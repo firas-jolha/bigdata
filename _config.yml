@@ -4,7 +4,7 @@
 remote_theme: chrisrhymes/bulma-clean-theme@v0.14.0
 
 # Title of the website
-layout: page
+layout: default
 title: Big Data course 2026
 description: By Firas Jolha
 
