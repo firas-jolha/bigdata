@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>
+        Lab 0 - Docker &amp; Bash - CodiMD
+    </title>
+    <link rel="icon" type="image/png" href="http://localhost:3000/favicon.png">
+    <link rel="apple-touch-icon" href="http://localhost:3000/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha256-H0KfTigpUV+0/5tn2HXC0CPwhhDhWgSawJdnFd0CGCo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fork-awesome/1.1.3/css/fork-awesome.min.css" integrity="sha256-ZhApazu+kejqTYhMF+1DzNKjIzP7KXu6AzyXcC1gMus=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" integrity="sha256-vtR0hSWRc3Tb26iuN2oZHt3KRUomwTufNIf5/4oeCyg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css" integrity="sha256-tAflq+ymku3Khs+I/WcAneIlafYgDiOQ9stIHH985Wo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/css/basic/emojify.min.css" integrity="sha256-UOrvMOsSDSrW6szVLe8ZDZezBxh5IoIfgTwdNDgTjiU=" crossorigin="anonymous" />
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,600,600italic,300italic,300|Source+Serif+Pro|Source+Code+Pro:400,300,500&subset=latin,latin-ext);.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;font-size:16px;line-height:1.5;word-wrap:break-word}.markdown-body:after,.markdown-body:before{display:table;content:""}.markdown-body:after{clear:both}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#c00}.markdown-body .anchor{float:left;padding-right:4px;margin-left:-20px;line-height:1}.markdown-body .anchor:focus{outline:none}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-top:0;margin-bottom:16px}.markdown-body hr{height:.25em;padding:0;margin:24px 0;background-color:#e7e7e7;border:0}.markdown-body blockquote{padding:0 1em;color:#777;border-left:.25em solid #ddd}.night .markdown-body blockquote{color:#bcbcbc}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body .loweralpha{list-style-type:lower-alpha}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}.night .markdown-body h1,.night .markdown-body h2,.night .markdown-body h3,.night .markdown-body h4,.night .markdown-body h5,.night .markdown-body h6{color:#ddd}.markdown-body h1 .fa-link,.markdown-body h2 .fa-link,.markdown-body h3 .fa-link,.markdown-body h4 .fa-link,.markdown-body h5 .fa-link,.markdown-body h6 .fa-link{color:#000;vertical-align:middle;visibility:hidden;font-size:16px}.night .markdown-body h1 .fa-link,.night .markdown-body h2 .fa-link,.night .markdown-body h3 .fa-link,.night .markdown-body h4 .fa-link,.night .markdown-body h5 .fa-link,.night .markdown-body h6 .fa-link{color:#fff}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .fa-link,.markdown-body h2:hover .anchor .fa-link,.markdown-body h3:hover .anchor .fa-link,.markdown-body h4:hover .anchor .fa-link,.markdown-body h5:hover .anchor .fa-link,.markdown-body h6:hover .anchor .fa-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{font-size:inherit}.markdown-body h1{font-size:2em}.markdown-body h1,.markdown-body h2{padding-bottom:.3em;border-bottom:1px solid #eee}.markdown-body h2{font-size:1.5em}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{font-size:.85em;color:#777}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol.no-list,.markdown-body ul.no-list{padding:0;list-style-type:none}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:0;margin-bottom:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{margin-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}.markdown-body dl dd{padding:0 16px;margin-bottom:16px}.markdown-body table{display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}.markdown-body table th{font-weight:700}.markdown-body table td,.markdown-body table th{padding:6px 13px;border:1px solid #ddd}.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}.night .markdown-body table tr{background-color:#5f5f5f}.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}.night .markdown-body table tr:nth-child(2n){background-color:#4f4f4f}.markdown-body img{max-width:100%;box-sizing:content-box;background-color:#fff}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{max-width:none;vertical-align:text-top;background-color:transparent}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{display:block;float:left;width:auto;padding:7px;margin:13px 0 0;overflow:hidden;border:1px solid #ddd}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{display:block;padding:5px 0 0;clear:both;color:#333}.markdown-body span.align-center{display:block;overflow:hidden;clear:both}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{display:block;overflow:hidden;clear:both}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{padding:.2em 0;margin:0;font-size:85%;background-color:rgba(0,0,0,.04);border-radius:3px}.night .markdown-body code,.night .markdown-body tt{color:#eee;background-color:hsla(0,0%,90.2%,.36)}.markdown-body code:after,.markdown-body code:before,.markdown-body tt:after,.markdown-body tt:before{letter-spacing:-.2em;content:"\A0"}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre{word-wrap:normal}.markdown-body pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f7f7f7;border-radius:3px}.markdown-body pre code,.markdown-body pre tt{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}.markdown-body pre code:after,.markdown-body pre code:before,.markdown-body pre tt:after,.markdown-body pre tt:before{content:normal}.markdown-body .csv-data td,.markdown-body .csv-data th{padding:5px;overflow:hidden;font-size:12px;line-height:1;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-line-num{padding:10px 8px 9px;text-align:right;background:#fff;border:0}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{font-weight:700;background:#f8f8f8;border-top:0}.markdown-body kbd{display:inline-block;padding:3px 5px;font-size:11px;line-height:10px;color:#555;vertical-align:middle;background-color:#fcfcfc;border:1px solid;border-color:#ccc #ccc #bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb}.news .alert .markdown-body blockquote{padding:0 0 0 40px;border:0}.activity-tab .news .alert .commits,.activity-tab .news .markdown-body blockquote{padding-left:0}.task-list-item{list-style-type:none}.task-list-item label{font-weight:400}.task-list-item.enabled label{cursor:pointer}.task-list-item+.task-list-item{margin-top:3px}.task-list-item-checkbox{float:left;margin:.31em 0 .2em -1.3em!important;vertical-align:middle;cursor:default!important}.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;padding-top:40px;padding-bottom:40px;max-width:758px;overflow:visible!important}.markdown-body pre{border:inherit!important}.night .markdown-body pre{filter:invert(100%)}.markdown-body code{color:inherit!important}.markdown-body pre code .wrapper{display:-webkit-inline-flex;display:-moz-inline-flex;display:-ms-inline-flex;display:-o-inline-flex;display:inline-flex}.markdown-body pre code .gutter{float:left;overflow:hidden;-webkit-user-select:none;user-select:none}.markdown-body pre code .gutter.linenumber{text-align:right;position:relative;display:inline-block;cursor:default;z-index:4;padding:0 8px 0 0;min-width:20px;box-sizing:content-box;color:#afafaf!important;border-right:3px solid #6ce26c!important}.markdown-body pre code .gutter.linenumber>span:before{content:attr(data-linenumber)}.markdown-body pre code .code{float:left;margin:0 0 0 16px}.markdown-body .gist .line-numbers{border-left:none;border-top:none;border-bottom:none}.markdown-body .gist .line-data{border:none}.markdown-body .gist table{border-spacing:0;border-collapse:inherit!important}.night .markdown-body .gist table tr:nth-child(2n){background-color:#ddd}.markdown-body code[data-gist-id]{background:none;padding:0;filter:invert(100%)}.markdown-body code[data-gist-id]:after,.markdown-body code[data-gist-id]:before{content:""}.markdown-body code[data-gist-id] .blob-num{border:unset}.markdown-body code[data-gist-id] table{overflow:unset;margin-bottom:unset}.markdown-body code[data-gist-id] table tr{background:unset}.markdown-body[dir=rtl] pre{direction:ltr}.markdown-body[dir=rtl] code{direction:ltr;unicode-bidi:embed}.markdown-body .alert>p{margin-bottom:0}.markdown-body pre.abc,.markdown-body pre.flow-chart,.markdown-body pre.geo,.markdown-body pre.graphviz,.markdown-body pre.mermaid,.markdown-body pre.sequence-diagram,.markdown-body pre.vega{text-align:center;background-color:inherit;border-radius:0;white-space:inherit}.night .markdown-body pre.graphviz .graph>polygon{fill:#333}.night .markdown-body pre.mermaid .sectionTitle,.night .markdown-body pre.mermaid .titleText,.night .markdown-body pre.mermaid text{fill:#fff}.markdown-body pre.abc>code,.markdown-body pre.flow-chart>code,.markdown-body pre.graphviz>code,.markdown-body pre.mermaid>code,.markdown-body pre.sequence-diagram>code,.markdown-body pre.vega>code{text-align:left}.markdown-body pre.abc>svg,.markdown-body pre.flow-chart>svg,.markdown-body pre.graphviz>svg,.markdown-body pre.mermaid>svg,.markdown-body pre.sequence-diagram>svg,.markdown-body pre.vega>svg{max-width:100%;height:100%}.night .markdown-body .abc path{fill:#eee}.night .markdown-body .abc path.note_selected{fill:##4DD0E1}.night tspan{fill:#fefefe}.night pre rect{fill:transparent}.night pre.flow-chart path,.night pre.flow-chart rect{stroke:#fff}.markdown-body pre>code.wrap{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word}.markdown-body .alert>p,.markdown-body .alert>ul{margin-bottom:0}.markdown-body summary{display:list-item}.markdown-body summary:focus{outline:none}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none}.markdown-body figure{margin:1em 40px}.markdown-body img{background-color:transparent}.vimeo,.youtube{cursor:pointer;display:table;text-align:center;background-position:50%;background-repeat:no-repeat;background-size:contain;background-color:#000;overflow:hidden}.vimeo,.youtube{position:relative;width:100%}.youtube{padding-bottom:56.25%}.vimeo img{width:100%;object-fit:contain;z-index:0}.youtube img{object-fit:cover;z-index:0}.vimeo iframe,.youtube iframe,.youtube img{width:100%;height:100%;position:absolute;top:0;left:0}.vimeo iframe,.youtube iframe{vertical-align:middle;z-index:1}.vimeo .icon,.youtube .icon{position:absolute;height:auto;width:auto;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;opacity:.3;-webkit-transition:opacity .2s;transition:opacity .2s;z-index:0}.vimeo:hover .icon,.youtube:hover .icon{opacity:.6;-webkit-transition:opacity .2s;transition:opacity .2s}.slideshare .inner,.speakerdeck .inner{position:relative;width:100%}.slideshare .inner iframe,.speakerdeck .inner iframe{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%}.geo-map{width:100%;height:250px}.markmap-container{height:300px}.markmap-container>svg{width:100%;height:100%}.MJX_Assistive_MathML{display:none}.ui-infobar{position:relative;z-index:2;max-width:758px;margin-top:25px;margin-bottom:-25px;color:#777}.toc .invisable-node{list-style-type:none}.ui-toc{position:fixed;bottom:20px;z-index:10000}.ui-toc-label{opacity:.9;background-color:#ccc;border:none}.ui-toc-label,.ui-toc .open .ui-toc-label{-webkit-transition:opacity .2s;transition:opacity .2s}.ui-toc .open .ui-toc-label{opacity:1;color:#5f5f5f}.ui-toc-label:focus{opacity:1;background-color:#ccc;color:#000}.ui-toc-label:hover{opacity:1;background-color:#ccc;-webkit-transition:opacity .2s;transition:opacity .2s}.ui-toc-dropdown{margin-top:23px;margin-bottom:20px;padding-left:10px;padding-right:10px;max-width:45vw;width:25vw;max-height:70vh;overflow:auto;text-align:inherit}.ui-toc-dropdown>.toc{max-height:calc(70vh - 100px);overflow:auto}.ui-toc-dropdown[dir=rtl] .nav{padding-right:0;letter-spacing:.0029em}.ui-toc-dropdown a{overflow:hidden;text-overflow:ellipsis;white-space:pre}.ui-toc-dropdown .nav>li>a{display:block;padding:4px 20px;font-size:13px;font-weight:500;color:#767676}.ui-toc-dropdown .nav>li:first-child:last-child>ul,.ui-toc-dropdown .toc.expand ul{display:block}.ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover{padding-left:19px;color:#000;text-decoration:none;background-color:transparent;border-left:1px solid #000}.night .ui-toc-dropdown .nav>li>a:focus,.night .ui-toc-dropdown .nav>li>a:hover{color:#fff;border-left-color:#fff}.ui-toc-dropdown[dir=rtl] .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav>li>a:hover{padding-right:19px;border-left:none;border-right:1px solid #000}.ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a{padding-left:18px;font-weight:700;color:#000;background-color:transparent;border-left:2px solid #000}.night .ui-toc-dropdown .nav>.active:focus>a,.night .ui-toc-dropdown .nav>.active:hover>a,.night .ui-toc-dropdown .nav>.active>a{color:#fff;border-left:2px solid #fff}.ui-toc-dropdown[dir=rtl] .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav>.active>a{padding-right:18px;border-left:none;border-right:2px solid #000}.ui-toc-dropdown .nav .nav{display:none;padding-bottom:10px}.ui-toc-dropdown .nav>.active>ul{display:block}.ui-toc-dropdown .nav .nav>li>a{padding-top:1px;padding-bottom:1px;padding-left:30px;font-size:12px;font-weight:400}.night .ui-toc-dropdown .nav>li>a{color:#aaa}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a{padding-right:30px}.ui-toc-dropdown .nav .nav>li>ul>li>a{padding-top:1px;padding-bottom:1px;padding-left:40px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a{padding-right:40px}.ui-toc-dropdown .nav .nav>li>ul>li>ul>li>a{padding-top:1px;padding-bottom:1px;padding-left:50px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>ul>li>a{padding-right:50px}.ui-toc-dropdown .nav .nav>li>ul>li>ul>li>ul>li>a{padding-top:1px;padding-bottom:1px;padding-left:60px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>ul>li>ul>li>a{padding-right:60px}.ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover{padding-left:29px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:hover{padding-right:29px}.ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover{padding-left:39px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:hover{padding-right:39px}.ui-toc-dropdown .nav .nav>li>ul>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>ul>li>a:hover{padding-left:49px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>ul>li>a:hover{padding-right:49px}.ui-toc-dropdown .nav .nav>li>ul>li>ul>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>ul>li>ul>li>a:hover{padding-left:59px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>ul>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>ul>li>ul>li>a:hover{padding-right:59px}.ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a{padding-left:28px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>a{padding-right:28px}.ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a{padding-left:38px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>a{padding-right:38px}.ui-toc-dropdown .nav .nav>.active>.nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>.nav>.active>a{padding-left:48px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.active>.nav>.nav>.active>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>.nav>.active:hover>a{padding-right:48px}.ui-toc-dropdown .nav .nav>.active>.nav>.active>.nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>.nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>.nav>.active>.nav>.active>a{padding-left:58px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.active>.nav>.nav>.active>.nav>.active>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>.nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>.nav>.active>.nav>.active:hover>a{padding-right:58px}.markdown-body[lang^=ja]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Helvetica,Arial,Hiragino Kaku Gothic Pro,"\30D2\30E9\30AE\30CE\89D2\30B4   Pro W3",Osaka,Meiryo,"\30E1\30A4\30EA\30AA",MS Gothic,"\FF2D\FF33   \30B4\30B7\30C3\30AF",sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}.ui-toc-dropdown[lang^=ja]{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,"\FF2D\FF33   \FF30\30B4\30B7\30C3\30AF",sans-serif}.markdown-body[lang=zh-tw]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Helvetica,Arial,PingFang TC,Microsoft JhengHei,"\5FAE\8EDF\6B63\9ED1",sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}.ui-toc-dropdown[lang=zh-tw]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,"\5FAE\8EDF\6B63\9ED1UI",sans-serif}.markdown-body[lang=zh-cn]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Helvetica,Arial,PingFang SC,Microsoft YaHei,"\5FAE\8F6F\96C5\9ED1",sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol}.ui-toc-dropdown[lang=zh-cn]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,"\5FAE\8F6F\96C5\9ED1UI",sans-serif}.ui-affix-toc{position:fixed;top:0;max-width:15vw;max-height:70vh;overflow:auto}.back-to-top,.expand-toggle,.go-to-bottom{display:block;padding:4px 10px;margin-top:10px;margin-left:10px;font-size:12px;font-weight:500;color:rgba(0,0,0,.85)}.back-to-top:focus,.back-to-top:hover,.expand-toggle:focus,.expand-toggle:hover,.go-to-bottom:focus,.go-to-bottom:hover{color:#563d7c;text-decoration:none}.back-to-top,.go-to-bottom{margin-top:0}.ui-user-icon{width:20px;height:20px;display:block;border-radius:3px;margin-top:2px;margin-bottom:2px;margin-right:5px;background-position:50%;background-repeat:no-repeat;background-size:contain}.ui-user-icon.small{width:18px;height:18px;display:inline-block;vertical-align:middle;margin:0 0 .2em}small span{line-height:22px}small .dropdown{display:inline-block}small .dropdown a:focus,small .dropdown a:hover{text-decoration:none}.unselectable{-moz-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none;user-select:none}.night .navbar{background:#333;border-bottom-color:#333;color:#eee}.night .navbar a{color:#eee}@media print{blockquote,div,img,pre,table{page-break-inside:avoid!important}a[href]:after{font-size:12px!important}}.markdown-body.slides{position:relative;z-index:1;color:#222}.markdown-body.slides:before{content:"";display:block;position:absolute;top:0;left:0;right:0;bottom:0;z-index:-1;background-color:currentColor;box-shadow:0 0 0 50vw}.markdown-body.slides section[data-markdown]{position:relative;margin-bottom:1.5em;background-color:#fff;text-align:center}.markdown-body.slides section[data-markdown] code{text-align:left}.markdown-body.slides section[data-markdown]:before{content:"";display:block;padding-bottom:56.23%}.markdown-body.slides section[data-markdown]>div:first-child{position:absolute;top:50%;left:1em;right:1em;transform:translateY(-50%);max-height:100%;overflow:hidden}.markdown-body.slides section[data-markdown]>ul{display:inline-block}.markdown-body.slides>section>section+section:after{content:"";position:absolute;top:-1.5em;right:1em;height:1.5em;border:3px solid #777}body{font-smoothing:subpixel-antialiased!important;-webkit-font-smoothing:subpixel-antialiased!important;-moz-osx-font-smoothing:auto!important;text-shadow:0 0 1em transparent,1px 1px 1.2px rgba(0,0,0,.004);-webkit-overflow-scrolling:touch;font-family:Source Sans Pro,Helvetica,Arial,sans-serif;letter-spacing:.025em}.focus,:focus{outline:none!important}::-moz-focus-inner{border:0!important}body.modal-open{overflow-y:auto;padding-right:0!important}
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Lab-0---Docker-amp-Bash"><a class="anchor hidden-xs" href="#Lab-0---Docker-amp-Bash" title="Lab-0---Docker-amp-Bash"><i class="fa fa-link"></i></a>Lab 0 - Docker &amp; Bash</h1><p><strong>Course:</strong> Big Data - IU</p><h1 id="Agenda"><a class="anchor hidden-xs" href="#Agenda" title="Agenda"><i class="fa fa-link"></i></a>Agenda</h1><p></p><div class="toc"><ul>
+<li><a href="#Lab-0---Docker-amp-Bash" title="Lab 0 - Docker &amp; Bash">Lab 0 - Docker &amp; Bash</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Docker" title="Docker">Docker</a><ul>
+<li><a href="#How-is-Docker-different-from-VMs" title="How is Docker different from VMs?">How is Docker different from VMs?</a></li>
+<li><a href="#Check-Docker-Info" title="Check Docker Info">Check Docker Info</a></li>
+<li><a href="#Test-Docker-installation" title="Test Docker installation">Test Docker installation</a></li>
+<li><a href="#Build-Your-Image-and-Instantiate-Your-Container" title="Build Your Image and Instantiate Your Container">Build Your Image and Instantiate Your Container</a><ul>
+<li><a href="#Before-Building-an-Image" title="Before Building an Image">Before Building an Image</a></li>
+<li><a href="#Build-the-App" title="Build the App">Build the App</a></li>
+<li><a href="#Run-the-app" title="Run the app">Run the app</a></li>
+</ul>
+</li>
+<li><a href="#Repository-for-Docker-Images" title="Repository for Docker Images">Repository for Docker Images</a></li>
+<li><a href="#Docker-for-Services" title="Docker for Services">Docker for Services</a><ul>
+<li><a href="#Define-a-Service" title="Define a Service">Define a Service</a></li>
+<li><a href="#Deploying-a-Service" title="Deploying a Service">Deploying a Service</a></li>
+<li><a href="#Scaling-Your-App" title="Scaling Your App">Scaling Your App</a></li>
+<li><a href="#Shutting-Down-Your-Service" title="Shutting Down Your Service">Shutting Down Your Service</a></li>
+</ul>
+</li>
+<li><a href="#More-About-Swarms" title="More About Swarms">More About Swarms</a><ul>
+<li><a href="#Set-Up-Your-Swarm" title="Set Up Your Swarm">Set Up Your Swarm</a></li>
+<li><a href="#Deploy-You-App-to-the-Swarm-Cluster" title="Deploy You App to the Swarm Cluster">Deploy You App to the Swarm Cluster</a></li>
+<li><a href="#Deploy-the-App-on-the-Swarm-Manager" title="Deploy the App on the Swarm Manager">Deploy the App on the Swarm Manager</a></li>
+</ul>
+</li>
+<li><a href="#More-About-Stacks" title="More About Stacks">More About Stacks</a><ul>
+<li><a href="#Adding-a-New-Service" title="Adding a New Service">Adding a New Service</a></li>
+<li><a href="#Adding-One-More-Service" title="Adding One More Service">Adding One More Service</a></li>
+</ul>
+</li>
+<li><a href="#Afterword" title="Afterword">Afterword</a></li>
+<li><a href="#Links" title="Links">Links</a></li>
+<li><a href="#Docker-Tutorial-Troubleshooting" title="Docker Tutorial: Troubleshooting">Docker Tutorial: Troubleshooting</a></li>
+<li><a href="#I-have-installed-Docker-Toolbox-but-starting-script-fails" title="I have installed Docker Toolbox, but starting script fails">I have installed Docker Toolbox, but starting script fails</a></li>
+<li><a href="#Docker-Toolbox-cannot-download-boot2dockeriso-image" title="Docker Toolbox cannot download boot2docker.iso image">Docker Toolbox cannot download boot2docker.iso image</a></li>
+<li><a href="#docker-machine-does-not-see-Virtual-box" title="docker-machine does not see Virtual box">docker-machine does not see Virtual box</a></li>
+<li><a href="#Command-eval-sudo-docker-machine-env-myvm1-does-not-do-what-I-want" title="Command eval $(sudo docker-machine env myvm1) does not do what I want">Command eval $(sudo docker-machine env myvm1) does not do what I want</a></li>
+<li><a href="#docker-machine-does-not-work-without-sudo" title="docker-machine does not work without sudo">docker-machine does not work without sudo</a></li>
+<li><a href="#After-shutting-down-workers-cannot-use-swarm-it-says-that-certificate-has-expired" title="After shutting down workers, cannot use swarm, it says that certificate has expired">After shutting down workers, cannot use swarm, it says that certificate has expired</a></li>
+<li><a href="#docker-machine-complains-on-lack-of-virtualization-support" title="docker-machine complains on lack of virtualization support">docker-machine complains on lack of virtualization support</a></li>
+<li><a href="#docker-machine-does-not-work-on-mac" title="docker-machine does not work on mac">docker-machine does not work on mac</a></li>
+<li><a href="#Containers-stuck-in-Ready-state" title="Containers stuck in Ready state">Containers stuck in Ready state</a></li>
+<li><a href="#Self-check-Questions" title="Self-check Questions">Self-check Questions</a></li>
+<li><a href="#Acceptance-criteria" title="Acceptance criteria:">Acceptance criteria:</a></li>
+</ul>
+</li>
+<li><a href="#Bash" title="Bash">Bash</a><ul>
+<li><a href="#UnixOSbash" title="Unix/OS/bash">Unix/OS/bash</a><ul>
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#-man" title="$ man">$ man</a></li>
+<li><a href="#UNIX-shell" title="UNIX shell">UNIX shell</a></li>
+<li><a href="#Processes" title="Processes">Processes</a></li>
+<li><a href="#Advanced-Addition" title="Advanced. Addition">Advanced. Addition</a></li>
+<li><a href="#Basic-commands" title="Basic commands">Basic commands</a></li>
+<li><a href="#Advanced-Streams-and-Pipelines" title="Advanced. Streams and Pipelines.">Advanced. Streams and Pipelines.</a></li>
+<li><a href="#Excercises" title="Excercises">Excercises</a></li>
+<li><a href="#bashrc" title="~/.bashrc">~/.bashrc</a></li>
+<li><a href="#The-PATH-Environment-Variable" title="The PATH Environment Variable">The PATH Environment Variable</a></li>
+<li><a href="#Read-by-your-own" title="Read by your own">Read by your own</a></li>
+<li><a href="#PS-“Holy-Grail”-of-sysadmins-or-just-logs" title="P.S. “Holy Grail” of sysadmins or just logs">P.S. “Holy Grail” of sysadmins or just logs</a></li>
+</ul>
+</li>
+<li><a href="#Networks" title="Networks">Networks</a><ul>
+<li><a href="#How-TCPIP-stack-looks-like" title="How TCP/IP stack looks like.">How TCP/IP stack looks like.</a></li>
+<li><a href="#Excercises1" title="Excercises">Excercises</a></li>
+<li><a href="#Network-tools" title="Network tools">Network tools</a></li>
+</ul>
+</li>
+<li><a href="#Shared-folders" title="Shared folders">Shared folders</a></li>
+</ul>
+</li>
+</ul>
+</div><p></p><h1 id="Docker"><a class="anchor hidden-xs" href="#Docker" title="Docker"><i class="fa fa-link"></i></a>Docker</h1><p>This tutorial guides you through creating your first Docker container. It was heavily drawn from the official <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">Docker Getting Started Guide</a>.</p><div class="alert alert-info">
+<p>This tutorial comes with a troubleshooting section that lists the most common problems.</p>
+</div><h2 id="How-is-Docker-different-from-VMs"><a class="anchor hidden-xs" href="#How-is-Docker-different-from-VMs" title="How-is-Docker-different-from-VMs"><i class="fa fa-link"></i></a>How is Docker different from VMs?</h2><p>Virtual Machine emulates a fully working isolated OS. It requires the same resources from the host as a normal OS would, meaning it would load its kernel into the memory, load all necessary kernel modules, all the libraries to work with the software and only then will allocate resources for a user application. If you run 100 identical VMs, they would occupy 100 times more resources.</p><p>A Docker container, on the other hand, runs natively on Linux and shares the kernel of the host machine with other containers. It runs a discrete process, taking no more memory than any other executable, making it lightweight.</p><p>The difference can be intuitively demonstrated by the following image</p><p><img src="https://firas-jolha.github.io/bigdata/images/vms.containers.png" alt="" class="md-image md-image"></p><p><em>Source: <a href="https://www.docker.com/blog/containers-and-vms-together/" target="_blank" rel="noopener">Docker: Get Started</a></em></p><p>Follow <a href="https://docs.docker.com/engine/install/" target="_blank" rel="noopener">official guidelines</a> to install docker. Mac and Windows users should install Docker Desktop. Linux users should follow instructions for servers.</p><div class="alert alert-warning">
+<p>Linux users should complete istructions to manage Docker as non-root user  <a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user" target="_blank" rel="noopener">post-installation instructions</a>.</p>
+</div><h2 id="Check-Docker-Info"><a class="anchor hidden-xs" href="#Check-Docker-Info" title="Check-Docker-Info"><i class="fa fa-link"></i></a>Check Docker Info</h2><p>We assume you have already installed Docker on your OS. Open your favorite terminal emulator and try running</p><pre><code>docker --version &amp;&amp; docker info
+</code></pre><h2 id="Test-Docker-installation"><a class="anchor hidden-xs" href="#Test-Docker-installation" title="Test-Docker-installation"><i class="fa fa-link"></i></a>Test Docker installation</h2><div class="alert alert-danger">
+<p>Avoid using Docker in the form of snap container. People reported multiple issues with this type of installation.<br>
+<em>16/09/2019</em></p>
+</div><p>Test that your installation works by running the simple Docker image, <code>hello-world</code>:</p><pre><code>docker run hello-world
+</code></pre><p>List local images and find <code>hello-world</code> that was downloaded to your machine:</p><pre><code>docker image ls
+</code></pre><p>List the <code>hello-world</code> container (spawned by the image) which exits after displaying its message. If it were still running, you would not need the --all option:</p><pre><code>docker container ls --all
+
+CONTAINER ID     IMAGE           COMMAND      CREATED            STATUS
+54f4984ed6a8     hello-world     "/hello"     20 seconds ago     Exited (0) 
+</code></pre><p>A container is launched by running an image. An image is an executable package that includes everything needed to run an application – code, runtime, libraries, environment variables, and configuration files.</p><p>A container is a runtime instance of an image – what the image becomes in memory when executed (that is, an image with state, or a user process). You can see a list of your running containers with the command, <code>docker ps</code>, just as you would in Linux.</p><h2 id="Build-Your-Image-and-Instantiate-Your-Container"><a class="anchor hidden-xs" href="#Build-Your-Image-and-Instantiate-Your-Container" title="Build-Your-Image-and-Instantiate-Your-Container"><i class="fa fa-link"></i></a>Build Your Image and Instantiate Your Container</h2><p><code>Dockerfile</code> defines what goes on in the environment inside your container. Access to resources like networking interfaces and disk drives is virtualized inside this environment, which is isolated from the rest of your system, so you need to map ports to the outside world, and be specific about what files you want to “copy in” to that environment. However, after doing that, you can expect that the build of your app defined in this Dockerfile behaves exactly the same wherever it runs.</p><h3 id="Before-Building-an-Image"><a class="anchor hidden-xs" href="#Before-Building-an-Image" title="Before-Building-an-Image"><i class="fa fa-link"></i></a>Before Building an Image</h3><p>Create <code>Dockerfile</code> (simple text document, no extension) with the the following content</p><pre><code class="dockerfile hljs"><span class="hljs-comment"># Use an official Python runtime as a parent image</span>
+<span class="hljs-keyword">FROM</span> python:<span class="hljs-number">2.7</span>-slim
+
+<span class="hljs-comment"># Set the working directory to /app</span>
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /app</span>
+
+<span class="hljs-comment"># Copy the current directory contents into the container at /app</span>
+<span class="hljs-keyword">COPY</span><span class="bash"> . /app</span>
+
+<span class="hljs-comment"># Install any needed packages specified in requirements.txt</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> pip install --trusted-host pypi.python.org -r requirements.txt</span>
+
+<span class="hljs-comment"># Make port 80 available to the world outside this container</span>
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">80</span>
+
+<span class="hljs-comment"># Define environment variable</span>
+<span class="hljs-keyword">ENV</span> NAME World
+
+<span class="hljs-comment"># Run app.py when the container launches</span>
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"python"</span>, <span class="hljs-string">"app.py"</span>]</span>
+</code></pre><p>Try to understand what this file defines. This <code>Dockerfile</code> refers to a couple of files we haven’t created yet, namely <code>app.py</code> and <code>requirements.txt</code>. Create them and put them in the same folder with the <code>Dockerfile</code>.</p><p>Create <code>requirements.txt</code> with the following content</p><pre><code>Flask
+Redis
+</code></pre><p>and <code>app.py</code></p><pre><code class="python hljs"><span class="hljs-keyword">from</span> flask <span class="hljs-keyword">import</span> Flask
+<span class="hljs-keyword">from</span> redis <span class="hljs-keyword">import</span> Redis, RedisError
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> socket
+
+<span class="hljs-comment"># Connect to Redis</span>
+redis = Redis(host=<span class="hljs-string">"redis"</span>, db=<span class="hljs-number">0</span>, socket_connect_timeout=<span class="hljs-number">2</span>, socket_timeout=<span class="hljs-number">2</span>)
+
+app = Flask(__name__)
+
+<span class="hljs-meta">@app.route("/")</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hello</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">try</span>:
+        visits = redis.incr(<span class="hljs-string">"counter"</span>)
+    <span class="hljs-keyword">except</span> RedisError:
+        visits = <span class="hljs-string">"&lt;i&gt;cannot connect to Redis, counter disabled&lt;/i&gt;"</span>
+
+    html = <span class="hljs-string">"&lt;h3&gt;Hello {name}!&lt;/h3&gt;"</span> \
+           <span class="hljs-string">"&lt;b&gt;Hostname:&lt;/b&gt; {hostname}&lt;br/&gt;"</span> \
+           <span class="hljs-string">"&lt;b&gt;Visits:&lt;/b&gt; {visits}"</span>
+    <span class="hljs-keyword">return</span> html.format(name=os.getenv(<span class="hljs-string">"NAME"</span>, <span class="hljs-string">"world"</span>), hostname=socket.gethostname(), visits=visits)
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+    app.run(host=<span class="hljs-string">'0.0.0.0'</span>, port=<span class="hljs-number">80</span>)
+</code></pre><h3 id="Build-the-App"><a class="anchor hidden-xs" href="#Build-the-App" title="Build-the-App"><i class="fa fa-link"></i></a>Build the App</h3><p>We are ready to build the app. Make sure you are still at the top level of your new directory. Here’s what ls should show:</p><pre><code class="bash hljs">$ ls
+
+Dockerfile		app.py			requirements.txt
+</code></pre><p>Now run the build command. This creates a Docker image, which we’re going to name using the <code>--tag option</code>. Use <code>-t</code> if you want to use the shorter option.</p><pre><code class="bash hljs">docker build --tag=friendlyhello .
+</code></pre><p>The image is placed into Docker’s local image registry:</p><pre><code class="bash hljs">
+$ docker image ls
+
+REPOSITORY            TAG                 IMAGE ID
+friendlyhello         latest              326387cea398
+
+</code></pre><p>Note how the tag defaulted to latest. The full syntax for the tag option would be something like <code>--tag=friendlyhello:v0.0.1</code>.</p><h3 id="Run-the-app"><a class="anchor hidden-xs" href="#Run-the-app" title="Run-the-app"><i class="fa fa-link"></i></a>Run the app</h3><p>Run the app, mapping your machine’s port <code>4000</code> to the container’s published port <code>80</code> using <code>-p</code>:</p><pre><code>docker run -p 4000:80 friendlyhello
+</code></pre><p>If you are unsure what a port is, we have some additional homework for you :)</p><p>You should see a message that Python is serving your app at <code>http://0.0.0.0:80</code>. But that message is coming from inside the container, which doesn’t know you mapped port <code>80</code> of that container to <code>4000</code>, making the correct URL <code>http://localhost:4000</code>.</p><p>Go to that URL in a web browser to see the display content served up on a web page. You can stop the web server by hitting <code>CRTL+C</code> in your terminal.</p><p>Now let’s run the app in the background, in detached mode:</p><pre><code>docker run -d -p 4000:80 friendlyhello
+</code></pre><p>You will get a container ID in return. You can check available containers with <code>docker container ls</code>. Use the ID to stop the container:</p><pre><code>docker container stop ID
+</code></pre><h2 id="Repository-for-Docker-Images"><a class="anchor hidden-xs" href="#Repository-for-Docker-Images" title="Repository-for-Docker-Images"><i class="fa fa-link"></i></a>Repository for Docker Images</h2><p>Try uploading your image to Docker repository. The following commands are self sufficient.</p><pre><code class="bash hljs">docker login             <span class="hljs-comment"># Log in this CLI session using your Docker credentials</span>
+docker tag &lt;image&gt; username/repository:tag  <span class="hljs-comment"># Tag &lt;image&gt; for upload to registry</span>
+docker push username/repository:tag            <span class="hljs-comment"># Upload tagged image to registry</span>
+docker run username/repository:tag                   <span class="hljs-comment"># Run image from a registry</span>
+</code></pre><h2 id="Docker-for-Services"><a class="anchor hidden-xs" href="#Docker-for-Services" title="Docker-for-Services"><i class="fa fa-link"></i></a>Docker for Services</h2><p>In a distributed application, different pieces of the app are called “services”. For example, if you imagine a video sharing site, it probably includes a service for storing application data in a database, a service for video transcoding in the background after a user uploads something, a service for the front-end, and so on.</p><p>Services are really just “containers in production.” A service only runs one image, but it codifies the way that image runs — what ports it should use, how many replicas of the container should run so the service has the capacity it needs, and so on. Scaling a service changes the number of container instances running that piece of software, assigning more computing resources to the service in the process. And containers help to create a controlled environment for software execution.</p><p>First, verify that you have <code>docker-compose</code> installed</p><pre><code>docker-compose --version
+</code></pre><p>If not, read how to install <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">Docker Compose</a> on your system.</p><h3 id="Define-a-Service"><a class="anchor hidden-xs" href="#Define-a-Service" title="Define-a-Service"><i class="fa fa-link"></i></a>Define a Service</h3><p>With Docker it is easy to define, run, and scale services – just write a <code>docker-compose.yml</code> file</p><pre><code class="yaml hljs"><span class="hljs-attr">version:</span> <span class="hljs-string">"3"</span>
+<span class="hljs-attr">services:</span>
+<span class="hljs-attr">  web:</span>
+    <span class="hljs-comment"># replace username/repo:tag with your name and image details</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">username/repo:tag</span>
+<span class="hljs-attr">    deploy:</span>
+<span class="hljs-attr">      replicas:</span> <span class="hljs-number">5</span>
+<span class="hljs-attr">      resources:</span>
+<span class="hljs-attr">        limits:</span>
+<span class="hljs-attr">          cpus:</span> <span class="hljs-string">"0.1"</span>
+<span class="hljs-attr">          memory:</span> <span class="hljs-number">50</span><span class="hljs-string">M</span>
+<span class="hljs-attr">      restart_policy:</span>
+<span class="hljs-attr">        condition:</span> <span class="hljs-string">on-failure</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"4000:80"</span>
+<span class="hljs-attr">    networks:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">webnet</span>
+<span class="hljs-attr">networks:</span>
+<span class="hljs-attr">  webnet:</span>
+</code></pre><p>This <code>docker-compose.yml</code> file tells Docker to do the following:</p><ul>
+<li>
+<p>Pull the image we uploaded before from the registry</p>
+</li>
+<li>
+<p>Run 5 instances of that image as a service called web, limiting each one to use, at most, 10% of a single core of CPU time (this could also be e.g. “1.5” to mean 1 and half core for each), and 50MB of RAM</p>
+</li>
+<li>
+<p>Immediately restart containers if one fails</p>
+</li>
+<li>
+<p>Map port 4000 on the host to web’s port 80</p>
+</li>
+<li>
+<p>Instruct web’s containers to share port 80 via a load-balanced network called <code>webnet</code>. (Internally, the containers themselves publish to web’s port 80 at an ephemeral port)</p>
+</li>
+<li>
+<p>Define the webnet network with the default settings (which is a load-balanced overlay network)</p>
+</li>
+</ul><h3 id="Deploying-a-Service"><a class="anchor hidden-xs" href="#Deploying-a-Service" title="Deploying-a-Service"><i class="fa fa-link"></i></a>Deploying a Service</h3><p>Initialize Docker swarm:</p><pre><code>docker swarm init
+</code></pre><p>Now let’s run it. You need to give your app a name. Here, it is set to getstartedlab:</p><pre><code>docker stack deploy -c docker-compose.yml getstartedlab
+</code></pre><p>You can list running services with <code>docker service ls </code>. A single container running in a service is called a task. Tasks are given unique IDs that numerically increment, up to the number of replicas you defined in docker-compose.yml. List the tasks for your service:</p><pre><code>docker service ps getstartedlab_web
+</code></pre><p>Alternatively, you can list your running containers <code>docker container ls -q</code>.</p><p>You can run <code>curl -4 http://localhost:4000</code> several times in a row, or go to that URL in your browser and hit refresh a few times.</p><h3 id="Scaling-Your-App"><a class="anchor hidden-xs" href="#Scaling-Your-App" title="Scaling-Your-App"><i class="fa fa-link"></i></a>Scaling Your App</h3><p>You can scale the app by changing the replicas value in <code>docker-compose.yml</code>, saving the change, and re-running the docker stack deploy command:</p><pre><code>docker stack deploy -c docker-compose.yml getstartedlab
+</code></pre><p>Docker performs an in-place update, no need to tear the stack down first or kill any containers.</p><p>Now, re-run docker <code>container ls -q</code> to see the deployed instances reconfigured. If you scaled up the replicas, more tasks, and hence, more containers, are started.</p><h3 id="Shutting-Down-Your-Service"><a class="anchor hidden-xs" href="#Shutting-Down-Your-Service" title="Shutting-Down-Your-Service"><i class="fa fa-link"></i></a>Shutting Down Your Service</h3><p>Take the app down with <code>docker stack rm</code>:</p><pre><code>docker stack rm getstartedlab
+</code></pre><p>Take down the swarm.</p><pre><code>docker swarm leave --force
+</code></pre><h2 id="More-About-Swarms"><a class="anchor hidden-xs" href="#More-About-Swarms" title="More-About-Swarms"><i class="fa fa-link"></i></a>More About Swarms</h2><p>Make sure you have <code>docker-machine</code> installed</p><pre><code>docker-machine --version
+</code></pre><p>If not, follow the instructions for your OS <a href="https://github.com/docker/machine/releases/" target="_blank" rel="noopener">here</a>.</p><h3 id="Set-Up-Your-Swarm"><a class="anchor hidden-xs" href="#Set-Up-Your-Swarm" title="Set-Up-Your-Swarm"><i class="fa fa-link"></i></a>Set Up Your Swarm</h3><p>A swarm is made up of multiple nodes, which can be either physical or virtual machines. The basic concept is simple enough: run <code>docker swarm init</code> to enable swarm mode and make your current machine a swarm manager, then run<code> docker swarm join</code> on other machines to have them join the swarm as workers. We use VMs to quickly create a two-machine cluster and turn it into a swarm.</p><p>Create a couple of VMs using docker-machine, using the VirtualBox driver:</p><pre><code>docker-machine create --driver virtualbox myvm1
+docker-machine create --driver virtualbox myvm2
+</code></pre><p>Alternatively, you can use a real servers or other VMs that have Docker installed. You can read more about <code>docker-machine</code> in the <a href="https://docs.docker.com/machine/reference/create/" target="_blank" rel="noopener">official documentation</a>. List VMs and get their IP addresses</p><pre><code>docker-machine ls
+</code></pre><p>Now you can initialize the swarm and add nodes. The first machine acts as the manager, which executes management commands and authenticates workers to join the swarm, and the second is a worker.</p><p>You can send commands to your VMs using <code>docker-machine ssh</code>. Instruct <code>myvm1</code> to become a swarm manager with<code> docker swarm init</code> and look for output like this:</p><pre><code>$ docker-machine ssh myvm1 "docker swarm init --advertise-addr &lt;myvm1 ip&gt;"
+Swarm initialized: current node &lt;node ID&gt; is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+  docker swarm join \
+  --token &lt;token&gt; \
+  &lt;myvm ip&gt;:&lt;port&gt;
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+</code></pre><p>As you can see, the response to <code>docker swarm init</code> contains a pre-configured <code>docker swarm join</code> command for you to run on any nodes you want to add. Copy this command, and send it to <code>myvm2</code> via <code>docker-machine ssh</code> to have <code>myvm2</code> join your new swarm as a worker:</p><pre><code>$ docker-machine ssh myvm2 "docker swarm join \
+--token &lt;token&gt; \
+&lt;ip&gt;:2377"
+
+This node joined a swarm as a worker.
+</code></pre><p>Run <code>docker node ls</code> on the manager to view the nodes in this swarm</p><h3 id="Deploy-You-App-to-the-Swarm-Cluster"><a class="anchor hidden-xs" href="#Deploy-You-App-to-the-Swarm-Cluster" title="Deploy-You-App-to-the-Swarm-Cluster"><i class="fa fa-link"></i></a>Deploy You App to the Swarm Cluster</h3><p>So far, you’ve been wrapping Docker commands in <code>docker-machine ssh</code> to talk to the VMs. Another option is to run <code>docker-machine env &lt;machine&gt;</code> to get and run a command that configures your current shell to talk to the Docker daemon on the VM. This method works better for the next step because it allows you to use your local <code>docker-compose.yml</code> file to deploy the app “remotely” without having to copy it anywhere.</p><p>Type <code>docker-machine env myvm1</code>, then copy-paste and run the command provided as the last line of the output to configure your shell to talk to myvm1, the swarm manager.</p><pre><code>$ docker-machine env myvm1
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.100:2376"
+export DOCKER_CERT_PATH="/Users/sam/.docker/machine/machines/myvm1"
+export DOCKER_MACHINE_NAME="myvm1"
+# Run this command to configure your shell:
+# eval $(docker-machine env myvm1)
+</code></pre><p>Run the given command to configure your shell to talk to myvm1.</p><pre><code class="bash hljs"><span class="hljs-built_in">eval</span> $(docker-machine env myvm1)
+</code></pre><p>On Windows it looks differently</p><pre><code>PS C:\Users\sam\sandbox\get-started&gt; docker-machine env myvm1
+$Env:DOCKER_TLS_VERIFY = "1"
+$Env:DOCKER_HOST = "tcp://192.168.203.207:2376"
+$Env:DOCKER_CERT_PATH = "C:\Users\sam\.docker\machine\machines\myvm1"
+$Env:DOCKER_MACHINE_NAME = "myvm1"
+$Env:COMPOSE_CONVERT_WINDOWS_PATHS = "true"
+# Run this command to configure your shell:
+# &amp; "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+</code></pre><p>Run the given command to configure your shell to talk to myvm1.</p><pre><code>&amp; "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+</code></pre><p>Run <code>docker-machine ls</code> to verify that <code>myvm1</code> is now the active machine, as indicated by the asterisk next to it.</p><h3 id="Deploy-the-App-on-the-Swarm-Manager"><a class="anchor hidden-xs" href="#Deploy-the-App-on-the-Swarm-Manager" title="Deploy-the-App-on-the-Swarm-Manager"><i class="fa fa-link"></i></a>Deploy the App on the Swarm Manager</h3><p>Now that you have configured your environment to access <code>myvm1</code>, your swarm manager, you can easily deploy your application on the cluster</p><pre><code>docker stack deploy -c docker-compose.yml getstartedlab
+</code></pre><p>Now you can access your app from the IP address of either <code>myvm1</code> or <code>myvm2</code>.</p><p>The reason both IP addresses work is that nodes in a swarm participate in an ingress routing mesh. This ensures that a service deployed at a certain port within your swarm always has that port reserved to itself, no matter what node is actually running the container. Here’s a diagram of how a routing mesh for a service called my-web published at port <code>8080</code> on a three-node swarm would look:<br>
+<img src="https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png" alt="" class="md-image md-image"></p><p>You can tear down the stack with <code>docker stack rm</code>. For example:</p><pre><code class="bash hljs">docker stack rm getstartedlab
+</code></pre><h2 id="More-About-Stacks"><a class="anchor hidden-xs" href="#More-About-Stacks" title="More-About-Stacks"><i class="fa fa-link"></i></a>More About Stacks</h2><p>A stack is a group of interrelated services that share dependencies, and can be orchestrated and scaled together. A single stack is capable of defining and coordinating the functionality of an entire application (though very complex applications may want to use multiple stacks).</p><h3 id="Adding-a-New-Service"><a class="anchor hidden-xs" href="#Adding-a-New-Service" title="Adding-a-New-Service"><i class="fa fa-link"></i></a>Adding a New Service</h3><p>It’s easy to add services to our <code>docker-compose.yml</code> file. First, let’s add a free visualizer service that lets us look at how our swarm is scheduling containers.</p><pre><code class="yaml hljs"><span class="hljs-attr">version:</span> <span class="hljs-string">"3"</span>
+<span class="hljs-attr">services:</span>
+<span class="hljs-attr">  web:</span>
+    <span class="hljs-comment"># replace username/repo:tag with your name and image details</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">username/repo:tag</span>
+<span class="hljs-attr">    deploy:</span>
+<span class="hljs-attr">      replicas:</span> <span class="hljs-number">5</span>
+<span class="hljs-attr">      restart_policy:</span>
+<span class="hljs-attr">        condition:</span> <span class="hljs-string">on-failure</span>
+<span class="hljs-attr">      resources:</span>
+<span class="hljs-attr">        limits:</span>
+<span class="hljs-attr">          cpus:</span> <span class="hljs-string">"0.1"</span>
+<span class="hljs-attr">          memory:</span> <span class="hljs-number">50</span><span class="hljs-string">M</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"80:80"</span>
+<span class="hljs-attr">    networks:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">webnet</span>
+<span class="hljs-attr">  visualizer:</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">dockersamples/visualizer:stable</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"8080:8080"</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"/var/run/docker.sock:/var/run/docker.sock"</span>
+<span class="hljs-attr">    deploy:</span>
+<span class="hljs-attr">      placement:</span>
+<span class="hljs-attr">        constraints:</span> <span class="hljs-string">[node.role</span> <span class="hljs-string">==</span> <span class="hljs-string">manager]</span>
+<span class="hljs-attr">    networks:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">webnet</span>
+<span class="hljs-attr">networks:</span>
+<span class="hljs-attr">  webnet:</span>
+</code></pre><p>The only thing new here is the peer service to web, named <code>visualizer</code>. Notice two new things here: a volumes key, giving the visualizer access to the host’s socket file for Docker, and a placement key, ensuring that this service only ever runs on a swarm manager – never a worker. That’s because this container, built from an open source project created by Docker, displays Docker services running on a swarm in a diagram.</p><p>We talk more about placement constraints and volumes in a moment. Make sure your shell is configured to talk to <code>myvm1</code>. Run docker-machine ls to list machines and make sure you are connected to <code>myvm1</code>, as indicated by an asterisk next to it. If needed, re-run <code>docker-machine env myvm1</code>. Now, re-run the <code>docker stack deploy</code> command on the manager, and whatever services need updating are updated</p><pre><code>$ docker stack deploy -c docker-compose.yml getstartedlab
+Updating service getstartedlab_web (id: angi1bf5e4to03qu9f93trnxm)
+Creating service getstartedlab_visualizer (id: l9mnwkeq2jiononb5ihz9u7a4)
+</code></pre><p>Now you can take a look at the visualizer in your browser at port <code>8080</code>. Does the display match what you would expect?</p><h3 id="Adding-One-More-Service"><a class="anchor hidden-xs" href="#Adding-One-More-Service" title="Adding-One-More-Service"><i class="fa fa-link"></i></a>Adding One More Service</h3><p>Let’s add Redis database for storing app data. Modify <code>docker-compose.yml</code></p><pre><code class="yaml hljs"><span class="hljs-attr">version:</span> <span class="hljs-string">"3"</span>
+<span class="hljs-attr">services:</span>
+<span class="hljs-attr">  web:</span>
+    <span class="hljs-comment"># replace username/repo:tag with your name and image details</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">username/repo:tag</span>
+<span class="hljs-attr">    deploy:</span>
+<span class="hljs-attr">      replicas:</span> <span class="hljs-number">5</span>
+<span class="hljs-attr">      restart_policy:</span>
+<span class="hljs-attr">        condition:</span> <span class="hljs-string">on-failure</span>
+<span class="hljs-attr">      resources:</span>
+<span class="hljs-attr">        limits:</span>
+<span class="hljs-attr">          cpus:</span> <span class="hljs-string">"0.1"</span>
+<span class="hljs-attr">          memory:</span> <span class="hljs-number">50</span><span class="hljs-string">M</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"80:80"</span>
+<span class="hljs-attr">    networks:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">webnet</span>
+<span class="hljs-attr">  visualizer:</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">dockersamples/visualizer:stable</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"8080:8080"</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"/var/run/docker.sock:/var/run/docker.sock"</span>
+<span class="hljs-attr">    deploy:</span>
+<span class="hljs-attr">      placement:</span>
+<span class="hljs-attr">        constraints:</span> <span class="hljs-string">[node.role</span> <span class="hljs-string">==</span> <span class="hljs-string">manager]</span>
+<span class="hljs-attr">    networks:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">webnet</span>
+<span class="hljs-attr">  redis:</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">redis</span>
+<span class="hljs-attr">    ports:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"6379:6379"</span>
+<span class="hljs-attr">    volumes:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">"/home/docker/data:/data"</span>
+<span class="hljs-attr">    deploy:</span>
+<span class="hljs-attr">      placement:</span>
+<span class="hljs-attr">        constraints:</span> <span class="hljs-string">[node.role</span> <span class="hljs-string">==</span> <span class="hljs-string">manager]</span>
+<span class="hljs-attr">    command:</span> <span class="hljs-string">redis-server</span> <span class="hljs-bullet">--appendonly</span> <span class="hljs-literal">yes</span>
+<span class="hljs-attr">    networks:</span>
+<span class="hljs-bullet">      -</span> <span class="hljs-string">webnet</span>
+<span class="hljs-attr">networks:</span>
+<span class="hljs-attr">  webnet:</span>
+</code></pre><p>Redis has an official image in the Docker library and has been granted the short image name of just <code>redis</code>, so no <code>username/repo</code> notation here. The Redis port, <code>6379</code>, has been pre-configured by Redis to be exposed from the container to the host, and here in our Compose file we expose it from the host to the world, so you can actually enter the IP for any of your nodes into Redis Desktop Manager and manage this Redis instance, if you so choose.</p><p>Most importantly, there are a couple of things in the redis specification that make data persist between deployments of this stack:</p><ul>
+<li><code>redis</code> always runs on the manager, so it’s always using the same filesystem.</li>
+<li><code>redis</code> accesses a directory in the host’s file system that is linked to the directory <code>/data</code> inside the container, which is where Redis stores data.</li>
+</ul><p>Together, this is creating a “source of truth” in your host’s physical filesystem for the Redis data. Without this, Redis would store its data in <code>/data</code> inside the container’s filesystem, which would get wiped out if that container were ever redeployed.</p><p>This source of truth has two components:</p><ul>
+<li>The placement constraint you put on the Redis service, ensuring that it always uses the same host.</li>
+<li>The volume you created that lets the container access <code>./data</code> (on the host) as <code>/data</code> (inside the Redis container). While containers come and go, the files stored on <code>./data</code> on the specified host persists, enabling continuity.</li>
+</ul><p>You are ready to deploy your new Redis-using stack. Create a <code>./data</code> directory on the manager</p><pre><code class="bash hljs">docker-machine ssh myvm1 <span class="hljs-string">"mkdir ./data"</span>
+</code></pre><p>Run <code>docker stack deploy</code> one more time</p><pre><code class="bash hljs">docker stack deploy -c docker-compose.yml getstartedlab
+</code></pre><p>And visit the web page that you serve on the manager in your browser.</p><h2 id="Afterword"><a class="anchor hidden-xs" href="#Afterword" title="Afterword"><i class="fa fa-link"></i></a>Afterword</h2><p>You have completed two tutorials on virtualization. In the next classes, you are going stick with <code>vagrant</code> to create virtual machines. If you decide to try using Docker for the next several lab sessions - you have this freedom, but you will be on your own (no technical support).</p><h2 id="Links"><a class="anchor hidden-xs" href="#Links" title="Links"><i class="fa fa-link"></i></a>Links</h2><ul>
+<li><a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">Docker Tutorial</a></li>
+<li><a href="https://phoenixnap.com/kb/how-to-install-docker-on-ubuntu-18-04" target="_blank" rel="noopener">Install on Linux</a></li>
+</ul><h2 id="Docker-Tutorial-Troubleshooting"><a class="anchor hidden-xs" href="#Docker-Tutorial-Troubleshooting" title="Docker-Tutorial-Troubleshooting"><i class="fa fa-link"></i></a>Docker Tutorial: Troubleshooting</h2><h2 id="I-have-installed-Docker-Toolbox-but-starting-script-fails"><a class="anchor hidden-xs" href="#I-have-installed-Docker-Toolbox-but-starting-script-fails" title="I-have-installed-Docker-Toolbox-but-starting-script-fails"><i class="fa fa-link"></i></a>I have installed Docker Toolbox, but starting script fails</h2><p>If your starting script fails with a message saying that it cannot find <code>docker-machine.exe</code> or <code>vboxmanage.exe</code>, open the script itself, i.e. <code>C:\Program Files\Docker Toolbox\start.sh</code> and enter respective paths explicitly.</p><h2 id="Docker-Toolbox-cannot-download-boot2dockeriso-image"><a class="anchor hidden-xs" href="#Docker-Toolbox-cannot-download-boot2dockeriso-image" title="Docker-Toolbox-cannot-download-boot2dockeriso-image"><i class="fa fa-link"></i></a>Docker Toolbox cannot download <code>boot2docker.iso</code> image</h2><p>Docket Toolbox installation comes with <code>boot2docker.iso</code>. Locate it in <code>C:\Program Files\Docker Toolbox\boot2docker.iso</code> and copy it to <code>C:/Users/User/.docker/cache</code></p><h2 id="docker-machine-does-not-see-Virtual-box"><a class="anchor hidden-xs" href="#docker-machine-does-not-see-Virtual-box" title="docker-machine-does-not-see-Virtual-box"><i class="fa fa-link"></i></a><code>docker-machine</code> does not see Virtual box</h2><p>You will see similar error</p><pre><code>Running pre-create checks...
+Error with pre-create check: "VBoxManage not found. Make sure VirtualBox is installed and VBoxManage is in the path"
+</code></pre><p><a href="https://github.com/docker/machine/issues/4590" target="_blank" rel="noopener">Solution</a></p><h2 id="Command-eval-sudo-docker-machine-env-myvm1-does-not-do-what-I-want"><a class="anchor hidden-xs" href="#Command-eval-sudo-docker-machine-env-myvm1-does-not-do-what-I-want" title="Command-eval-sudo-docker-machine-env-myvm1-does-not-do-what-I-want"><i class="fa fa-link"></i></a>Command <code>eval $(sudo docker-machine env myvm1)</code> does not do what I want</h2><p><strong>Solution:</strong> <a href="https://docs.docker.com/install/linux/linux-postinstall/" target="_blank" rel="noopener">configure Docker to work without <code>sudo</code></a></p><h2 id="docker-machine-does-not-work-without-sudo"><a class="anchor hidden-xs" href="#docker-machine-does-not-work-without-sudo" title="docker-machine-does-not-work-without-sudo"><i class="fa fa-link"></i></a><code>docker-machine</code> does not work without <code>sudo</code></h2><p>Some problems with Docker arise from the snap version of Docker application. If your version is installed in the form of snap container, remove it and install the latest version from the web site.</p><h2 id="After-shutting-down-workers-cannot-use-swarm-it-says-that-certificate-has-expired"><a class="anchor hidden-xs" href="#After-shutting-down-workers-cannot-use-swarm-it-says-that-certificate-has-expired" title="After-shutting-down-workers-cannot-use-swarm-it-says-that-certificate-has-expired"><i class="fa fa-link"></i></a>After shutting down workers, cannot use swarm, it says that certificate has expired</h2><p><a href="https://docs.google.com/document/d/1-bnE1KSa05TjE2k1wLrls_wbuHJ6UhWMHczIA48psWY/edit" target="_blank" rel="noopener"><strong>Solution provided by Michail</strong></a></p><h2 id="docker-machine-complains-on-lack-of-virtualization-support"><a class="anchor hidden-xs" href="#docker-machine-complains-on-lack-of-virtualization-support" title="docker-machine-complains-on-lack-of-virtualization-support"><i class="fa fa-link"></i></a><code>docker-machine</code> complains on lack of virtualization support</h2><p>If you run Docker on VM, make sure <em>nested virtualization</em> is enabled for your VM.<br>
+If you work on you host machine, make sure virtualization is enambed in BIOS.<br>
+Some versions of Windows do not support virtualization.</p><p>Error example:</p><pre><code class="bash hljs">$ docker-machine create --driver virtualbox myvm1
+
+Running pre-create checks...
+Error with pre-create check: <span class="hljs-string">"This computer doesn't have VT-X/AMD-v enabled. Enabling it in the BIOS is mandatory"</span>
+</code></pre><h2 id="docker-machine-does-not-work-on-mac"><a class="anchor hidden-xs" href="#docker-machine-does-not-work-on-mac" title="docker-machine-does-not-work-on-mac"><i class="fa fa-link"></i></a><code>docker-machine</code> does not work on mac</h2><p>Sometimes after starting the <code>docker-machine</code> on mac you will get the message <code>Killed</code>. This likely means that <code>docker-machine</code> execution was blocked by your privacy settings. Go to Settings, Privacy and Security, General tab, and allow the evecution of <code>docker-machine</code>.</p><h2 id="Containers-stuck-in-Ready-state"><a class="anchor hidden-xs" href="#Containers-stuck-in-Ready-state" title="Containers-stuck-in-Ready-state"><i class="fa fa-link"></i></a>Containers stuck in <code>Ready</code> state</h2><p>Verify the integrity of the container that you have pushed into the repository</p><h2 id="Self-check-Questions"><a class="anchor hidden-xs" href="#Self-check-Questions" title="Self-check-Questions"><i class="fa fa-link"></i></a>Self-check Questions</h2><p>Useful resourse: <a href="https://docs.docker.com/engine/reference/commandline/cli/" target="_blank" rel="noopener">Docker Documentation</a></p><ol>
+<li>Is this statement correct: You can’t create multiple containers from the same image?</li>
+<li>Is this statement correct: All containers running on a single machine share the same operating system kernel, so they start instantly and make more efficient use of RAM.</li>
+<li>Is this statement correct: Containers include the application and all of its dependencies, but share the kernel with other containers. They run as an isolated process in userspace on the host operating system. They’re also not tied to any specific infrastructure – Docker containers run on any computer, on any infrastructure, and in any cloud.</li>
+<li>Fill in a blank: ________ is a cloud-hosted service from Docker that provides registry capabilities for public and private content</li>
+<li>Fill in a blank: ________ is a tool for defining and running multi-container Docker applications.</li>
+<li>Fill in a blank: ________ is native clustering for Docker. It turns a pool of Docker hosts into a single, virtual Docker host.</li>
+<li>Fill in a blank: ________ is a text document that contains all the commands a user could call on the command line to assemble an image</li>
+<li>Explain Docker command: <code>docker exec -it container_id bash</code></li>
+<li>Explain Docker command: <code>docker build -t my_user/repo_name:1.0</code></li>
+<li>Explain Docker command: <code>docker commit -m "My first update" container_ID user_name/repository_name</code></li>
+<li>Explain Docker command: <code>docker push user_name/repository_name</code></li>
+<li>Explain Docker command: <code>docker ps</code></li>
+<li>Explain Docker command: <code>docker images</code></li>
+<li>Explain Docker command: <code>docker ps -a</code></li>
+<li>Which command runs a Docker container?</li>
+<li>Which command stops Docker a container?</li>
+<li>Which command deletes a Docker container?</li>
+<li>Which command deletes a Docker image?</li>
+</ol><h2 id="Acceptance-criteria"><a class="anchor hidden-xs" href="#Acceptance-criteria" title="Acceptance-criteria"><i class="fa fa-link"></i></a>Acceptance criteria:</h2><ol start="0">
+<li>Understanding of what you did</li>
+<li>Image loaded to docker hub</li>
+<li>Stack deployed to <strong>2 VMs</strong> in the swarm</li>
+<li>Visualizer container running relevant web page from the host machine</li>
+<li>Hello web page opens from the host (from both VM IPs)</li>
+<li>Counter from Redis works</li>
+</ol><h1 id="Bash"><a class="anchor hidden-xs" href="#Bash" title="Bash"><i class="fa fa-link"></i></a>Bash</h1><p>by Boris</p><h2 id="UnixOSbash"><a class="anchor hidden-xs" href="#UnixOSbash" title="UnixOSbash"><i class="fa fa-link"></i></a>Unix/OS/bash</h2><h3 id="Introduction"><a class="anchor hidden-xs" href="#Introduction" title="Introduction"><i class="fa fa-link"></i></a>Introduction</h3><p>Here you will become familiar with tools that “red eyes” community (a.k.a. <strong>Linux</strong>oids) have to use every day.</p><p>Whenever you read manuals, symbol <code>$</code> usually signifies the beginning of a bash command. For example:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> hello
+</code></pre><p>That means the author expects that you will type “echo hello” in a bash-compatible shell and, probably, execute it.</p><h3 id="-man"><a class="anchor hidden-xs" href="#-man" title="-man"><i class="fa fa-link"></i></a>$ man</h3><p><strong>man</strong> - bash command - utility to get description of bash commands in bash console.</p><h4 id="Usage"><a class="anchor hidden-xs" href="#Usage" title="Usage"><i class="fa fa-link"></i></a>Usage</h4><pre><code class="bash hljs">$ man man
+</code></pre><h4 id="Outcome"><a class="anchor hidden-xs" href="#Outcome" title="Outcome"><i class="fa fa-link"></i></a>Outcome</h4><p>manual for “man” command</p><h4 id="Output"><a class="anchor hidden-xs" href="#Output" title="Output"><i class="fa fa-link"></i></a>Output</h4><pre><code>  "man is the system's manual pager.  Each page argument given to  man  is
+   normally  the  name of a program, utility or function.  The manual page
+   associated with each of these arguments is then found and displayed."
+</code></pre><h4 id="pay-ATTENTION-to-RED-WORDS"><a class="anchor hidden-xs" href="#pay-ATTENTION-to-RED-WORDS" title="pay-ATTENTION-to-RED-WORDS"><i class="fa fa-link"></i></a>(pay ATTENTION to RED WORDS)</h4><p><img src="https://i.imgur.com/v9qNGvl.png" alt="" class="md-image md-image"></p><h4 id="Practice"><a class="anchor hidden-xs" href="#Practice" title="Practice"><i class="fa fa-link"></i></a>Practice</h4><p>execute commands like:</p><pre><code class="bash hljs">$ man ssh
+$ man 1 strcpy
+$ man 3 strcpy <span class="hljs-comment"># c library function documentation.</span>
+$ man rm <span class="hljs-comment">#  After dash in bash goes not executable comments rm -r /</span>
+</code></pre><p>Google this command by yourself</p><pre><code class="bash hljs">$ sudo rm -rf /
+</code></pre><p>Do you want to execute this? Hint: you do not!</p><h3 id="UNIX-shell"><a class="anchor hidden-xs" href="#UNIX-shell" title="UNIX-shell"><i class="fa fa-link"></i></a>UNIX shell</h3><p>Shell is a text user interface (TUI) for accessing operating system’s services. It has many implementations: bash shell, original Unix shell, Bourne shell, ksh, csh, zsh, fish, etc.</p><p>Typical shell for ubuntu is bash you know it as Terminal. Hotkey: <strong>Ctrl + Alt + T</strong></p><h4 id="Questions"><a class="anchor hidden-xs" href="#Questions" title="Questions"><i class="fa fa-link"></i></a>Questions</h4><ul>
+<li>What happens if type Ctrl + Shift + T in opened terminal?</li>
+<li>How changes state of terminal if  invoke command like $ gedit</li>
+<li>if invoke $ gedit &amp;</li>
+<li>behavior if close terminal after $ gedit&amp;<br>
+<span style="color:red"><b>Attention:</b> there are several methods to close terminal (Alt + F4, Ctrl + D, exit command, etc) and, as was found, at least two behaviours. Describe your actions and their consequences. For curiosity kittens :3 <a href="https://en.wikipedia.org/wiki/Signal_(IPC)" target="_blank" rel="noopener">link - SIGKILL, SIGSTOP, SIGTERM…</a> </span></li>
+</ul><h3 id="Processes"><a class="anchor hidden-xs" href="#Processes" title="Processes"><i class="fa fa-link"></i></a>Processes</h3><p>Explore by yourself about</p><pre><code class="bash hljs">$ ps 
+$ pstree
+$ <span class="hljs-built_in">kill</span>
+</code></pre><h3 id="Advanced-Addition"><a class="anchor hidden-xs" href="#Advanced-Addition" title="Advanced-Addition"><i class="fa fa-link"></i></a>Advanced. Addition</h3><p>Foreground processes block shell during execution and background do not. Appending &amp; will run process in background.</p><pre><code class="bash hljs">$ gedit &amp;
+</code></pre><p>Foreground process can be suspend by <strong>ctrl+z</strong></p><pre><code class="bash hljs"><span class="hljs-variable">$jobs</span> <span class="hljs-comment">#  display list of jobs.</span>
+</code></pre><h4 id="Advanced-practice-1"><a class="anchor hidden-xs" href="#Advanced-practice-1" title="Advanced-practice-1"><i class="fa fa-link"></i></a>Advanced practice #1</h4><p>Try to close process of command:</p><pre><code class="bash hljs">$ gedit &amp; 
+</code></pre><h3 id="Basic-commands"><a class="anchor hidden-xs" href="#Basic-commands" title="Basic-commands"><i class="fa fa-link"></i></a>Basic commands</h3><h4 id="Shell---File-system-commands"><a class="anchor hidden-xs" href="#Shell---File-system-commands" title="Shell---File-system-commands"><i class="fa fa-link"></i></a>Shell - File system commands</h4><pre><code class="bash hljs"><span class="hljs-built_in">pwd</span> - Print name of current/working directory.
+mkdir &lt;dirname&gt; - Make directory.
+<span class="hljs-built_in">cd</span> &lt;path&gt; - Change directory.
+rm &lt;filenames&gt; - Remove a file.
+rm -r &lt;dirname&gt; - Remove (recursive) a directory.
+ls - List content of a directory.
+mv &lt;old_path&gt; &lt;new_path&gt; - Move file.
+cat &lt;filenames&gt; - Concatenate files to stdout.
+</code></pre><h4 id="Shell---File-System---Special-Characters"><a class="anchor hidden-xs" href="#Shell---File-System---Special-Characters" title="Shell---File-System---Special-Characters"><i class="fa fa-link"></i></a>Shell - File System - Special Characters</h4><p><strong>~</strong> - home directory<br>
+<strong>.</strong> - represent current directory<br>
+<strong>…</strong> - represent parent directory of current directory</p><p>Examples:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">cd</span> .. <span class="hljs-comment"># go previous directory</span>
+$ ls . <span class="hljs-comment"># list all files in current directory</span>
+$ <span class="hljs-built_in">cd</span> ~ <span class="hljs-comment"># go to home directory. What is the path of home directory?</span>
+</code></pre><h3 id="Advanced-Streams-and-Pipelines"><a class="anchor hidden-xs" href="#Advanced-Streams-and-Pipelines" title="Advanced-Streams-and-Pipelines"><i class="fa fa-link"></i></a>Advanced. Streams and Pipelines.</h3><p>Standard streams are preconnected communication channels of programs. They are:</p><ul>
+<li><strong>stdin</strong> - standard input that going into program,</li>
+<li><strong>stdout</strong> - standard out where program writes output,</li>
+<li><strong>stderr</strong> - to display error messages.</li>
+</ul><h4 id="Usage-in-python"><a class="anchor hidden-xs" href="#Usage-in-python" title="Usage-in-python"><i class="fa fa-link"></i></a>Usage in python</h4><p>This code redirects all output of console to the system’s trash file (/dev/null) and saves person’s PC from one of Memory Leack case (critically if code checks for contest like pcms by S.Protasov)</p><pre><code class="python hljs"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HidePrints</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__enter__</span><span class="hljs-params">(self)</span>:</span>
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, <span class="hljs-string">'w'</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__exit__</span><span class="hljs-params">(self, exc_type, exc_val, exc_tb)</span>:</span>
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
+
+<span class="hljs-comment"># ...</span>
+
+<span class="hljs-keyword">with</span> HidePrints():
+    executeCodeWithFloodyOutput(<span class="hljs-string">'drop'</span>)
+</code></pre><h4 id="Advanced-practice-2"><a class="anchor hidden-xs" href="#Advanced-practice-2" title="Advanced-practice-2"><i class="fa fa-link"></i></a>Advanced practice #2</h4><p>Redirect output (for example errors) to the file on your PC (like custom log file)</p><h4 id="Bash-redirect"><a class="anchor hidden-xs" href="#Bash-redirect" title="Bash-redirect"><i class="fa fa-link"></i></a>Bash redirect</h4><p>It is possible to redirect streams to or from files with <strong>&gt;</strong> and <strong>&lt;</strong></p><pre><code class="bash hljs">$ ls &gt; list.txt <span class="hljs-comment"># Save list of files in current directory to list.txt</span>
+$ head -n 3 &lt; file.txt <span class="hljs-comment"># Display the first 3 entries.</span>
+</code></pre><p>It is possible to redirect output of one program to input of another by <strong>|</strong> (pipe symbol)</p><pre><code class="bash hljs">$ ls | sort -r | tail -n 3
+</code></pre><p>Command above receives list of files, reverse sort and display the 3 last.</p><h3 id="Excercises"><a class="anchor hidden-xs" href="#Excercises" title="Excercises"><i class="fa fa-link"></i></a>Excercises</h3><h4 id="Ex1"><a class="anchor hidden-xs" href="#Ex1" title="Ex1"><i class="fa fa-link"></i></a>Ex1</h4><p>Create directory “week1” in home directory.</p><pre><code class="bash hljs">$ mkdir ~/week1
+$ <span class="hljs-built_in">cd</span> ~/week1
+</code></pre><p>List entries in /usr/bin that contain “gcc” in reverse alphabetical order. Save results in “~/week1/ex1.txt”.</p><p><strong>Hint</strong>: use $ grep utility (<a href="https://docs.oracle.com/cd/E19455-01/806-2902/6jc3b36dn/index.html" target="_blank" rel="noopener">https://docs.oracle.com/cd/E19455-01/806-2902/6jc3b36dn/index.html</a>)</p><h4 id="Ex2"><a class="anchor hidden-xs" href="#Ex2" title="Ex2"><i class="fa fa-link"></i></a>Ex2</h4><p>Execute command</p><pre><code class="bash hljs">$ <span class="hljs-built_in">history</span> -c <span class="hljs-comment"># to clear history of your bash commands</span>
+</code></pre><p>Then execute some commands</p><pre><code class="bash hljs"><span class="hljs-comment">## for example</span>
+$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"hello"</span> 
+$ mkdir ~/hello
+$ <span class="hljs-built_in">cd</span> hello
+$ ping -c 4 8.8.8.8 &gt;&gt; log.txt 
+$ cp log.txt ..
+$ <span class="hljs-built_in">cd</span> ..
+$ cat log.txt
+$ rm -r hello
+$ rm log.txt
+$ <span class="hljs-built_in">echo</span> <span class="hljs-keyword">done</span>
+</code></pre><p>Then save history to “~/week1/ex2.txt”.</p><pre><code class="bash hljs">$ <span class="hljs-built_in">history</span> | cut -c 8- &gt; ex2.txt
+</code></pre><h4 id="Ex2-Continue"><a class="anchor hidden-xs" href="#Ex2-Continue" title="Ex2-Continue"><i class="fa fa-link"></i></a>Ex2 (Continue)</h4><p>Change ex2.txt file to run it from console. Such a file named as Bash script (often with .sh extension). Use guide like this: <a href="http://omgenomics.com/writing-bash-script/" target="_blank" rel="noopener">http://omgenomics.com/writing-bash-script/</a><br>
+(step 1-5)</p><p>Execute your script.</p><h3 id="bashrc"><a class="anchor hidden-xs" href="#bashrc" title="bashrc"><i class="fa fa-link"></i></a>~/.bashrc</h3><p><strong>.bashrc</strong> is a shell script that Bash runs whenever it is started interactively. It initializes an interactive shell session. You can put any command in that file that you could type at the command prompt.</p><p>You put commands here to set up the shell for use in your particular environment, or to customize things to your preferences. A common thing to put in <strong>.bashrc</strong> are aliases that you want to always be available.</p><h4 id="Alias"><a class="anchor hidden-xs" href="#Alias" title="Alias"><i class="fa fa-link"></i></a>Alias</h4><p>In computing, alias is a command in various command line interpreters (shells) which enables a replacement of a word by another string. For example:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">alias</span> copy=<span class="hljs-string">'cp'</span>
+</code></pre><p>then you can use</p><pre><code class="bash hljs">$ copy file file2 <span class="hljs-comment">#instead of cp file file2</span>
+</code></pre><h4 id="Self-study"><a class="anchor hidden-xs" href="#Self-study" title="Self-study"><i class="fa fa-link"></i></a>Self study</h4><p>Can we use this tools to execute Windows scripts on Linux?</p><h4 id="Variables"><a class="anchor hidden-xs" href="#Variables" title="Variables"><i class="fa fa-link"></i></a>Variables</h4><p>Variables - pairs of key value in bash and used like:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span>
+</code></pre><p>where <strong>$PATH</strong> substitutes variable</p><h4 id="ENVIRONMENT"><a class="anchor hidden-xs" href="#ENVIRONMENT" title="ENVIRONMENT"><i class="fa fa-link"></i></a>ENVIRONMENT</h4><p>When a program is invoked it is given an array of strings called the environment. This is a list of name-value pairs, of the form name=value.</p><p>Executed commands inherit the environment. The <strong>$ export</strong> command allow parameters and functions to be added to and deleted from the environment. Removed by the <strong>$ unset</strong></p><pre><code class="bash hljs">$ <span class="hljs-built_in">export</span> KEK=<span class="hljs-variable">$HOME</span><span class="hljs-string">"/kek"</span>
+$ mkdir KEK
+</code></pre><p>Then open or rerun Terminal and paste:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$KEK</span>
+</code></pre><p>As result it should just print empty string. This is because environment not keeps lust state. To make default state repeatable, we add such a commands in <strong>~/.bashrc</strong> file. You can do it in editor (but this file is hidden as all files started with dot in Unix) or add to end of file with command:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">"export KEK=<span class="hljs-variable">$HOME</span>\"/kek\""</span> &gt;&gt; ~/.bashrc
+</code></pre><p>Than you will open Terminal next time, variable <strong>KEK</strong> will be accessible again.</p><p>More materials <a href="https://www.lifewire.com/bashrc-file-4101947" target="_blank" rel="noopener">here</a></p><h3 id="The-PATH-Environment-Variable"><a class="anchor hidden-xs" href="#The-PATH-Environment-Variable" title="The-PATH-Environment-Variable"><i class="fa fa-link"></i></a>The PATH Environment Variable</h3><p>The PATH environment variable has a special format. Let’s see what it looks like:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span>
+</code></pre><p>It’s essentially a : separated list of directories. When you execute a command, the shell searches through each of these directories, one by one, until it finds a directory where the executable exists. We can find ls in /bin, right? /bin is the second item in the PATH variable. So let’s remove /bin from PATH. We can do this by using the export command:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">export</span> PATH=/usr/<span class="hljs-built_in">local</span>/bin:/usr/bin:/sbin:/usr/sbin:
+</code></pre><p>Make sure that the variable is set correctly:</p><pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span>
+</code></pre><p>Now, if we try to run ls, the shell no longer knows to look in /bin!</p><pre><code class="bash hljs">$ ls <span class="hljs-comment"># -bash: ls: command not found</span>
+</code></pre><p>As expected, ls can no longer be found. More details <a href="https://www.cs.purdue.edu/homes/bb/cs348/www-S08/unix_path.html" target="_blank" rel="noopener">here</a></p><h4 id="Ex-3"><a class="anchor hidden-xs" href="#Ex-3" title="Ex-3"><i class="fa fa-link"></i></a>Ex 3</h4><p>Modify your ~/.bashrc file to use such a aliasing tools (at least “cp” to “copy” aliasing).<br>
+Provide your modifications from ~/.bashrc<br>
+Can “one of my friends” use information from your ~/.bashrc to hack you?</p><h3 id="Read-by-your-own"><a class="anchor hidden-xs" href="#Read-by-your-own" title="Read-by-your-own"><i class="fa fa-link"></i></a>Read by your own</h3><p>What is responsibility of default linux folders? <a href="https://itshaman.ru/articles/10/directory-linux" target="_blank" rel="noopener">rus</a><br>
+Why everything in linux is file? For example <strong>$ ls /proc</strong> will introduce you all processes and its information. Is Windows the same?</p><h3 id="PS-“Holy-Grail”-of-sysadmins-or-just-logs"><a class="anchor hidden-xs" href="#PS-“Holy-Grail”-of-sysadmins-or-just-logs" title="PS-“Holy-Grail”-of-sysadmins-or-just-logs"><i class="fa fa-link"></i></a>P.S. “Holy Grail” of sysadmins or just logs</h3><p>Each program generates something output (at least return code). It help programmers to understand what happens inside program. The best practice is to use logs. There is no universal solution how to organize or store logs. Some programs store them in system folders (e.g. dpkg tool that installs packages in linux uses /var/log/dpkg.log file)</p><p>Pay attention to this <a href="https://stackify.com/linux-logs/" target="_blank" rel="noopener">link</a></p><pre><code class="bash hljs">$ cat  /var/<span class="hljs-built_in">log</span>/dpkg.log <span class="hljs-comment"># use tail and pipe to short it by yourself :3</span>
+</code></pre><p>Use logs, analyse logs, google error messages from logs, share logs with friends, subscribe on logs, put likes to logs. Don’t rush in tg till you read logs ;)</p><h2 id="Networks"><a class="anchor hidden-xs" href="#Networks" title="Networks"><i class="fa fa-link"></i></a>Networks</h2><h3 id="How-TCPIP-stack-looks-like"><a class="anchor hidden-xs" href="#How-TCPIP-stack-looks-like" title="How-TCPIP-stack-looks-like"><i class="fa fa-link"></i></a>How TCP/IP stack looks like.</h3><p><img src="https://i.imgur.com/OcfBy2b.png" alt="" class="md-image md-image"><br>
+Behind this idea is layered architecture. Each layer has own set of commands (interface), error checking, information delivery addresses and useful data part.</p><p>Data frame (restored from raw bits) can be represented like <img src="https://i.imgur.com/5r0JtDP.png" alt="" class="md-image md-image"></p><p>or like this</p><p><img src="https://i.imgur.com/12fV3Vh.png" alt="" class="md-image md-image"></p><p>That means each website you visit, delivered to your machine by packets like this. Their packet varies from ~60 Bytes to ~64 KBytes. Moodle dashboard weights ~3.4 MB for me. Think about this values.</p><p>DS students should be familiar with that because often their (your) work depend on virtualization technologies such that Virtual Machines, remote desktop (ssh), private/virtual networks.</p><p>It is too hard to shortly explain 1 semester Tanenbaum based course at single page, so learn such a topics by yourself:</p><ul>
+<li>IP</li>
+<li>Port</li>
+<li>DNS</li>
+<li>Bridges (device and network virtualization)</li>
+<li>NAT (Network Address Translation)</li>
+</ul><p>And then answer the questions.<br>
+Useful links:<br>
+THE MOST IMPORTANT FOR U, <a href="https://www.virtualbox.org/manual/ch06.html#network_nat_service" target="_blank" rel="noopener">VirtualBox guidelines </a><br>
+<a href="http://iips.icci.edu.iq/images/exam/Computer-Networks---A-Tanenbaum---5th-edition.pdf" target="_blank" rel="noopener">Tanenbaum</a> (use index)<br>
+<a href="https://nsrc.org/workshops/2014/btnog/raw-attachment/wiki/Track2Agenda/virt-network-modes.pdf" target="_blank" rel="noopener">Good slides</a></p><h3 id="Excercises1"><a class="anchor hidden-xs" href="#Excercises1" title="Excercises1"><i class="fa fa-link"></i></a>Excercises</h3><p>Now you are ready to complete 13 questions from moodle.</p><h3 id="Network-tools"><a class="anchor hidden-xs" href="#Network-tools" title="Network-tools"><i class="fa fa-link"></i></a>Network tools</h3><h4 id="wgetcurl"><a class="anchor hidden-xs" href="#wgetcurl" title="wgetcurl"><i class="fa fa-link"></i></a>wget/curl</h4><p><strong>wget</strong> and <strong>curl</strong> are command-line programs that let you fetch a URL. Unlike a web browser,<br>
+which fetches and executes entire pages, wget and curl give you control over exactly which<br>
+URLs you fetch and when you fetch them.</p><pre><code class="bash hljs">$ wget http://innopolis.ru
+$ curl http://innopolis.ru
+</code></pre><p>This will fetch the resource and either write it to a file (wget) or to the screen (curl)</p><h4 id="ping"><a class="anchor hidden-xs" href="#ping" title="ping"><i class="fa fa-link"></i></a>ping</h4><p><strong>ping</strong> is a standard command-line utility for checking that another computer is responsive. It is widely used for network troubleshooting and comes pre-installed on Window, Linux, and Mac. While ping has various options, simply issuing the command</p><pre><code class="bash hljs">ping www.bing.com
+</code></pre><p>will cause your computer to send a small number of ICMP ping requests to the remote computer (here <a href="http://www.bing.com" target="_blank" rel="noopener">www.bing.com</a>), each of which should elicit an ICMP ping response.</p><h4 id="traceroute"><a class="anchor hidden-xs" href="#traceroute" title="traceroute"><i class="fa fa-link"></i></a>traceroute</h4><p><strong>traceroute</strong> is a standard command-line utility for discovering the Internet paths that your computer uses. It is widely used for network troubleshooting. It comes pre-installed on Window and Mac, and can be installed using your package manager on Linux. On Windows, it is called “tracert”. It has various options, but simply<br>
+issuing the command</p><pre><code class="bash hljs">traceroute university.innopolis.ru
+</code></pre><p>will cause your computer to<br>
+find and print the path to the remote computer (here <a href="http://university.innopolis.ru" target="_blank" rel="noopener">university.innopolis.ru</a>).</p><p>If you are on Linux / Mac and behind a NAT (as most home users or virtual machine users) then<br>
+use the –I option (that was a capital i) to traceroute, e.g.,</p><pre><code class="bash hljs">traceroute –I university.innopolis.ru
+</code></pre><p>This will cause traceroute to send ICMP probes like tracert instead of its usual UDP probes; ICMP probes are better able to pass through NAT boxes.</p><h4 id="ifconfig"><a class="anchor hidden-xs" href="#ifconfig" title="ifconfig"><i class="fa fa-link"></i></a>ifconfig</h4><p><strong>ifconfig</strong> stands for “interface configuration”. It is used to view and change the configuration of the network interfaces on your system. Helps to explore addresses and names of networks and virtual networks of your machine. Also in</p><pre><code class="bash hljs">$ man ifconfig
+</code></pre><p>you can find another utilities how to use this tool to modify network interfaces.</p><h4 id="ssh"><a class="anchor hidden-xs" href="#ssh" title="ssh"><i class="fa fa-link"></i></a>ssh</h4><p><strong>SSH</strong> a.k.a. Secure Shell or Secure Socket Shell, is a network protocol that gives users, particularly system administrators, a secure way to access a computer over an unsecured network. SSH also refers to the suite of utilities that implement the SSH protocol. Secure Shell provides strong authentication and encrypted data communications between two computers connecting over an open network such as the internet. SSH is widely used by network administrators for managing systems and applications remotely, allowing them to log into another computer over a network, execute commands and move files from one computer to another.</p><p>The most basic use of SSH is for connecting to a remote host for a terminal session. The form of that command is:</p><pre><code class="bash hljs">$ ssh UserName@SSHserver.example.com
+<span class="hljs-comment"># or </span>
+$ ssh myPCName@192.168.0.1 <span class="hljs-comment">#where 192.168.0.1 is myPCName's IP.</span>
+</code></pre><h4 id="Other-tools"><a class="anchor hidden-xs" href="#Other-tools" title="Other-tools"><i class="fa fa-link"></i></a>Other tools</h4><p>Look  for <strong>$ netcat</strong> (the most useful for future works), <strong>$ netstat</strong> and <strong>$ scp</strong> by your own.</p><h4 id="Read-by-your-own1"><a class="anchor hidden-xs" href="#Read-by-your-own1" title="Read-by-your-own1"><i class="fa fa-link"></i></a>Read by your own</h4><ul>
+<li>Socket connection</li>
+<li>OSI model</li>
+<li>Default ports</li>
+<li>localhost</li>
+<li>/etc/network</li>
+</ul><h2 id="Shared-folders"><a class="anchor hidden-xs" href="#Shared-folders" title="Shared-folders"><i class="fa fa-link"></i></a>Shared folders</h2><p>The easiest way to share files between your host and guest machines. Only loosers use TG to share files btw your machines. There is no silver bullet for every hypervisor how to work with shared folder, so there no guides, but keep it in mind when you will work with files passing.</p></div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+                <div class="toc"><ul class="nav">
+<li class=""><a href="#Lab-0---Docker-amp-Bash" title="Lab 0 - Docker &amp; Bash">Lab 0 - Docker &amp; Bash</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Docker" title="Docker">Docker</a><ul class="nav">
+<li><a href="#How-is-Docker-different-from-VMs" title="How is Docker different from VMs?">How is Docker different from VMs?</a></li>
+<li><a href="#Check-Docker-Info" title="Check Docker Info">Check Docker Info</a></li>
+<li><a href="#Test-Docker-installation" title="Test Docker installation">Test Docker installation</a></li>
+<li><a href="#Build-Your-Image-and-Instantiate-Your-Container" title="Build Your Image and Instantiate Your Container">Build Your Image and Instantiate Your Container</a><ul class="nav">
+<li><a href="#Before-Building-an-Image" title="Before Building an Image">Before Building an Image</a></li>
+<li><a href="#Build-the-App" title="Build the App">Build the App</a></li>
+<li><a href="#Run-the-app" title="Run the app">Run the app</a></li>
+</ul>
+</li>
+<li><a href="#Repository-for-Docker-Images" title="Repository for Docker Images">Repository for Docker Images</a></li>
+<li><a href="#Docker-for-Services" title="Docker for Services">Docker for Services</a><ul class="nav">
+<li><a href="#Define-a-Service" title="Define a Service">Define a Service</a></li>
+<li><a href="#Deploying-a-Service" title="Deploying a Service">Deploying a Service</a></li>
+<li><a href="#Scaling-Your-App" title="Scaling Your App">Scaling Your App</a></li>
+<li><a href="#Shutting-Down-Your-Service" title="Shutting Down Your Service">Shutting Down Your Service</a></li>
+</ul>
+</li>
+<li><a href="#More-About-Swarms" title="More About Swarms">More About Swarms</a><ul class="nav">
+<li><a href="#Set-Up-Your-Swarm" title="Set Up Your Swarm">Set Up Your Swarm</a></li>
+<li><a href="#Deploy-You-App-to-the-Swarm-Cluster" title="Deploy You App to the Swarm Cluster">Deploy You App to the Swarm Cluster</a></li>
+<li><a href="#Deploy-the-App-on-the-Swarm-Manager" title="Deploy the App on the Swarm Manager">Deploy the App on the Swarm Manager</a></li>
+</ul>
+</li>
+<li><a href="#More-About-Stacks" title="More About Stacks">More About Stacks</a><ul class="nav">
+<li><a href="#Adding-a-New-Service" title="Adding a New Service">Adding a New Service</a></li>
+<li><a href="#Adding-One-More-Service" title="Adding One More Service">Adding One More Service</a></li>
+</ul>
+</li>
+<li><a href="#Afterword" title="Afterword">Afterword</a></li>
+<li><a href="#Links" title="Links">Links</a></li>
+<li><a href="#Docker-Tutorial-Troubleshooting" title="Docker Tutorial: Troubleshooting">Docker Tutorial: Troubleshooting</a></li>
+<li><a href="#I-have-installed-Docker-Toolbox-but-starting-script-fails" title="I have installed Docker Toolbox, but starting script fails">I have installed Docker Toolbox, but starting script fails</a></li>
+<li><a href="#Docker-Toolbox-cannot-download-boot2dockeriso-image" title="Docker Toolbox cannot download boot2docker.iso image">Docker Toolbox cannot download boot2docker.iso image</a></li>
+<li><a href="#docker-machine-does-not-see-Virtual-box" title="docker-machine does not see Virtual box">docker-machine does not see Virtual box</a></li>
+<li><a href="#Command-eval-sudo-docker-machine-env-myvm1-does-not-do-what-I-want" title="Command eval $(sudo docker-machine env myvm1) does not do what I want">Command eval $(sudo docker-machine env myvm1) does not do what I want</a></li>
+<li><a href="#docker-machine-does-not-work-without-sudo" title="docker-machine does not work without sudo">docker-machine does not work without sudo</a></li>
+<li><a href="#After-shutting-down-workers-cannot-use-swarm-it-says-that-certificate-has-expired" title="After shutting down workers, cannot use swarm, it says that certificate has expired">After shutting down workers, cannot use swarm, it says that certificate has expired</a></li>
+<li><a href="#docker-machine-complains-on-lack-of-virtualization-support" title="docker-machine complains on lack of virtualization support">docker-machine complains on lack of virtualization support</a></li>
+<li><a href="#docker-machine-does-not-work-on-mac" title="docker-machine does not work on mac">docker-machine does not work on mac</a></li>
+<li><a href="#Containers-stuck-in-Ready-state" title="Containers stuck in Ready state">Containers stuck in Ready state</a></li>
+<li><a href="#Self-check-Questions" title="Self-check Questions">Self-check Questions</a></li>
+<li><a href="#Acceptance-criteria" title="Acceptance criteria:">Acceptance criteria:</a></li>
+</ul>
+</li>
+<li><a href="#Bash" title="Bash">Bash</a><ul class="nav">
+<li><a href="#UnixOSbash" title="Unix/OS/bash">Unix/OS/bash</a><ul class="nav">
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#-man" title="$ man">$ man</a></li>
+<li><a href="#UNIX-shell" title="UNIX shell">UNIX shell</a></li>
+<li><a href="#Processes" title="Processes">Processes</a></li>
+<li><a href="#Advanced-Addition" title="Advanced. Addition">Advanced. Addition</a></li>
+<li><a href="#Basic-commands" title="Basic commands">Basic commands</a></li>
+<li><a href="#Advanced-Streams-and-Pipelines" title="Advanced. Streams and Pipelines.">Advanced. Streams and Pipelines.</a></li>
+<li><a href="#Excercises" title="Excercises">Excercises</a></li>
+<li><a href="#bashrc" title="~/.bashrc">~/.bashrc</a></li>
+<li><a href="#The-PATH-Environment-Variable" title="The PATH Environment Variable">The PATH Environment Variable</a></li>
+<li><a href="#Read-by-your-own" title="Read by your own">Read by your own</a></li>
+<li><a href="#PS-“Holy-Grail”-of-sysadmins-or-just-logs" title="P.S. “Holy Grail” of sysadmins or just logs">P.S. “Holy Grail” of sysadmins or just logs</a></li>
+</ul>
+</li>
+<li><a href="#Networks" title="Networks">Networks</a><ul class="nav">
+<li><a href="#How-TCPIP-stack-looks-like" title="How TCP/IP stack looks like.">How TCP/IP stack looks like.</a></li>
+<li><a href="#Excercises1" title="Excercises">Excercises</a></li>
+<li><a href="#Network-tools" title="Network tools">Network tools</a></li>
+</ul>
+</li>
+<li><a href="#Shared-folders" title="Shared folders">Shared folders</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu" style="">
+    <a class="expand-toggle expand-all" href="#">Expand all</a>
+    <a class="expand-toggle collapse-all" href="#" style="display: none;">Collapse all</a>
+    <a class="back-to-top" href="#">Back to top</a>
+    <a class="go-to-bottom" href="#">Go to bottom</a>
+</div>
+            </ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
+        <div class="toc"><ul class="nav">
+<li class=""><a href="#Lab-0---Docker-amp-Bash" title="Lab 0 - Docker &amp; Bash">Lab 0 - Docker &amp; Bash</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Docker" title="Docker">Docker</a><ul class="nav">
+<li><a href="#How-is-Docker-different-from-VMs" title="How is Docker different from VMs?">How is Docker different from VMs?</a></li>
+<li><a href="#Check-Docker-Info" title="Check Docker Info">Check Docker Info</a></li>
+<li><a href="#Test-Docker-installation" title="Test Docker installation">Test Docker installation</a></li>
+<li><a href="#Build-Your-Image-and-Instantiate-Your-Container" title="Build Your Image and Instantiate Your Container">Build Your Image and Instantiate Your Container</a><ul class="nav">
+<li><a href="#Before-Building-an-Image" title="Before Building an Image">Before Building an Image</a></li>
+<li><a href="#Build-the-App" title="Build the App">Build the App</a></li>
+<li><a href="#Run-the-app" title="Run the app">Run the app</a></li>
+</ul>
+</li>
+<li><a href="#Repository-for-Docker-Images" title="Repository for Docker Images">Repository for Docker Images</a></li>
+<li><a href="#Docker-for-Services" title="Docker for Services">Docker for Services</a><ul class="nav">
+<li><a href="#Define-a-Service" title="Define a Service">Define a Service</a></li>
+<li><a href="#Deploying-a-Service" title="Deploying a Service">Deploying a Service</a></li>
+<li><a href="#Scaling-Your-App" title="Scaling Your App">Scaling Your App</a></li>
+<li><a href="#Shutting-Down-Your-Service" title="Shutting Down Your Service">Shutting Down Your Service</a></li>
+</ul>
+</li>
+<li><a href="#More-About-Swarms" title="More About Swarms">More About Swarms</a><ul class="nav">
+<li><a href="#Set-Up-Your-Swarm" title="Set Up Your Swarm">Set Up Your Swarm</a></li>
+<li><a href="#Deploy-You-App-to-the-Swarm-Cluster" title="Deploy You App to the Swarm Cluster">Deploy You App to the Swarm Cluster</a></li>
+<li><a href="#Deploy-the-App-on-the-Swarm-Manager" title="Deploy the App on the Swarm Manager">Deploy the App on the Swarm Manager</a></li>
+</ul>
+</li>
+<li><a href="#More-About-Stacks" title="More About Stacks">More About Stacks</a><ul class="nav">
+<li><a href="#Adding-a-New-Service" title="Adding a New Service">Adding a New Service</a></li>
+<li><a href="#Adding-One-More-Service" title="Adding One More Service">Adding One More Service</a></li>
+</ul>
+</li>
+<li><a href="#Afterword" title="Afterword">Afterword</a></li>
+<li><a href="#Links" title="Links">Links</a></li>
+<li><a href="#Docker-Tutorial-Troubleshooting" title="Docker Tutorial: Troubleshooting">Docker Tutorial: Troubleshooting</a></li>
+<li><a href="#I-have-installed-Docker-Toolbox-but-starting-script-fails" title="I have installed Docker Toolbox, but starting script fails">I have installed Docker Toolbox, but starting script fails</a></li>
+<li><a href="#Docker-Toolbox-cannot-download-boot2dockeriso-image" title="Docker Toolbox cannot download boot2docker.iso image">Docker Toolbox cannot download boot2docker.iso image</a></li>
+<li><a href="#docker-machine-does-not-see-Virtual-box" title="docker-machine does not see Virtual box">docker-machine does not see Virtual box</a></li>
+<li><a href="#Command-eval-sudo-docker-machine-env-myvm1-does-not-do-what-I-want" title="Command eval $(sudo docker-machine env myvm1) does not do what I want">Command eval $(sudo docker-machine env myvm1) does not do what I want</a></li>
+<li><a href="#docker-machine-does-not-work-without-sudo" title="docker-machine does not work without sudo">docker-machine does not work without sudo</a></li>
+<li><a href="#After-shutting-down-workers-cannot-use-swarm-it-says-that-certificate-has-expired" title="After shutting down workers, cannot use swarm, it says that certificate has expired">After shutting down workers, cannot use swarm, it says that certificate has expired</a></li>
+<li><a href="#docker-machine-complains-on-lack-of-virtualization-support" title="docker-machine complains on lack of virtualization support">docker-machine complains on lack of virtualization support</a></li>
+<li><a href="#docker-machine-does-not-work-on-mac" title="docker-machine does not work on mac">docker-machine does not work on mac</a></li>
+<li><a href="#Containers-stuck-in-Ready-state" title="Containers stuck in Ready state">Containers stuck in Ready state</a></li>
+<li><a href="#Self-check-Questions" title="Self-check Questions">Self-check Questions</a></li>
+<li><a href="#Acceptance-criteria" title="Acceptance criteria:">Acceptance criteria:</a></li>
+</ul>
+</li>
+<li><a href="#Bash" title="Bash">Bash</a><ul class="nav">
+<li><a href="#UnixOSbash" title="Unix/OS/bash">Unix/OS/bash</a><ul class="nav">
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#-man" title="$ man">$ man</a></li>
+<li><a href="#UNIX-shell" title="UNIX shell">UNIX shell</a></li>
+<li><a href="#Processes" title="Processes">Processes</a></li>
+<li><a href="#Advanced-Addition" title="Advanced. Addition">Advanced. Addition</a></li>
+<li><a href="#Basic-commands" title="Basic commands">Basic commands</a></li>
+<li><a href="#Advanced-Streams-and-Pipelines" title="Advanced. Streams and Pipelines.">Advanced. Streams and Pipelines.</a></li>
+<li><a href="#Excercises" title="Excercises">Excercises</a></li>
+<li><a href="#bashrc" title="~/.bashrc">~/.bashrc</a></li>
+<li><a href="#The-PATH-Environment-Variable" title="The PATH Environment Variable">The PATH Environment Variable</a></li>
+<li><a href="#Read-by-your-own" title="Read by your own">Read by your own</a></li>
+<li><a href="#PS-“Holy-Grail”-of-sysadmins-or-just-logs" title="P.S. “Holy Grail” of sysadmins or just logs">P.S. “Holy Grail” of sysadmins or just logs</a></li>
+</ul>
+</li>
+<li><a href="#Networks" title="Networks">Networks</a><ul class="nav">
+<li><a href="#How-TCPIP-stack-looks-like" title="How TCP/IP stack looks like.">How TCP/IP stack looks like.</a></li>
+<li><a href="#Excercises1" title="Excercises">Excercises</a></li>
+<li><a href="#Network-tools" title="Network tools">Network tools</a></li>
+</ul>
+</li>
+<li><a href="#Shared-folders" title="Shared folders">Shared folders</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu" style="">
+    <a class="expand-toggle expand-all" href="#">Expand all</a>
+    <a class="expand-toggle collapse-all" href="#" style="display: none;">Collapse all</a>
+    <a class="back-to-top" href="#">Back to top</a>
+    <a class="go-to-bottom" href="#">Go to bottom</a>
+</div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.min.js" integrity="sha256-kJrlY+s09+QoWjpkOrXXwhxeaoDz9FW5SaxF8I0DibQ=" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.6.0/gist-embed.min.js" integrity="sha256-KyF2D6xPIJUW5sUDSs93vWyZm+1RzIpKCexxElmxl8g=" crossorigin="anonymous" defer></script>
+    <script>
+        var markdown = $(".markdown-body");
+        //smooth all hash trigger scrolling
+        function smoothHashScroll() {
+            var hashElements = $("a[href^='#']").toArray();
+            for (var i = 0; i < hashElements.length; i++) {
+                var element = hashElements[i];
+                var $element = $(element);
+                var hash = element.hash;
+                if (hash) {
+                    $element.on('click', function (e) {
+                        // store hash
+                        var hash = this.hash;
+                        if ($(hash).length <= 0) return;
+                        // prevent default anchor click behavior
+                        e.preventDefault();
+                        // animate
+                        $('body, html').stop(true, true).animate({
+                            scrollTop: $(hash).offset().top
+                        }, 100, "linear", function () {
+                            // when done, add hash to url
+                            // (default click behaviour)
+                            window.location.hash = hash;
+                        });
+                    });
+                }
+            }
+        }
+
+        smoothHashScroll();
+        var toc = $('.ui-toc');
+        var tocAffix = $('.ui-affix-toc');
+        var tocDropdown = $('.ui-toc-dropdown');
+        //toc
+        tocDropdown.click(function (e) {
+            e.stopPropagation();
+        });
+
+        var enoughForAffixToc = true;
+
+        function generateScrollspy() {
+            $(document.body).scrollspy({
+                target: ''
+            });
+            $(document.body).scrollspy('refresh');
+            if (enoughForAffixToc) {
+                toc.hide();
+                tocAffix.show();
+            } else {
+                tocAffix.hide();
+                toc.show();
+            }
+            $(document.body).scroll();
+        }
+
+        function windowResize() {
+            //toc right
+            var paddingRight = parseFloat(markdown.css('padding-right'));
+            var right = ($(window).width() - (markdown.offset().left + markdown.outerWidth() - paddingRight));
+            toc.css('right', right + 'px');
+            //affix toc left
+            var newbool;
+            var rightMargin = (markdown.parent().outerWidth() - markdown.outerWidth()) / 2;
+            //for ipad or wider device
+            if (rightMargin >= 133) {
+                newbool = true;
+                var affixLeftMargin = (tocAffix.outerWidth() - tocAffix.width()) / 2;
+                var left = markdown.offset().left + markdown.outerWidth() - affixLeftMargin;
+                tocAffix.css('left', left + 'px');
+            } else {
+                newbool = false;
+            }
+            if (newbool != enoughForAffixToc) {
+                enoughForAffixToc = newbool;
+                generateScrollspy();
+            }
+        }
+        $(window).resize(function () {
+            windowResize();
+        });
+        $(document).ready(function () {
+            windowResize();
+            generateScrollspy();
+        });
+
+        //remove hash
+        function removeHash() {
+            window.location.hash = '';
+        }
+
+        var backtotop = $('.back-to-top');
+        var gotobottom = $('.go-to-bottom');
+
+        backtotop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToTop)
+                scrollToTop();
+            removeHash();
+        });
+        gotobottom.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToBottom)
+                scrollToBottom();
+            removeHash();
+        });
+
+        var toggle = $('.expand-toggle');
+        var tocExpand = false;
+
+        checkExpandToggle();
+        toggle.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            tocExpand = !tocExpand;
+            checkExpandToggle();
+        })
+
+        function checkExpandToggle () {
+            var toc = $('.ui-toc-dropdown .toc');
+            var toggle = $('.expand-toggle');
+            if (!tocExpand) {
+                toc.removeClass('expand');
+                toggle.text('Expand all');
+            } else {
+                toc.addClass('expand');
+                toggle.text('Collapse all');
+            }
+        }
+
+        function scrollToTop() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: 0
+            }, 100, "linear");
+        }
+
+        function scrollToBottom() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: $(document.body)[0].scrollHeight
+            }, 100, "linear");
+        }
+    </script>
+</body>
+
+</html>
