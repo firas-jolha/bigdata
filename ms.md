@@ -8,6 +8,7 @@ layout: page
 
 ## Labs
 
+### [Lab 0 - Docker & Bash](html/ms/Lab 0 - Docker & Bash.html)
 ### [Lab 1 - Installing HDP Sandbox](html/ms/MS - Lab 1 - Installing HDP Sandbox.html)
 <!-- 
 ### [Lab 2 - Data Retrieval with SQL and Cypher](html/ms/MS - Lab 2 - Data Retrieval with SQL and Cypher.html)
