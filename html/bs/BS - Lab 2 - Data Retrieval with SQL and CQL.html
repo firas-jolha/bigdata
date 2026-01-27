@@ -34,7 +34,7 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Lab-2---Data-Retrieval-with-SQL-and-CQL"><a class="anchor hidden-xs" href="#Lab-2---Data-Retrieval-with-SQL-and-CQL" title="Lab-2---Data-Retrieval-with-SQL-and-CQL"><i class="fa fa-link"></i></a>Lab 2 - Data Retrieval with SQL and CQL</h1><p><strong>Course:</strong> Big Data - IU S25<br>
+    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Lab-2---Data-Retrieval-with-SQL-and-CQL"><a class="anchor hidden-xs" href="#Lab-2---Data-Retrieval-with-SQL-and-CQL" title="Lab-2---Data-Retrieval-with-SQL-and-CQL"><i class="fa fa-link"></i></a>Lab 2 - Data Retrieval with SQL and CQL</h1><p><strong>Course:</strong> Big Data - IU<br>
 <strong>Author:</strong> Firas Jolha</p><h1 id="Dataset"><a class="anchor hidden-xs" href="#Dataset" title="Dataset"><i class="fa fa-link"></i></a>Dataset</h1><ul>
 <li><a href="https://disk.yandex.ru/d/HlBEEgUJmkD6Xg" target="_blank" rel="noopener">Users and Posts</a></li>
 </ul><h1 id="Agenda"><a class="anchor hidden-xs" href="#Agenda" title="Agenda"><i class="fa fa-link"></i></a>Agenda</h1><p></p><div class="toc"><ul>
@@ -441,15 +441,84 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-keyword">SELECT</span> <span class="hljs-number">100</span> * c/c2 || <span class="hljs-string">'%'</span>
 <span class="hljs-keyword">FROM</span> post_total, post_count;
 </code></pre>
-</div><h2 id="Citus-Data"><a class="anchor hidden-xs" href="#Citus-Data" title="Citus-Data"><i class="fa fa-link"></i></a>Citus Data</h2><p>It is called distributed Postgres. The Citus database distributes your Postgres tables or schemas across multiple nodes and parallelizes your queries and transactions. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth often leads to dramatic speed ups. In this chart, we show a benchmark SQL query running ~40x faster with an 8-node Citus cluster vs. a single Postgres node.</p><p><img src="https://www.citusdata.com/assets/images/diagrams/performance-bar-chart.svg" alt="" class="md-image md-image"></p><h4 id="Run-a-cluster-of-Citus-nodes"><a class="anchor hidden-xs" href="#Run-a-cluster-of-Citus-nodes" title="Run-a-cluster-of-Citus-nodes"><i class="fa fa-link"></i></a>Run a cluster of Citus nodes</h4><ol>
+</div><h2 id="Citus-Data"><a class="anchor hidden-xs" href="#Citus-Data" title="Citus-Data"><i class="fa fa-link"></i></a>Citus Data</h2><p>It is called distributed Postgres. The Citus database distributes your Postgres tables or schemas across multiple nodes and parallelizes your queries and transactions. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth often leads to dramatic speed ups. In this chart, we show a benchmark SQL query running ~40x faster with an 8-node Citus cluster vs. a single Postgres node.</p><p><img src="https://www.citusdata.com/assets/images/diagrams/performance-bar-chart.svg" alt="" class="md-image md-image"></p><p>Citus is an open-source PostgreSQL extension to distribute tables and queries on multiple shards. The extension requires a master node aka the coordinator whose role is to forward queries to workers — that actually store data — and gather results.</p><h4 id="Setup-a-Local-Cluster-of-Citus-Nodes"><a class="anchor hidden-xs" href="#Setup-a-Local-Cluster-of-Citus-Nodes" title="Setup-a-Local-Cluster-of-Citus-Nodes"><i class="fa fa-link"></i></a>Setup a Local Cluster of Citus Nodes</h4><ol>
 <li>Prepare the docker compose file.</li>
-</ol><pre><code class="yaml hljs"><span class="hljs-string">curl</span> <span class="hljs-bullet">-L</span> <span class="hljs-attr">https://raw.githubusercontent.com/citusdata/docker/master/docker-compose.yml</span> <span class="hljs-string">&gt; docker-compose.yml
-</span></code></pre><ol start="2">
-<li>Create and run the cluster of 10 nodes.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">COMPOSE_PROJECT_NAME=citus</span> <span class="hljs-string">docker-compose</span> <span class="hljs-string">up</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--scale</span> <span class="hljs-string">worker=10</span>
+</ol><pre><code class="dockerfile hljs"><span class="hljs-comment"># curl -L https://raw.githubusercontent.com/citusdata/docker/master/docker-compose.yml &gt; docker-compose.yml</span>
+<span class="hljs-comment"># docker-compose.yml</span>
+<span class="hljs-comment"># This file is auto generated from it's template,</span>
+<span class="hljs-comment"># see citusdata/tools/packaging_automation/templates/docker/latest/docker-compose.tmpl.yml.</span>
+
+
+services:
+  master:
+    container_name: <span class="hljs-string">"${COMPOSE_PROJECT_NAME:-citus}_master"</span>
+    image: <span class="hljs-string">"citusdata/citus:13.0.3"</span>
+    ports: [<span class="hljs-string">"${COORDINATOR_EXTERNAL_PORT:-5432}:5432"</span>]
+    labels: [<span class="hljs-string">"com.citusdata.role=Master"</span>]
+    environment: &amp;AUTH
+      POSTGRES_USER: <span class="hljs-string">"${POSTGRES_USER:-postgres}"</span>
+      POSTGRES_PASSWORD: <span class="hljs-string">"${POSTGRES_PASSWORD}"</span>
+      PGUSER: <span class="hljs-string">"${POSTGRES_USER:-postgres}"</span>
+      PGPASSWORD: <span class="hljs-string">"${POSTGRES_PASSWORD}"</span>
+      POSTGRES_HOST_AUTH_METHOD: <span class="hljs-string">"${POSTGRES_HOST_AUTH_METHOD:-trust}"</span>
+  worker:
+    image: <span class="hljs-string">"citusdata/citus:13.0.3"</span>
+    labels: [<span class="hljs-string">"com.citusdata.role=Worker"</span>]
+    environment: *AUTH
+    volumes:
+      - <span class="hljs-keyword">healthcheck</span><span class="bash">-volume:/healthcheck</span>
+volumes:
+  <span class="hljs-keyword">healthcheck</span><span class="bash">-volume:</span>
+</code></pre><ol start="2">
+<li>Create and run a cluster of <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 2.804em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.427em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.565em, 1002.37em, 2.535em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-4" style="font-family: MathJax_Main; padding-left: 0.272em;">=</span><span class="mn" id="MathJax-Span-5" style="font-family: MathJax_Main; padding-left: 0.272em;">2</span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mn>2</mn></math></span></span><script type="math/tex" id="MathJax-Element-1">n=2</script></span> nodes.</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-comment"># export POSTGRES_PASSWORD=postgres</span>
+<span class="hljs-string">export</span> <span class="hljs-string">COMPOSE_PROJECT_NAME=citus</span> 
+<span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">up</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--scale</span> <span class="hljs-string">worker=2</span>
+
+<span class="hljs-comment"># You can teminate the cluster by running:</span>
+<span class="hljs-comment"># docker-compose down</span>
 </code></pre><ol start="3">
-<li>Access psql of the master node and run queries.</li>
-</ol><pre><code class="wrap yaml hljs"> <span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">citus_master</span> <span class="hljs-string">psql</span> <span class="hljs-bullet">-U</span> <span class="hljs-string">postgres</span>
+<li>Access psql of the master node (coordinator) and run queries.</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">citus_master</span> <span class="hljs-string">psql</span> <span class="hljs-bullet">-U</span> <span class="hljs-string">postgres</span>
+</code></pre><ol start="4">
+<li>Check if Citus extension is installed or install if not in the Citus master/coordinator.</li>
+</ol><pre><code class="wrap sql hljs"><span class="hljs-comment"># Run this in all nodes</span>
+<span class="hljs-keyword">CREATE</span> EXTENSION <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> <span class="hljs-string">"citus"</span>;
+
+</code></pre><p>You can check which extensions are enabled by running <code>\dx</code> in psql terminal.<br>
+5. Add all workers to the cluster.</p><pre><code class="wrap sql hljs"><span class="hljs-comment">-- list all active nodes</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> master_get_active_worker_nodes();
+
+<span class="hljs-comment">-- add one worker node with hostname 'citus-worker-1' and port 5432.</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">from</span> master_add_node(<span class="hljs-string">'citus-worker-1'</span>, <span class="hljs-number">5432</span>);
+
+</code></pre><ol start="5">
+<li>You can propagate a specific SQL command from the master to all workers as follows:</li>
+</ol><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> run_command_on_workers(<span class="hljs-string">'CREATE EXTENSION IF NOT EXISTS "citus"'</span>);
+</code></pre><ol start="6">
+<li>Create a distributed table.</li>
+</ol><pre><code class="wrap sql hljs"><span class="hljs-comment">-- Create local tables first.</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> <span class="hljs-keyword">Users</span>(
+userid <span class="hljs-built_in">INT</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
+surname <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">50</span>),
+<span class="hljs-keyword">name</span> <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">50</span>),
+age <span class="hljs-built_in">INT</span>,
+_timestamp <span class="hljs-built_in">timestamp</span>,
+temp <span class="hljs-built_in">BIGINT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>
+);
+
+
+<span class="hljs-comment">-- Distribute it using a distribution column (userid)</span>
+<span class="hljs-keyword">SELECT</span> create_distributed_table(<span class="hljs-string">'users'</span>, <span class="hljs-string">'userid'</span>, shard_count := <span class="hljs-number">80</span>);
+<span class="hljs-comment">-- default is 32</span>
+
+
+<span class="hljs-comment">-- create reference table if needed</span>
+<span class="hljs-keyword">SELECT</span> create_reference_table(<span class="hljs-string">'users'</span>);
+
+<span class="hljs-comment">-- upgrade to reference table</span>
+<span class="hljs-keyword">SELECT</span> upgrade_to_reference_table(<span class="hljs-string">'users'</span>);
+
 </code></pre><h1 id="Apache-Cassandra"><a class="anchor hidden-xs" href="#Apache-Cassandra" title="Apache-Cassandra"><i class="fa fa-link"></i></a>Apache Cassandra</h1><p>The Cassandra data store is an open source Apache project. Cassandra originated at <strong>Facebook</strong> in 2007 to solve its inbox search problem where the company had to deal with large volumes of data in a way that was difficult to scale with traditional methods. Cassandra is being used by some of the biggest companies such as Facebook, Twitter, Cisco, Rackspace, ebay, Twitter, Netflix, and more.</p><p>When deadling with Cassandra, keep the following features in mind:</p><ul>
 <li><em>Data is stored in tables</em></li>
 <li><em>Denormalize your tables</em></li>
@@ -1067,7 +1136,7 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li class=""><a href="#Lab-2---Data-Retrieval-with-SQL-and-CQL" title="Lab 2 - Data Retrieval with SQL and CQL">Lab 2 - Data Retrieval with SQL and CQL</a></li>
+<li><a href="#Lab-2---Data-Retrieval-with-SQL-and-CQL" title="Lab 2 - Data Retrieval with SQL and CQL">Lab 2 - Data Retrieval with SQL and CQL</a></li>
 <li><a href="#Dataset" title="Dataset">Dataset</a></li>
 <li><a href="#Agenda" title="Agenda">Agenda</a></li>
 <li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
@@ -1080,14 +1149,14 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
 </ul>
 </li>
-<li><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
+<li class=""><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
 <li><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
 <li><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
 <li><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
-<li><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
+<li class=""><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
 </ul>
 </li>
-<li class=""><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
+<li><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
 <li><a href="#Installing-Cassandra" title="Installing Cassandra">Installing Cassandra</a><ul class="nav">
 <li><a href="#Single-node-Cassandra-server-installation" title="Single-node Cassandra server installation">Single-node Cassandra server installation</a></li>
 <li><a href="#Multi-node-Cassandra-cluster" title="Multi-node Cassandra cluster">Multi-node Cassandra cluster</a></li>
@@ -1105,17 +1174,17 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Distinct" title="Distinct">Distinct</a></li>
 </ul>
 </li>
-<li class=""><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
+<li><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
 <li><a href="#Define-application-queries" title="Define application queries">Define application queries</a></li>
 <li><a href="#Define-logical-data-model" title="Define logical data model">Define logical data model</a></li>
 <li><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
-<li class=""><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
-<li class=""><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
+<li><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
+<li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class=""><a href="#References" title="References">References</a></li>
+<li><a href="#References" title="References">References</a></li>
 </ul>
 </div><div class="toc-menu" style="">
     <a class="expand-toggle expand-all" href="#">Expand all</a>
@@ -1141,14 +1210,14 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
 </ul>
 </li>
-<li><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
+<li class=""><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
 <li><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
 <li><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
 <li><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
-<li><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
+<li class=""><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
 </ul>
 </li>
-<li class=""><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
+<li><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
 <li><a href="#Installing-Cassandra" title="Installing Cassandra">Installing Cassandra</a><ul class="nav">
 <li><a href="#Single-node-Cassandra-server-installation" title="Single-node Cassandra server installation">Single-node Cassandra server installation</a></li>
 <li><a href="#Multi-node-Cassandra-cluster" title="Multi-node Cassandra cluster">Multi-node Cassandra cluster</a></li>
@@ -1166,17 +1235,17 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Distinct" title="Distinct">Distinct</a></li>
 </ul>
 </li>
-<li class=""><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
+<li><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
 <li><a href="#Define-application-queries" title="Define application queries">Define application queries</a></li>
 <li><a href="#Define-logical-data-model" title="Define logical data model">Define logical data model</a></li>
 <li><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
-<li class=""><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
-<li class=""><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
+<li><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
+<li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class=""><a href="#References" title="References">References</a></li>
+<li><a href="#References" title="References">References</a></li>
 </ul>
 </div><div class="toc-menu" style="">
     <a class="expand-toggle expand-all" href="#">Expand all</a>
