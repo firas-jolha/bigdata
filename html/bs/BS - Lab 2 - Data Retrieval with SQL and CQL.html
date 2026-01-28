@@ -84,6 +84,10 @@
 <li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
 </ul>
 </li>
+<li><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul>
+<li><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#References" title="References">References</a></li>
@@ -256,7 +260,7 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> friends2 <span class="hljs-keyword">RENAME</span> <span class="hljs-keyword">TO</span> friends;
 
 </code></pre><h1 id="Data-Retrieval-using-SQL"><a class="anchor hidden-xs" href="#Data-Retrieval-using-SQL" title="Data-Retrieval-using-SQL"><i class="fa fa-link"></i></a>Data Retrieval using SQL</h1><p>In this part of the lab, we will practice on writing SQL queries to retrieve data from our database.</p><h2 id="Data-Retrieval-from-a-single-table"><a class="anchor hidden-xs" href="#Data-Retrieval-from-a-single-table" title="Data-Retrieval-from-a-single-table"><i class="fa fa-link"></i></a>Data Retrieval from a single table</h2><p>You can return data from a single table by using <code>SELECT</code> command. This kind of data retrieval is the simplest way to get data from a single table.</p><div class="alert alert-success">
-<h3 id="Exercises"><a class="anchor hidden-xs" href="#Exercises" title="Exercises"><i class="fa fa-link"></i></a>Exercises</h3>
+<h3 id="Exercises0"><a class="anchor hidden-xs" href="#Exercises0" title="Exercises0"><i class="fa fa-link"></i></a>Exercises</h3>
 <ol>
 <li>Who are the users who have posts?</li>
 </ol>
@@ -316,7 +320,7 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 </div><div class="alert alert-warning">
 <p>In PostgreSQL, double quotes <code>""</code> are used to indicate identifiers within the database, which are objects like tables, column names, and roles. In contrast, single quotes <code>''</code> are used to indicate string literals.</p>
 </div><h2 id="Data-Retrieval-from-multiple-tables-Joining-tables"><a class="anchor hidden-xs" href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data-Retrieval-from-multiple-tables-Joining-tables"><i class="fa fa-link"></i></a>Data Retrieval from multiple tables (Joining tables)</h2><div class="alert alert-success">
-<h3 id="Exercises1"><a class="anchor hidden-xs" href="#Exercises1" title="Exercises1"><i class="fa fa-link"></i></a>Exercises</h3>
+<h3 id="Exercises"><a class="anchor hidden-xs" href="#Exercises" title="Exercises"><i class="fa fa-link"></i></a>Exercises</h3>
 <ol start="8">
 <li>Who is the 2nd youngest person who published <code>Image</code> posts?</li>
 </ol>
@@ -325,8 +329,8 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-keyword">JOIN</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">ON</span> posts.userid = users.userid
 <span class="hljs-keyword">WHERE</span> posts.posttype=<span class="hljs-string">'Image'</span>
 <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> age <span class="hljs-keyword">ASC</span>
-<span class="hljs-keyword">LIMIT</span> <span class="hljs-number">1</span>
-<span class="hljs-keyword">OFFSET</span> <span class="hljs-number">1</span>;
+<span class="hljs-keyword">OFFSET</span> <span class="hljs-number">1</span>
+<span class="hljs-keyword">LIMIT</span> <span class="hljs-number">1</span>;
 </code></pre>
 <ol start="9">
 <li>What are the posts that are published by people who are between 20 and 30?</li>
@@ -481,7 +485,7 @@ volumes:
 <li>Access psql of the master node (coordinator) and run queries.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">citus_master</span> <span class="hljs-string">psql</span> <span class="hljs-bullet">-U</span> <span class="hljs-string">postgres</span>
 </code></pre><ol start="4">
-<li>Check if Citus extension is installed or install if not in the Citus master/coordinator.</li>
+<li>Check if Citus extension is installed or install if not in the Citus master/coordinator on the current database.</li>
 </ol><pre><code class="wrap sql hljs"><span class="hljs-comment"># Run this in all nodes</span>
 <span class="hljs-keyword">CREATE</span> EXTENSION <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> <span class="hljs-string">"citus"</span>;
 
@@ -513,12 +517,44 @@ temp <span class="hljs-built_in">BIGINT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-comment">-- default is 32</span>
 
 
+<span class="hljs-comment">-- send the files to citus_master container using 'docker cp'</span>
+docker cp ~/citus/relational_social_data/users.csv citus_master:/
+
+
+<span class="hljs-comment">-- upload data</span>
+\COPY Users(userid, surname, name, age, temp)  FROM 'users.csv'  DELIMITER ','  CSV HEADER;
+<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">Users</span> <span class="hljs-keyword">SET</span> _timestamp = TO_TIMESTAMP(temp);
+<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">Users</span> <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">COLUMN</span> temp;
+
+
 <span class="hljs-comment">-- create reference table if needed</span>
 <span class="hljs-keyword">SELECT</span> create_reference_table(<span class="hljs-string">'users'</span>);
 
-<span class="hljs-comment">-- upgrade to reference table</span>
+<span class="hljs-comment">-- upgrade distributed to reference table</span>
 <span class="hljs-keyword">SELECT</span> upgrade_to_reference_table(<span class="hljs-string">'users'</span>);
 
+</code></pre><ol start="7">
+<li>Run some useful diagnostic queries (<a href="https://docs.citusdata.com/en/stable/develop/api_metadata.html" target="_blank" rel="noopener">reference</a>)</li>
+</ol><pre><code class="wrap sql hljs"><span class="hljs-comment">-- A view shows a summary of all tables managed by Citus (distributed and reference tables)</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> citus_tables;
+
+<span class="hljs-comment">-- A view helps you inspect shards to find any size imbalances across nodes</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> citus_shards;
+
+<span class="hljs-comment">-- metadata table about which tables in the database are distributed</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> pg_dist_partition;
+
+
+<span class="hljs-comment">-- metadata table about individual shards of a table</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> pg_dist_shard;
+
+
+<span class="hljs-comment">-- table contains information about the worker nodes in the cluster.</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> pg_dist_node;
+</code></pre><ol start="8">
+<li>Run some queries.</li>
+</ol><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> userid
+<span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span>;
 </code></pre><h1 id="Apache-Cassandra"><a class="anchor hidden-xs" href="#Apache-Cassandra" title="Apache-Cassandra"><i class="fa fa-link"></i></a>Apache Cassandra</h1><p>The Cassandra data store is an open source Apache project. Cassandra originated at <strong>Facebook</strong> in 2007 to solve its inbox search problem where the company had to deal with large volumes of data in a way that was difficult to scale with traditional methods. Cassandra is being used by some of the biggest companies such as Facebook, Twitter, Cisco, Rackspace, ebay, Twitter, Netflix, and more.</p><p>When deadling with Cassandra, keep the following features in mind:</p><ul>
 <li><em>Data is stored in tables</em></li>
 <li><em>Denormalize your tables</em></li>
@@ -564,7 +600,7 @@ Connection <span class="hljs-symbol">error:</span> (<span class="hljs-string">'U
 <li>Run the third node.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-3</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span>  <span class="hljs-bullet">-e</span> <span class="hljs-string">CASSANDRA_SEEDS=cassandra-2</span> <span class="hljs-attr">cassandra:latest</span>
 </code></pre><p>You can check the status of the cluster by running the command on one of the nodes:</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-string">cassandra-1</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
-</code></pre><p><img src="https://i.imgur.com/BKgbw23.png" alt="" class="md-image md-image"></p><p><code>UN</code> means that the servers are up and normal.</p><h4 id="2-Using-Docker-Compose"><a class="anchor hidden-xs" href="#2-Using-Docker-Compose" title="2-Using-Docker-Compose"><i class="fa fa-link"></i></a>2. Using Docker Compose</h4><p>Here, I will share the steps to run a Cassandra cluster of 3 nodes by following the instructions in <a href="https://github.com/kayvansol/Cassandra" target="_blank" rel="noopener">this repository</a>. Make sure that you have Docker compose installed, otherwise follow <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">this tutorial</a> to install it. The steps to create a cluster of 3 Cassandra nodes are:</p><ol>
+</code></pre><p><img src="https://i.imgur.com/BpQFyTT.png" alt="" class="md-image md-image"></p><p><code>UN</code> means that the servers are up and normal.</p><h4 id="2-Using-Docker-Compose"><a class="anchor hidden-xs" href="#2-Using-Docker-Compose" title="2-Using-Docker-Compose"><i class="fa fa-link"></i></a>2. Using Docker Compose</h4><p>Here, I will share the steps to run a Cassandra cluster of 3 nodes by following the instructions in <a href="https://github.com/kayvansol/Cassandra" target="_blank" rel="noopener">this repository</a>. Make sure that you have Docker compose installed, otherwise follow <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">this tutorial</a> to install it. The steps to create a cluster of 3 Cassandra nodes are:</p><ol>
 <li>Pull the Cassandra image.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-attr">cassandra:latest</span>
 </code></pre><ol start="2">
@@ -1115,6 +1151,25 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> available_rooms_by_hotel_date
   <span class="hljs-keyword">WHERE</span> hotel_id=<span class="hljs-string">'AZ123'</span> <span class="hljs-keyword">AND</span> <span class="hljs-built_in">date</span>&gt;<span class="hljs-string">'2016-01-05'</span> <span class="hljs-keyword">AND</span> <span class="hljs-built_in">date</span>&lt;<span class="hljs-string">'2016-01-12'</span>
   <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">date</span> <span class="hljs-keyword">DESC</span>;
+</code></pre><h2 id="ScyllaDB-"><a class="anchor hidden-xs" href="#ScyllaDB-" title="ScyllaDB-"><i class="fa fa-link"></i></a>ScyllaDB (<img src="https://www.scylladb.com/wp-content/uploads/scylladb-logo-horizontal.svg" alt="" width="100" height="30" class="md-image md-image">)</h2><p>Scylla is the real-time big data database that is API-compatible with Apache Cassandra and Amazon DynamoDB. ScyllaDB is favored for its exceptional capability to manage high data volumes and support rapid read/write operations. It is particularly effective in environments demanding high throughput, low latency, and the ability to scale.</p><p>ScyllaDB is a C++ rewrite of Cassandra. The primary language for communicating with the ScyllaDB database is the Apache Cassandra Query Language (CQL).</p><h3 id="Install-ScyllaDB"><a class="anchor hidden-xs" href="#Install-ScyllaDB" title="Install-ScyllaDB"><i class="fa fa-link"></i></a>Install ScyllaDB</h3><p>You can similarly install and run a cluster of ScyllaDB nodes using Docker containers.</p><ol>
+<li>Pull the image</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-string">scylladb/scylla</span>
+</code></pre><ol start="2">
+<li>Start a node of ScyllaDB.</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span>
+</code></pre><ol start="3">
+<li>Add more nodes if needed.</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-comment"># Add node 2</span>
+<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla-node2</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span> <span class="hljs-bullet">--seeds="$(docker</span> <span class="hljs-string">inspect</span> <span class="hljs-bullet">--format='{{.NetworkSettings.Networks.bridge.IPAddress}}'</span> <span class="hljs-string">scylla)"</span>
+
+<span class="hljs-comment"># Add node 3</span>
+<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla-node3</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span> <span class="hljs-bullet">--seeds="$(docker</span> <span class="hljs-string">inspect</span> <span class="hljs-bullet">--format='{{.NetworkSettings.Networks.bridge.IPAddress}}'</span> <span class="hljs-string">scylla)"</span>
+</code></pre><ol start="4">
+<li>Check status of nodes.</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">scylla</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
+</code></pre><ol start="5">
+<li>You can start cqlsh to interact with ScyllaDB</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">scylla</span> <span class="hljs-string">cqlsh</span>
 </code></pre><h1 id="References"><a class="anchor hidden-xs" href="#References" title="References"><i class="fa fa-link"></i></a>References</h1><ul>
 <li><a href="https://quickref.me/postgres" target="_blank" rel="noopener">PostgreSQL cheatsheet</a></li>
 <li>Yasin N. Silva, Isadora Almeida, and Michell Queiroz. 2016. SQL: From Traditional Databases to Big Data. In Proceedings of the 47th ACM Technical Symposium on Computing Science Education (SIGCSE '16). Association for Computing Machinery, New York, NY, USA, 413–418. <a href="https://doi.org/10.1145/2839509.2844560" target="_blank" rel="noopener">https://doi.org/10.1145/2839509.2844560</a></li>
@@ -1128,6 +1183,7 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="https://docs.citusdata.com/en/v8.1/installation/single_machine_docker.html" target="_blank" rel="noopener">Citus data installation</a></li>
 <li><a href="https://docs.citusdata.com/en/v8.1/get_started/tutorial_multi_tenant.html#data-model-and-sample-data" target="_blank" rel="noopener">Citus data getting started</a></li>
 <li><a href="https://www.amazon.com/Cassandra-Design-Patterns-Rajanarayanan-Thottuvaikkatumana/dp/178528570X" target="_blank" rel="noopener">Cassandra design patterns</a></li>
+<li><a href="https://docs.scylladb.com/stable/get-started" target="_blank" rel="noopener">Scylladb | Get-Started</a></li>
 </ul></div>
     <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
         <div class="pull-right dropdown">
@@ -1180,6 +1236,10 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
 <li><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
 <li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
+</ul>
+</li>
+<li><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul class="nav">
+<li><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
 </ul>
 </li>
 </ul>
@@ -1241,6 +1301,10 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
 <li><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
 <li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
+</ul>
+</li>
+<li><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul class="nav">
+<li><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
 </ul>
 </li>
 </ul>
