@@ -58,13 +58,24 @@
 </ul>
 </li>
 <li><a href="#Graph-databases" title="Graph databases">Graph databases</a><ul>
-<li><a href="#Download-and-Install-Neo4j" title="Download and Install Neo4j">Download and Install Neo4j</a><ul>
+<li><a href="#Download-and-Install-Memgraph" title="Download and Install Memgraph">Download and Install Memgraph</a></li>
+<li><a href="#Download-and-Install-Neo4j-Optional" title="Download and Install Neo4j (Optional)">Download and Install Neo4j (Optional)</a><ul>
 <li><a href="#Neo4j-docker-image" title="Neo4j docker image">Neo4j docker image</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#Cypher" title="Cypher">Cypher</a><ul>
+<li><a href="#Neo4j" title="Neo4j">Neo4j</a></li>
+<li><a href="#Memgraph" title="Memgraph">Memgraph</a></li>
+<li><a href="#Labeled-Property-Graph-LPG-model" title="Labeled Property Graph (LPG) model">Labeled Property Graph (LPG) model</a></li>
+<li><a href="#Graph-Components" title="Graph Components">Graph Components</a><ul>
+<li><a href="#Nodes" title="Nodes">Nodes</a></li>
+<li><a href="#Relationships" title="Relationships">Relationships</a></li>
+<li><a href="#Labels" title="Labels">Labels</a></li>
+<li><a href="#Properties" title="Properties">Properties</a></li>
+</ul>
+</li>
 <li><a href="#Property-types" title="Property types">Property types</a></li>
 <li><a href="#Structural-types" title="Structural types">Structural types</a></li>
 <li><a href="#Composite-types" title="Composite types">Composite types</a></li>
@@ -81,14 +92,11 @@
 <li><a href="#Patterns" title="Patterns">Patterns</a><ul>
 <li><a href="#Patterns-for-nodes" title="Patterns for nodes">Patterns for nodes</a></li>
 <li><a href="#Patterns-for-related-nodes" title="Patterns for related nodes">Patterns for related nodes</a></li>
-<li><a href="#Patterns-for-labels" title="Patterns for labels">Patterns for labels</a></li>
-<li><a href="#Specifying-properties" title="Specifying properties">Specifying properties</a></li>
-<li><a href="#Patterns-for-relationships" title="Patterns for relationships">Patterns for relationships</a></li>
-<li><a href="#Variable-length-pattern-matching" title="Variable-length pattern matching">Variable-length pattern matching</a></li>
-<li><a href="#Assigning-to-path-variables" title="Assigning to path variables">Assigning to path variables</a></li>
 </ul>
 </li>
-<li><a href="#Build-the-database" title="Build the database">Build the database</a></li>
+<li><a href="#Build-the-database-in-Neo4j-Desktop" title="Build the database in Neo4j Desktop">Build the database in Neo4j Desktop</a></li>
+<li><a href="#Using-Memgraph-installed-via-Docker" title="Using Memgraph installed via Docker">Using Memgraph installed via Docker</a></li>
+<li><a href="#Data-loading-and-creating-nodesrelationships" title="Data loading and creating nodes/relationships">Data loading and creating nodes/relationships</a></li>
 </ul>
 </li>
 <li><a href="#Data-Retrieval-with-Cypher" title="Data Retrieval with Cypher">Data Retrieval with Cypher</a></li>
@@ -247,7 +255,7 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> friends2 RENAMT <span class="hljs-keyword">TO</span> friends;
 
 </code></pre><h1 id="Data-Retrieval-using-SQL"><a class="anchor hidden-xs" href="#Data-Retrieval-using-SQL" title="Data-Retrieval-using-SQL"><i class="fa fa-link"></i></a>Data Retrieval using SQL</h1><p>In this part of the lab, we will practice on writing SQL queries to retrieve data from our database.</p><h2 id="Data-Retrieval-from-a-single-table"><a class="anchor hidden-xs" href="#Data-Retrieval-from-a-single-table" title="Data-Retrieval-from-a-single-table"><i class="fa fa-link"></i></a>Data Retrieval from a single table</h2><p>You can return data from a single table by using <code>SELECT</code> command. This kind of data retrieval is the simplest way to get data from a single table.</p><div class="alert alert-success">
-<h3 id="Exercises"><a class="anchor hidden-xs" href="#Exercises" title="Exercises"><i class="fa fa-link"></i></a>Exercises</h3>
+<h3 id="Exercises0"><a class="anchor hidden-xs" href="#Exercises0" title="Exercises0"><i class="fa fa-link"></i></a>Exercises</h3>
 <ol>
 <li>Who are the users who have posts?</li>
 </ol>
@@ -432,27 +440,33 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-keyword">SELECT</span> <span class="hljs-number">100</span> * c/c2 || <span class="hljs-string">'%'</span>
 <span class="hljs-keyword">FROM</span> post_total, post_count;
 </code></pre>
-</div><h1 id="Graph-databases"><a class="anchor hidden-xs" href="#Graph-databases" title="Graph-databases"><i class="fa fa-link"></i></a>Graph databases</h1><p>A graph database stores nodes and relationships instead of tables, or documents. Data is stored just like you might sketch ideas on a whiteboard. Your data is stored without restricting it to a pre-defined model, allowing a very flexible way of thinking about and using it.</p><p>Graph databases address big challenges many of us tackle daily. Modern data problems often involve many-to-many relationships with heterogeneous data that sets up needs to:</p><ul>
-<li>Navigate deep hierarchies,</li>
-<li>Find hidden connections between distant items, and</li>
-<li>Discover inter-relationships between items.</li>
-</ul><p>Whether it’s a social network, payment networks, or road network you’ll find that everything is an interconnected graph of relationships. And when we want to ask questions about the real world, many questions are about the relationships rather than about the individual data elements.</p><center>
-<img src="https://i.imgur.com/TolfC5Q.png" width="400">
-<p>Example of a simple graph database
-</p>
-</center><p>Neo4j is an open-source, NoSQL, native graph database that provides an ACID-compliant transactional backend for your applications that has been publicly available since 2007. In Neo4j, information is organized as nodes, relationships, and properties. We can retrieve data from Neo4j via its query language called Cypher which is a declarative query language similar to SQL, but optimized for graphs.</p><center>
-<img src="https://i.imgur.com/JE0Cr95.png" width="400">
-<p>Building blocks of the property graph model
-</p>
-</center><p>The property graph model consists of mainly nodes and relationships. Nodes are the entities in the graph.</p><ul>
-<li>Nodes can be tagged with labels, representing their different roles in your domain. (For example, Person).</li>
-<li>Nodes can hold any number of key-value pairs, or properties. (For example, name).</li>
-<li>Node labels may also attach metadata (such as index or constraint information) to certain nodes.</li>
-</ul><p>Whereas relationships provide directed, named, connections between two node entities (e.g. Person LOVES Person).</p><ul>
-<li>Relationships always have a direction, a type, a start node, and an end node, and they can have properties, just like nodes.</li>
-<li>Nodes can have any number or type of relationships without sacrificing performance.</li>
-<li>Although relationships are always directed, they can be navigated efficiently in any direction.</li>
-</ul><h2 id="Download-and-Install-Neo4j"><a class="anchor hidden-xs" href="#Download-and-Install-Neo4j" title="Download-and-Install-Neo4j"><i class="fa fa-link"></i></a>Download and Install Neo4j</h2><p>Neo4j can be installed as an interpreter in Zeppelin but in HDP 2.6.5, Zeppelin 0.7.3 is installed and does not support neo4j interpreter. Installing Neo4j on HDP 2.6.5 as a Zeppelin interpreter will not work. The latest version (in Feb. 2025) of Zeppelin 0.11.0 supports Neo4j but we do not need to install it. Indeed, HDP 3.0 has Zeppelin 0.8.0 installed and supports neo4j interpreter but it is not a big deal to install HDP 3.0 just for neo4j since our work on the sandbox will not be mostly on graph databases.</p><p>The <strong>easy</strong> approach is to install Neo4j Desktop on your local machine. You can find here (<a href="https://neo4j.com/docs/desktop-manual/current/installation/download-installation/" target="_blank" rel="noopener">https://neo4j.com/docs/desktop-manual/current/installation/download-installation/</a>) some information about installing Neo4j Desktop and you can find here (<a href="https://neo4j.com/deployment-center" target="_blank" rel="noopener">https://neo4j.com/deployment-center</a>) download links. After you start downloading, the website will give a long key you need to use when you install the software as follows:<br>
+</div><h1 id="Graph-databases"><a class="anchor hidden-xs" href="#Graph-databases" title="Graph-databases"><i class="fa fa-link"></i></a>Graph databases</h1><p>A graph database is a database designed to store and manage data as a network of nodes (entities) and relationships (connections). Unlike traditional relational databases, where relationships are inferred through joins, graph databases store relationships as first-class citizens, enabling efficient traversal and querying. Graph databases use graph theory principles to structure data, making them ideal for representing highly connected information.</p><p>Graph databases are optimized for relationship-heavy data structures, where connections between entities are as important as the entities themselves. Unlike relational databases, which require complex JOIN operations to connect tables, graph databases enable direct relationship traversal.</p><h2 id="Download-and-Install-Memgraph"><a class="anchor hidden-xs" href="#Download-and-Install-Memgraph" title="Download-and-Install-Memgraph"><i class="fa fa-link"></i></a>Download and Install Memgraph</h2><p>You can download the Docker image for Memgraph and run a container. You can find more detail in <a href="https://memgraph.com/docs/getting-started/install-memgraph/docker" target="_blank" rel="noopener">this official page</a>. Memgraph comes with different Docker images. The main repositories that contain <code>memgraph</code> are:</p><ul>
+<li><code>memgraph/memgraph-mage</code> - includes Memgraph database, command-line interface <code>mgconsole</code> and MAGE graph algorithms library. If tagged with cuGraph, it also includes NVIDIA cuGraph GPU-powered graph algorithms.</li>
+<li><code>memgraph/memgraph</code> - includes Memgraph database and command-line interface <code>mgconsole</code>.</li>
+</ul><p>There are also two additional standalone images that do not include the Memgraph:</p><ul>
+<li><code>memgraph/lab</code> - includes a web interface Memgraph Lab that helps you explore the data stored in Memgraph.</li>
+<li><code>memgraph/mgconsole</code> - includes a command-line interface mgconsole that allows you to interact with Memgraph from the command line.</li>
+</ul><p>For this lab, you can just need two containers. One is the graph engine and another the web user interface. You can run a multi-container memgraph as follows:</p><pre><code class="dockerfile hljs">services:
+  memgraph:
+    image: memgraph/memgraph-mage:latest
+    container_name: memgraph-mage
+    ports:
+      - <span class="hljs-string">"7687:7687"</span>
+      - <span class="hljs-string">"7444:7444"</span>
+    command: [<span class="hljs-string">"--log-level=TRACE"</span>]
+
+  lab:
+    image: memgraph/lab:latest
+    container_name: memgraph-lab
+    ports:
+      - <span class="hljs-string">"3001:3000"</span>
+    depends_on:
+      - memgraph
+    environment:
+      - QUICK_CONNECT_MG_HOST=memgraph
+      - QUICK_CONNECT_MG_PORT=<span class="hljs-number">7687</span>
+</code></pre><p>You can just put this content in a file <code>docker-compose.yaml</code> and then run it using <code>docker compose up -d</code>. Then you can open the Memgraph lab (<a href="http://localhost:3001" target="_blank" rel="noopener">http://localhost:3001</a>) in the browser to access the web UI as shown below.</p><p><img src="https://imgur.com/nw1skMx.png" alt="" class="md-image md-image"></p><p>You can also access the console of the graph if you selected to not use the Memgraph lab web UI as follows:</p><pre><code>docker exec -it memgraph-mage mgconsole
+</code></pre><p>This will open the console for Memgraph where you can write your queries in Cypher language.</p><h2 id="Download-and-Install-Neo4j-Optional"><a class="anchor hidden-xs" href="#Download-and-Install-Neo4j-Optional" title="Download-and-Install-Neo4j-Optional"><i class="fa fa-link"></i></a>Download and Install Neo4j (Optional)</h2><p>Neo4j can be installed as an interpreter in Zeppelin but in HDP 2.6.5, Zeppelin 0.7.3 is installed and does not support neo4j interpreter. Installing Neo4j on HDP 2.6.5 as a Zeppelin interpreter will not work. The latest version (in Feb. 2025) of Zeppelin 0.11.0 supports Neo4j but we do not need to install it. Indeed, HDP 3.0 has Zeppelin 0.8.0 installed and supports neo4j interpreter but it is not a big deal to install HDP 3.0 just for neo4j since our work on the sandbox will not be mostly on graph databases.</p><p>The <strong>easy</strong> approach is to install Neo4j Desktop on your local machine. You can find here (<a href="https://neo4j.com/docs/desktop-manual/current/installation/download-installation/" target="_blank" rel="noopener">https://neo4j.com/docs/desktop-manual/current/installation/download-installation/</a>) some information about installing Neo4j Desktop and you can find here (<a href="https://neo4j.com/deployment-center" target="_blank" rel="noopener">https://neo4j.com/deployment-center</a>) download links. After you start downloading, the website will give a long key you need to use when you install the software as follows:<br>
 <img src="https://i.imgur.com/bwbGHJ5.png" alt="" class="md-image md-image"></p><p>The software will prepare the environment for installation as follows.</p><center>
 <img src="https://i.imgur.com/XvkI0rv.png" width="300">
 <p>Installing Neo4j Desktop
@@ -471,35 +485,118 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 </code></pre><p>Where <code>neo4j_server</code> is the container name or id if you did not assign a name.</p><p>In case you want to change some of the settings in running the container then you can delete the container and create a new one. Your data inside can be stored in local file system by attaching volumes to folders you want to. You can delete the container as follows: (make sure that you stopped it)</p><pre><code>docker rm neo4j_server
 </code></pre><p>Where <code>neo4j_server</code> is the container name or id if you did not assign a name.</p><p>You can access the Neo4j Browser usually at <a href="http://localhost:7474" target="_blank" rel="noopener">http://localhost:7474</a>.</p><div class="alert alert-danger">
 <p>If you can not install Neo4j due to some reason, you can open a free session of Neo4j Sandbox at <a href="https://neo4j.com/sandbox/" target="_blank" rel="noopener">https://neo4j.com/sandbox/</a> but you need proxy.</p>
-</div><h1 id="Cypher"><a class="anchor hidden-xs" href="#Cypher" title="Cypher"><i class="fa fa-link"></i></a>Cypher</h1><p>Cypher is Neo4j’s graph database query language that allows users to store and retrieve data from the graph database. It is a declarative, SQL-inspired language for describing visual patterns in graphs. The syntax provides a visual and logical way to match patterns of nodes and relationships in the graph. Cypher keywords are not case-sensitive but it is case-sensitive for variables.</p><p>All Neo4j servers contain a built-in database called <code>system</code>, which behaves differently than all other databases. The <code>system</code> database stores system data and you can not perform graph queries against it. A fresh installation of Neo4j includes two databases:</p><ul>
+</div><h1 id="Cypher"><a class="anchor hidden-xs" href="#Cypher" title="Cypher"><i class="fa fa-link"></i></a>Cypher</h1><p>Cypher is a graph database query language that allows users to store and retrieve data from the graph database. It is a declarative, SQL-inspired language for describing visual patterns in graphs. The syntax provides a visual and logical way to match patterns of nodes and relationships in the graph. Cypher keywords are not case-sensitive but it is case-sensitive for variables.</p><h2 id="Neo4j"><a class="anchor hidden-xs" href="#Neo4j" title="Neo4j"><i class="fa fa-link"></i></a>Neo4j</h2><details>
+<p>All Neo4j servers contain a built-in database called <code>system</code>, which behaves differently than all other databases. The <code>system</code> database stores system data and you can not perform graph queries against it. A fresh installation of Neo4j includes two databases:</p>
+<ul>
 <li><strong>system</strong> - the system database described above, containing meta-data on the DBMS and security configuration.</li>
 <li><strong>neo4j</strong> - the default database, named using the config option dbms.default_database=neo4j.</li>
-</ul><p>Cypher provides first class support for a number of data types. These fall into the following three categories: property, structural, and composite.</p><h2 id="Property-types"><a class="anchor hidden-xs" href="#Property-types" title="Property-types"><i class="fa fa-link"></i></a>Property types</h2><p>The following data types are included in the property types category: Integer, Float, String, Boolean, Point, Date, Time, LocalTime, DateTime, LocalDateTime, and Duration. For more details, visit the <a href="https://neo4j.com/docs/cypher-manual/4.4/syntax/values/#_property_type_details" target="_blank" rel="noopener">documentation</a>.</p><h2 id="Structural-types"><a class="anchor hidden-xs" href="#Structural-types" title="Structural-types"><i class="fa fa-link"></i></a>Structural types</h2><p>The following data types are included in the structural types category: Node, Relationship, and Path.</p><ul>
-<li>The <strong>Node</strong> data type includes: Id, Label(s), and Map (of properties). Note that labels are not values, but a form of pattern syntax.</li>
-<li>The <strong>Relationship</strong> data type includes: Id, Type, Map (of properties), Id of start node, and Id of end node.</li>
+</ul>
+</details><h2 id="Memgraph"><a class="anchor hidden-xs" href="#Memgraph" title="Memgraph"><i class="fa fa-link"></i></a>Memgraph</h2><p>Memgraph also provides with a default database in community edition named <code>memgraph</code>. You can use the same Cypher language to write and run queries in Memgraph. The difference is in some commands (e.g. loading data) and the functions supported by the engine. Neo4j provides APOC library that allows to access a huge set of functions useful for different purposes (data integration, graph algorithms, and data conversion.). Memgraph also provides functions and you can list all available functions by running <code>CALL mg.functions() YIELD *;</code>. Memgraph has a library called MAGE graph algorithm library that allows to access a set of functions for graph algorithms. Neo4j has a similar library called Graph Data Science (GDS).</p><h2 id="Labeled-Property-Graph-LPG-model"><a class="anchor hidden-xs" href="#Labeled-Property-Graph-LPG-model" title="Labeled-Property-Graph-LPG-model"><i class="fa fa-link"></i></a>Labeled Property Graph (LPG) model</h2><p>Memgraph implements the Labeled Property Graph (LPG) model, a flexible and powerful way to structure data. LPG represents data as a graph of nodes (entities) and relationships (connections), both of which can have properties—key-value pairs storing additional information. This structure enables intuitive, high-performance queries without relying on complex joins, as in relational databases.</p><center>
+<img src="https://i.imgur.com/TolfC5Q.png" width="400">
+<img src="https://memgraph.com/docs/_next/image?url=%2Fdocs%2F_next%2Fstatic%2Fmedia%2Fgraph-modeling-describe-domain.0527e6fe.png&amp;w=3840&amp;q=75" width="900">
+<p>Examples of graph databases</p>
+</center><h2 id="Graph-Components"><a class="anchor hidden-xs" href="#Graph-Components" title="Graph-Components"><i class="fa fa-link"></i></a>Graph Components</h2><p>A graph consists of three core components: nodes, relationships, and labels. Both nodes and relationships have properties.</p><h3 id="Nodes"><a class="anchor hidden-xs" href="#Nodes" title="Nodes"><i class="fa fa-link"></i></a>Nodes</h3><p>Nodes represent entities in your dataset. Each node can belong to one or multiple labels, which act as categories or types. Labels help define the role and grouping of nodes within the graph.</p><p><img src="https://memgraph.com/docs/_next/image?url=%2Fdocs%2F_next%2Fstatic%2Fmedia%2Fgraph-modeling-nodes.b20540d2.png&amp;w=3840&amp;q=75" alt="" class="md-image md-image"></p><p>We can create this graph in Cypher as follows:</p><pre><code class="cypher hljs"><span class="hljs-selector-tag">CREATE</span> (<span class="hljs-selector-pseudo">:Person</span><span class="hljs-selector-pseudo">:Student</span> {<span class="hljs-attribute">name</span>: <span class="hljs-string">"Alice"</span>, age: <span class="hljs-number">20</span>})
+<span class="hljs-selector-tag">CREATE</span> (<span class="hljs-selector-pseudo">:Person</span><span class="hljs-selector-pseudo">:Teacher</span> {<span class="hljs-attribute">name</span>: <span class="hljs-string">"Mr. Smith"</span>, experience: <span class="hljs-number">10</span>})
+<span class="hljs-selector-tag">CREATE</span> (<span class="hljs-selector-pseudo">:Subject</span> {<span class="hljs-attribute">name</span>: <span class="hljs-string">"Mathematics"</span>})
+</code></pre><div class="alert alert-info">
+<p><strong>Naming Conventions</strong></p>
+<ul>
+<li>Node labels should be written using <em>CamelCase</em> and start with an upper-case letter. Node labels are case-sensitive.</li>
+</ul>
+<pre><code class="smalltalk hljs">(:<span class="hljs-type">Country</span>)
+(:<span class="hljs-type">City</span>)
+(:<span class="hljs-type">CapitalCity</span>)
+</code></pre>
+<ul>
+<li>Property keys, variables, parameters, aliases, and functions are camelCase and begin with a lower-case letter. These components are case-sensitive.</li>
+</ul>
+<pre><code class="cpp hljs">dateOfBirth <span class="hljs-comment">// Property key</span>
+largestCountry <span class="hljs-comment">// Variable</span>
+size() <span class="hljs-comment">// Function</span>
+countryOne <span class="hljs-comment">// Alias</span>
+</code></pre>
+<ul>
+<li>Relationship types are styled upper-case and use the underscore character <code>_</code> to separate multiple words. They are also case-sensitive.</li>
+</ul>
+<pre><code class="smalltalk hljs">[:<span class="hljs-type">LIVES_IN</span>]
+(:<span class="hljs-type">BORDERS_WITH</span>)
+</code></pre>
+<ul>
+<li>Aside from clauses, there is a number of keywords that should be styled with capital letters even though they are not case sensitive. These include: <code>DISTINCT</code>, <code>IN</code>, <code>STARTS WITH</code>, <code>CONTAINS</code>, <code>NOT</code>, <code>AND</code>, <code>OR</code> and <code>AS</code>.</li>
+</ul>
+<pre><code class="smalltalk hljs"><span class="hljs-type">MATCH</span> (c:<span class="hljs-type">Country</span>)
+<span class="hljs-type">WHERE</span> c.name <span class="hljs-type">CONTAINS</span> <span class="hljs-string">'United'</span> <span class="hljs-type">AND</span> c.population &gt; <span class="hljs-number">9000000</span>
+<span class="hljs-type">RETURN</span> c <span class="hljs-type">AS</span> <span class="hljs-type">Country</span>;
+</code></pre>
+</div><h3 id="Relationships"><a class="anchor hidden-xs" href="#Relationships" title="Relationships"><i class="fa fa-link"></i></a>Relationships</h3><p>Relationships define connections between nodes. They are directed, meaning they always have a start node and an end node, but queries can traverse them in any direction.</p><p><img src="https://memgraph.com/docs/_next/image?url=%2Fdocs%2F_next%2Fstatic%2Fmedia%2Fgraph-modeling-relationships.c52718be.png&amp;w=3840&amp;q=75" alt="" class="md-image md-image"></p><p>In Cypher:</p><pre><code class="cypher hljs">MATCH (<span class="hljs-string">T:</span><span class="hljs-string">Person:</span>Teacher {<span class="hljs-string">name:</span> <span class="hljs-string">"Mr. Smith"</span>})
+MATCH (<span class="hljs-string">S:</span>Subject {<span class="hljs-string">name:</span> <span class="hljs-string">"Mathematics"</span>})
+MATCH (<span class="hljs-string">ST:</span><span class="hljs-string">Person:</span>Student {<span class="hljs-string">name:</span> <span class="hljs-string">"Alice"</span>})
+<span class="hljs-comment">// CREATE (T)-[:TEACHES]-&gt;(S)</span>
+<span class="hljs-comment">// CREATE (ST)-[:ATTENDS {grade: "A"}]-&gt;(S)</span>
+
+CREATE (T)-[:TEACHES]-&gt;(S)&lt;-[:ATTENDS {<span class="hljs-string">grade:</span> <span class="hljs-string">"A"</span>}]-(ST)
+
+</code></pre><h3 id="Labels"><a class="anchor hidden-xs" href="#Labels" title="Labels"><i class="fa fa-link"></i></a>Labels</h3><p>Labels categorize nodes and make querying more efficient. A node can have multiple labels, allowing for flexible classification.</p><table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Label(s)</th>
+<th>Properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Person:Student</code></td>
+<td><code>Person, Student</code></td>
+<td><code>name, dateOfBirth, yearOfStudy</code></td>
+</tr>
+<tr>
+<td><code>Person:Teacher</code></td>
+<td><code>Person, Teacher</code></td>
+<td><code>name, email, age</code></td>
+</tr>
+<tr>
+<td><code>Subject</code></td>
+<td><code>Subject</code></td>
+<td><code>name</code></td>
+</tr>
+</tbody>
+</table><p><img src="https://memgraph.com/docs/_next/image?url=%2Fdocs%2F_next%2Fstatic%2Fmedia%2Fgraph-modeling-labels.15e03394.png&amp;w=3840&amp;q=75" alt="" class="md-image md-image"></p><pre><code class="cypher hljs"><span class="hljs-selector-tag">MATCH</span> (<span class="hljs-selector-tag">p</span><span class="hljs-selector-pseudo">:Person</span><span class="hljs-selector-pseudo">:Student)</span> <span class="hljs-selector-tag">RETURN</span> <span class="hljs-selector-tag">p</span><span class="hljs-selector-class">.name</span>;
+</code></pre><h3 id="Properties"><a class="anchor hidden-xs" href="#Properties" title="Properties"><i class="fa fa-link"></i></a>Properties</h3><p>Both nodes and relationships can have properties, which store structured data within the graph. Properties use key-value pairs and store metadata inside nodes and relationships.</p><p><img src="https://memgraph.com/docs/_next/image?url=%2Fdocs%2F_next%2Fstatic%2Fmedia%2Fgraph-modeling-properties.6f338cd5.png&amp;w=3840&amp;q=75" alt="" class="md-image md-image"></p><p>The LPG model consists of mainly nodes and relationships. Nodes are the entities in the graph.</p><ul>
+<li>Nodes can be tagged with labels, representing their different roles in your domain. (For example, Person).</li>
+<li>Nodes can hold any number of key-value pairs, or properties. (For example, name).</li>
+<li>Node labels may also attach metadata (such as index or constraint information) to certain nodes.</li>
+</ul><p>Whereas relationships provide <strong>directed</strong>, named, connections between two node entities (e.g. Student ATTENDS Subject).</p><ul>
+<li>Relationships always have a direction, a type, a start node, and an end node, and they can have properties, just like nodes.</li>
+<li>Nodes can have any number or type of relationships without sacrificing performance.</li>
+<li>Although relationships are always directed, they can be navigated efficiently in any direction.</li>
+</ul><h2 id="Property-types"><a class="anchor hidden-xs" href="#Property-types" title="Property-types"><i class="fa fa-link"></i></a>Property types</h2><p>The following data types are included in the property types category: Integer, Float, String, Boolean, Point, Date, Time, LocalTime, DateTime, LocalDateTime, and Duration. For more details, visit the <a href="https://memgraph.com/docs/fundamentals/data-types" target="_blank" rel="noopener">Memgraph documentation</a> and <a href="https://neo4j.com/docs/cypher-manual/4.4/syntax/values/#_property_type_details" target="_blank" rel="noopener">Neo4j documentation</a>.</p><h2 id="Structural-types"><a class="anchor hidden-xs" href="#Structural-types" title="Structural-types"><i class="fa fa-link"></i></a>Structural types</h2><p>The following data types are included in the structural types category: Node, Relationship, and Path.</p><ul>
+<li>The <strong>Node</strong> data type includes: Id, Label(s), and Map (of properties). Note that labels are not values, but a form of pattern syntax. A label is of the type <code>String</code>.</li>
+<li>The <strong>Relationship</strong> data type includes: Id, Type, Map (of properties), Id of start node, and Id of end node. Type is also represented in the form of a <code>String</code>.</li>
 <li>The <strong>Path</strong> data type is an alternating sequence of nodes and relationships.</li>
-</ul><p>Nodes, relationships, and paths are returned as a result of pattern matching. In Neo4j, all relationships have a direction. However, you can have the notion of undirected relationships at query time.</p><h2 id="Composite-types"><a class="anchor hidden-xs" href="#Composite-types" title="Composite-types"><i class="fa fa-link"></i></a>Composite types</h2><p>The following data types are included in the composite types category: List and Map.</p><pre><code class="wrap cpp hljs">RETURN [1,2,3,4,5], {id:1, msg: 'hello', age: 31}
+</ul><p>Nodes, relationships, and paths are returned as a result of pattern matching. In Neo4j, all relationships have a <strong>direction</strong>. However, you can have the notion of <strong>undirected</strong> relationships at <strong>query</strong> time. For example, to retrieve all undirected relationships of type <code>TEACHES</code>, we can write in Cypher the following:</p><pre><code class="smalltalk hljs"><span class="hljs-type">MATCH</span> ()-[s:<span class="hljs-type">TEACHES</span>]-() <span class="hljs-type">RETURN</span> s
+</code></pre><h2 id="Composite-types"><a class="anchor hidden-xs" href="#Composite-types" title="Composite-types"><i class="fa fa-link"></i></a>Composite types</h2><p>The following data types are included in the composite types category: List and Map.</p><pre><code class="smalltalk hljs"><span class="hljs-type">RETURN</span> [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>], {id:<span class="hljs-number">1</span>, msg: <span class="hljs-string">'hello'</span>, age: <span class="hljs-number">31</span>}
 </code></pre><h2 id="How-to-define-a-variable"><a class="anchor hidden-xs" href="#How-to-define-a-variable" title="How-to-define-a-variable"><i class="fa fa-link"></i></a>How to define a variable</h2><p>When you reference parts of a pattern or a query, you do so by naming them. The names you give the different parts are called variables.<br>
-In this example:</p><pre><code class="wrap cpp hljs">MATCH (n)--&gt;(b)
-RETURN b
+In this example:</p><pre><code class="wrap smalltalk hljs"><span class="hljs-type">MATCH</span> (n)--&gt;(b)
+<span class="hljs-type">RETURN</span> b
 </code></pre><p>The variables are n and b.</p><pre><code class="wrap cpp hljs"><span class="hljs-comment">// this is a comment</span>
-</code></pre><p>A comment begin with double slash (//) and continue to the end of the line. Comments do not execute, they are for humans to read.</p><h2 id="Operators"><a class="anchor hidden-xs" href="#Operators" title="Operators"><i class="fa fa-link"></i></a>Operators</h2><h3 id="DISTINCT-aggregation-operator"><a class="anchor hidden-xs" href="#DISTINCT-aggregation-operator" title="DISTINCT-aggregation-operator"><i class="fa fa-link"></i></a><strong>DISTINCT</strong> (aggregation operator)</h3><pre><code class="wrap sql hljs"><span class="hljs-keyword">WITH</span> [<span class="hljs-string">'a'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-number">4</span>, <span class="hljs-string">'b'</span>, <span class="hljs-number">4</span>] <span class="hljs-keyword">AS</span> ps
-UNWIND ps <span class="hljs-keyword">AS</span> p
-<span class="hljs-keyword">RETURN</span> <span class="hljs-keyword">DISTINCT</span> p
-</code></pre><p>The output will have only ‘a’, 4, and ‘b’.</p><h3 id="Property-operators"><a class="anchor hidden-xs" href="#Property-operators" title="Property-operators"><i class="fa fa-link"></i></a>Property operators</h3><h4 id="The-operator--statically-access-the-property-of-a-node-or-relationship"><a class="anchor hidden-xs" href="#The-operator--statically-access-the-property-of-a-node-or-relationship" title="The-operator--statically-access-the-property-of-a-node-or-relationship"><i class="fa fa-link"></i></a>The operator <code>.</code> statically access the property of a node or relationship</h4><h4 id="The-operator--used-for-filtering-on-a-dynamically-computed-property-key"><a class="anchor hidden-xs" href="#The-operator--used-for-filtering-on-a-dynamically-computed-property-key" title="The-operator--used-for-filtering-on-a-dynamically-computed-property-key"><i class="fa fa-link"></i></a>The operator <code>[]</code> used for filtering on a dynamically-computed property key</h4><pre><code class="wrap cpp hljs">CREATE
-  (a:Restaurant {name: 'Hungry Jo', rating_hygiene: 10, rating_food: 7}),
-  (b:Restaurant {name: 'Buttercup Tea Rooms', rating_hygiene: 5, rating_food: 6}),
-  (c1:Category {name: 'hygiene'}),
-  (c2:Category {name: 'food'})
-WITH a, b, c1, c2
-MATCH (restaurant:Restaurant), (category:Category)
-WHERE restaurant["rating_" + category.name] &gt; 6
-RETURN DISTINCT restaurant.name
-</code></pre><h4 id="The-operator--used-for-replacing-all-properties-of-a-node-or-relationship"><a class="anchor hidden-xs" href="#The-operator--used-for-replacing-all-properties-of-a-node-or-relationship" title="The-operator--used-for-replacing-all-properties-of-a-node-or-relationship"><i class="fa fa-link"></i></a>The operator <code>=</code> used for replacing all properties of a node or relationship</h4><pre><code class="wrap cpp hljs">CREATE (a:Person {name: 'Jane', age: 20})
-WITH a
-MATCH (p:Person {name: 'Jane'})
-SET p = {name: 'Ellen', livesIn: 'London'}
-RETURN p.name, p.age, p.livesIn
+</code></pre><p>A comment begin with double slash (//) and continue to the end of the line. Comments do not execute, they are for humans to read.</p><h2 id="Operators"><a class="anchor hidden-xs" href="#Operators" title="Operators"><i class="fa fa-link"></i></a>Operators</h2><h3 id="DISTINCT-aggregation-operator"><a class="anchor hidden-xs" href="#DISTINCT-aggregation-operator" title="DISTINCT-aggregation-operator"><i class="fa fa-link"></i></a><strong>DISTINCT</strong> (aggregation operator)</h3><pre><code class="wrap smalltalk hljs"><span class="hljs-type">WITH</span> [<span class="hljs-string">'a'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-number">4</span>, <span class="hljs-string">'b'</span>, <span class="hljs-number">4</span>] <span class="hljs-type">AS</span> ps
+<span class="hljs-type">UNWIND</span> ps <span class="hljs-type">AS</span> p
+<span class="hljs-type">RETURN</span> <span class="hljs-type">DISTINCT</span> p
+</code></pre><p>The output will have only ‘a’, 4, and ‘b’.</p><h3 id="Property-operators"><a class="anchor hidden-xs" href="#Property-operators" title="Property-operators"><i class="fa fa-link"></i></a>Property operators</h3><h4 id="The-operator--statically-access-the-property-of-a-node-or-relationship"><a class="anchor hidden-xs" href="#The-operator--statically-access-the-property-of-a-node-or-relationship" title="The-operator--statically-access-the-property-of-a-node-or-relationship"><i class="fa fa-link"></i></a>The operator <code>.</code> statically access the property of a node or relationship.</h4><h4 id="The-operator--is-used-for-filtering-on-a-dynamically-computed-property-key-and-accessing-list-items"><a class="anchor hidden-xs" href="#The-operator--is-used-for-filtering-on-a-dynamically-computed-property-key-and-accessing-list-items" title="The-operator--is-used-for-filtering-on-a-dynamically-computed-property-key-and-accessing-list-items"><i class="fa fa-link"></i></a>The operator <code>[]</code> is used for filtering on a dynamically-computed property key and accessing list items.</h4><h4 id="Example"><a class="anchor hidden-xs" href="#Example" title="Example"><i class="fa fa-link"></i></a>Example:</h4><pre><code class="smalltalk hljs"><span class="hljs-type">CREATE</span>
+  (a:<span class="hljs-type">Restaurant</span> {name: <span class="hljs-string">'Hungry Jo'</span>, rating_hygiene: <span class="hljs-number">10</span>, rating_food: <span class="hljs-number">7</span>}),
+  (b:<span class="hljs-type">Restaurant</span> {name: <span class="hljs-string">'Buttercup Tea Rooms'</span>, rating_hygiene: <span class="hljs-number">5</span>, rating_food: <span class="hljs-number">6</span>}),
+  (c1:<span class="hljs-type">Category</span> {name: <span class="hljs-string">'hygiene'</span>}),
+  (c2:<span class="hljs-type">Category</span> {name: <span class="hljs-string">'food'</span>})
+<span class="hljs-type">WITH</span> a, b, c1, c2
+<span class="hljs-type">MATCH</span> (restaurant:<span class="hljs-type">Restaurant</span>), (category:<span class="hljs-type">Category</span>)
+<span class="hljs-type">WHERE</span> restaurant[<span class="hljs-comment">"rating_"</span> + category.name] &gt; <span class="hljs-number">6</span>
+<span class="hljs-type">RETURN</span> <span class="hljs-type">DISTINCT</span> restaurant.name
+</code></pre><h4 id="The-operator--used-for-replacing-all-properties-of-a-node-or-relationship"><a class="anchor hidden-xs" href="#The-operator--used-for-replacing-all-properties-of-a-node-or-relationship" title="The-operator--used-for-replacing-all-properties-of-a-node-or-relationship"><i class="fa fa-link"></i></a>The operator <code>=</code> used for replacing all properties of a node or relationship</h4><pre><code class="smalltalk hljs"><span class="hljs-type">CREATE</span> (a:<span class="hljs-type">Person</span> {name: <span class="hljs-string">'Jane'</span>, age: <span class="hljs-number">20</span>})
+<span class="hljs-type">WITH</span> a
+<span class="hljs-type">MATCH</span> (p:<span class="hljs-type">Person</span> {name: <span class="hljs-string">'Jane'</span>})
+<span class="hljs-type">SET</span> p = {name: <span class="hljs-string">'Ellen'</span>, livesIn: <span class="hljs-string">'London'</span>}
+<span class="hljs-type">RETURN</span> p.name, p.age, p.livesIn
 </code></pre><h3 id="Mathemtical-operators"><a class="anchor hidden-xs" href="#Mathemtical-operators" title="Mathemtical-operators"><i class="fa fa-link"></i></a>Mathemtical operators</h3><p>The mathematical operators comprise:</p><ul>
 <li>addition: +</li>
 <li>subtraction or unary minus: -</li>
@@ -507,7 +604,9 @@ RETURN p.name, p.age, p.livesIn
 <li>division: /</li>
 <li>modulo division: %</li>
 <li>exponentiation: ^</li>
-</ul><h3 id="Comparison-operators"><a class="anchor hidden-xs" href="#Comparison-operators" title="Comparison-operators"><i class="fa fa-link"></i></a>Comparison operators</h3><p>The comparison operators comprise:</p><ul>
+</ul><pre><code class="scala hljs"><span class="hljs-type">RETURN</span> ((<span class="hljs-number">2</span>*<span class="hljs-number">4</span>+<span class="hljs-number">200</span>/<span class="hljs-number">50</span>)%<span class="hljs-number">7</span>)
+<span class="hljs-comment">// 25</span>
+</code></pre><h3 id="Comparison-operators"><a class="anchor hidden-xs" href="#Comparison-operators" title="Comparison-operators"><i class="fa fa-link"></i></a>Comparison operators</h3><p>The comparison operators comprise:</p><ul>
 <li>equality: =</li>
 <li>inequality: &lt;&gt;</li>
 <li>less than: &lt;</li>
@@ -521,234 +620,354 @@ RETURN p.name, p.age, p.livesIn
 <li>ENDS WITH: perform case-sensitive suffix searching on strings</li>
 <li>CONTAINS: perform case-sensitive inclusion searching in strings</li>
 <li>=~: regular expression for matching a pattern</li>
-</ul><pre><code class="wrap cpp hljs">WITH ['mouse', 'chair', 'door', 'house'] AS wordlist
-UNWIND wordlist AS word
-WITH word
-WHERE word =~ '.*ous.*'
-RETURN word
-</code></pre><h3 id="Boolean-operators"><a class="anchor hidden-xs" href="#Boolean-operators" title="Boolean-operators"><i class="fa fa-link"></i></a>Boolean operators</h3><p>The boolean operators — also known as logical operators — comprise: <code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>NOT</code>.</p><h3 id="String-operators"><a class="anchor hidden-xs" href="#String-operators" title="String-operators"><i class="fa fa-link"></i></a>String operators</h3><p>The string operators comprise: concatenating strings: <code>+</code></p><pre><code class="wrap cpp hljs">RETURN 'neo' + '4j' AS result
-</code></pre><p>Check other operators from the documentation.</p><h2 id="Patterns"><a class="anchor hidden-xs" href="#Patterns" title="Patterns"><i class="fa fa-link"></i></a>Patterns</h2><p>Patterns and pattern-matching are at the very heart of Cypher, so being effective with Cypher requires a good understanding of patterns.<br>
-Using patterns, you describe the shape of the data you are looking for. For example, in the MATCH clause you describe the shape with a pattern, and Cypher will figure out how to get that data for you.</p><p>The pattern describes the data using a form that is very similar to how one typically draws the shape of property graph data on a whiteboard: usually as circles (representing nodes) and arrows between them to represent relationships.</p><p>Patterns appear in multiple places in Cypher: in <code>MATCH</code>, <code>CREATE</code> and <code>MERGE</code> clauses, and in pattern expressions.</p><h3 id="Patterns-for-nodes"><a class="anchor hidden-xs" href="#Patterns-for-nodes" title="Patterns-for-nodes"><i class="fa fa-link"></i></a>Patterns for nodes</h3><p>This simple pattern describes a single node, and names that node using the variable a.</p><pre><code class="wrap cpp hljs">(a)
-</code></pre><h3 id="Patterns-for-related-nodes"><a class="anchor hidden-xs" href="#Patterns-for-related-nodes" title="Patterns-for-related-nodes"><i class="fa fa-link"></i></a>Patterns for related nodes</h3><p>This pattern describes a very simple data shape: two nodes, and a single relationship from one to the other.</p><pre><code class="wrap cpp hljs">(a)--&gt;(b)
-</code></pre><p>This manner of describing nodes and relationships can be extended to cover an arbitrary number of nodes and the relationships between them, for example:</p><pre><code class="wrap cpp hljs">(a)--&gt;(b)&lt;--(c)
-</code></pre><p>Such a series of connected nodes and relationships is called a <strong>“path”</strong>.</p><h3 id="Patterns-for-labels"><a class="anchor hidden-xs" href="#Patterns-for-labels" title="Patterns-for-labels"><i class="fa fa-link"></i></a>Patterns for labels</h3><p>The most simple attribute that can be described in the pattern is a label that the node must have. For example:</p><pre><code class="wrap cpp hljs">(a:User)--&gt;(b)
-</code></pre><p>One can also describe a node that has multiple labels:</p><pre><code class="wrap cpp hljs">(a:User:Admin)--&gt;(b)
-</code></pre><h3 id="Specifying-properties"><a class="anchor hidden-xs" href="#Specifying-properties" title="Specifying-properties"><i class="fa fa-link"></i></a>Specifying properties</h3><p>Properties can be expressed in patterns using a map-construct: curly brackets surrounding a number of key-expression pairs, separated by commas. E.g. a node with two properties on it would look like:</p><pre><code class="wrap cpp hljs">(a {name: 'Andy', sport: 'Brazilian Ju-Jitsu'})
-</code></pre><p>A relationship with expectations on it is given by:</p><pre><code class="wrap cpp hljs">(a)-[{blocked: <span class="hljs-literal">false</span>}]-&gt;(b)
-</code></pre><h3 id="Patterns-for-relationships"><a class="anchor hidden-xs" href="#Patterns-for-relationships" title="Patterns-for-relationships"><i class="fa fa-link"></i></a>Patterns for relationships</h3><p>The simplest way to describe a relationship is by using the arrow between two nodes, as in the previous examples. Using this technique, you can describe that the relationship should exist and the directionality of it. If you don’t care about the direction of the relationship, the arrow head can be omitted, as exemplified by:</p><pre><code class="wrap cpp hljs">(a)--(b)
-
-(a)-[r]-&gt;(b)
-
-(a)-[r:REL_TYPE]-&gt;(b)
-    
-(a)-[r:TYPE1|TYPE2]-&gt;(b)
-
-(a)-[:REL_TYPE]-&gt;(b)
-</code></pre><h3 id="Variable-length-pattern-matching"><a class="anchor hidden-xs" href="#Variable-length-pattern-matching" title="Variable-length-pattern-matching"><i class="fa fa-link"></i></a>Variable-length pattern matching</h3><p>Rather than describing a long path using a sequence of many node and relationship descriptions in a pattern, many relationships (and the intermediate nodes) can be described by specifying a length in the relationship description of a pattern. For example:</p><pre><code class="wrap cpp hljs">(a)-[*<span class="hljs-number">2</span>]-&gt;(b) 
-</code></pre><p>This describes a graph of three nodes and two relationships, all in one path (a path of length 2). This is equivalent to:</p><pre><code class="wrap cpp hljs">(a)--&gt;()--&gt;(b)
-</code></pre><p>A range of lengths can also be specified: such relationship patterns are called ‘variable length relationships’. For example:</p><pre><code class="wrap cpp hljs">(a)-[*<span class="hljs-number">3.</span><span class="hljs-number">.5</span>]-&gt;(b)
-</code></pre><p>This is a minimum length of 3, and a maximum of 5. It describes a graph of either 4 nodes and 3 relationships, 5 nodes and 4 relationships or 6 nodes and 5 relationships, all connected together in a single path.</p><p>Either bound can be omitted. For example, to describe paths of length 3 or more, use:</p><pre><code class="wrap cpp hljs">(a)-[*<span class="hljs-number">3.</span>.]-&gt;(b)
-</code></pre><p>To describe paths of length 5 or less, use:</p><pre><code class="wrap cpp hljs">(a)-[*.<span class="hljs-number">.5</span>]-&gt;(b)
-</code></pre><p>Omitting both bounds is equivalent to specifying a minimum of 1, allowing paths of any positive length to be described:</p><pre><code class="wrap cpp hljs">(a)-[*]-&gt;(b)
-</code></pre><h3 id="Assigning-to-path-variables"><a class="anchor hidden-xs" href="#Assigning-to-path-variables" title="Assigning-to-path-variables"><i class="fa fa-link"></i></a>Assigning to path variables</h3><p>Cypher allows paths to be named using an identifer, as exemplified by:</p><pre><code class="wrap cpp hljs">p = (a)-[*<span class="hljs-number">3.</span><span class="hljs-number">.5</span>]-&gt;(b)
-</code></pre><h2 id="Build-the-database"><a class="anchor hidden-xs" href="#Build-the-database" title="Build-the-database"><i class="fa fa-link"></i></a>Build the database</h2><p>In Neo4j Desktop, create a new project as follows:<br>
-<img src="https://i.imgur.com/zHfzGM7.png" alt="" class="md-image md-image"></p><p>and add a local DBMs to the new project. Then, start the database as follows:<br>
-<img src="https://i.imgur.com/sr40QXb.png" alt="" class="md-image md-image"></p><p>As you can see in the following screenshot, the database is active and we can access it as a default user <code>neo4j</code> by opening a dashboard with <code>Neo4j Browser</code>.<br>
-<img src="https://i.imgur.com/orOE6Ch.png" alt="" class="md-image md-image"></p><p>In order to load csv files to the database, you need to add them to the <code>import</code> of the database (do not add them to the project directory) as follows:<br>
-<img src="https://i.imgur.com/71ItvTP.png" alt="" class="md-image md-image"></p><p>After copying/pasting the csv files, the <code>import</code> directory will be as follows:<br>
-<img src="https://i.imgur.com/qLTdMJO.png" alt="" class="md-image md-image"></p><ol>
-<li>Create a new database and access it.</li>
-</ol><pre><code class="wrap sql hljs"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">DATABASE</span> socialmedia
-
-:<span class="hljs-keyword">use</span> socialmedia
+</ul><pre><code class="smalltalk hljs"><span class="hljs-type">WITH</span> [[<span class="hljs-string">'mouse'</span>, <span class="hljs-string">'chair'</span>, <span class="hljs-string">'door'</span>, <span class="hljs-string">'house'</span>], [<span class="hljs-string">'house'</span>, <span class="hljs-string">'house'</span>, <span class="hljs-string">'window'</span>, <span class="hljs-string">'door'</span>]] <span class="hljs-type">AS</span> listwordlist
+<span class="hljs-type">UNWIND</span> listwordlist <span class="hljs-type">AS</span> wordlist
+<span class="hljs-type">UNWIND</span> wordlist <span class="hljs-type">AS</span> word
+<span class="hljs-type">WITH</span> word
+<span class="hljs-type">WHERE</span> word =~ <span class="hljs-string">'.*ous.*'</span>
+<span class="hljs-type">RETURN</span> word
+</code></pre><h3 id="Boolean-operators"><a class="anchor hidden-xs" href="#Boolean-operators" title="Boolean-operators"><i class="fa fa-link"></i></a>Boolean operators</h3><p>The boolean operators — also known as logical operators — comprise: <code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>NOT</code>.</p><pre><code class="scala hljs"><span class="hljs-type">RETURN</span> <span class="hljs-type">NOT</span> <span class="hljs-number">4</span>&gt;<span class="hljs-number">23</span> <span class="hljs-type">XOR</span> <span class="hljs-number">2</span>&gt;<span class="hljs-number">1</span>;
+<span class="hljs-comment">// false</span>
+</code></pre><h3 id="String-operators"><a class="anchor hidden-xs" href="#String-operators" title="String-operators"><i class="fa fa-link"></i></a>String operators</h3><p>The string operators comprise: concatenating strings: <code>+</code></p><pre><code class="smalltalk hljs"><span class="hljs-type">RETURN</span> <span class="hljs-string">'neo'</span> + <span class="hljs-string">'4j'</span> <span class="hljs-type">AS</span> result
+</code></pre><p>Check other operators from the <a href="https://memgraph.com/docs/querying" target="_blank" rel="noopener">documentation</a>.</p><h2 id="Patterns"><a class="anchor hidden-xs" href="#Patterns" title="Patterns"><i class="fa fa-link"></i></a>Patterns</h2><p>Patterns and pattern-matching are at the very heart of Cypher, so being effective with Cypher requires a good understanding of patterns.<br>
+Using patterns, you describe the shape of the data you are looking for. For example, in the <strong>MATCH</strong> clause you describe the shape with a pattern, and Cypher will figure out how to get that data for you.</p><p>The pattern describes the data using a form that is very similar to how one typically draws the shape of property graph data on a whiteboard: usually as circles (representing nodes) and arrows between them to represent relationships.</p><p>Patterns appear in multiple places in Cypher: in <code>MATCH</code>, <code>CREATE</code> and <code>MERGE</code> clauses, and in pattern expressions.</p><h3 id="Patterns-for-nodes"><a class="anchor hidden-xs" href="#Patterns-for-nodes" title="Patterns-for-nodes"><i class="fa fa-link"></i></a>Patterns for nodes</h3><p>This simple pattern describes a single node, and names that node using the variable a.</p><pre><code class="wrap smalltalk hljs"><span class="hljs-type">MATCH</span> (node) <span class="hljs-type">RETURN</span> node;
+</code></pre><h3 id="Patterns-for-related-nodes"><a class="anchor hidden-xs" href="#Patterns-for-related-nodes" title="Patterns-for-related-nodes"><i class="fa fa-link"></i></a>Patterns for related nodes</h3><p>This pattern describes a very simple data shape: two nodes, and a single relationship from one to the other.</p><pre><code class="smalltalk hljs"><span class="hljs-type">MATCH</span> (node1)-[connection]-(node2) <span class="hljs-type">RETURN</span> node1, connection, node2;
+</code></pre><p>This manner of describing nodes and relationships can be extended to cover an arbitrary number of nodes and the relationships between them, for example:</p><pre><code class="smalltalk hljs"><span class="hljs-type">MATCH</span> p = (node1)-[connection]-(node2)-[connection2]-(node3) 
+<span class="hljs-type">RETURN</span> p;
+</code></pre><p>Such a series of connected nodes and relationships is called a <strong>“path”</strong>.</p><h2 id="Build-the-database-in-Neo4j-Desktop"><a class="anchor hidden-xs" href="#Build-the-database-in-Neo4j-Desktop" title="Build-the-database-in-Neo4j-Desktop"><i class="fa fa-link"></i></a>Build the database in Neo4j Desktop</h2><details>
+<p>In Neo4j Desktop, create a new project as follows:<br>
+<img src="https://i.imgur.com/zHfzGM7.png" alt="" class="md-image md-image"></p>
+<p>and add a local DBMs to the new project. Then, start the database as follows:<br>
+<img src="https://i.imgur.com/sr40QXb.png" alt="" class="md-image md-image"></p>
+<p>As you can see in the following screenshot, the database is active and we can access it as a default user <code>neo4j</code> by opening a dashboard with <code>Neo4j Browser</code>.<br>
+<img src="https://i.imgur.com/orOE6Ch.png" alt="" class="md-image md-image"></p>
+<p>In order to load csv files to the database, you need to add them to the <code>import</code> of the database (do not add them to the project directory) as follows:<br>
+<img src="https://i.imgur.com/71ItvTP.png" alt="" class="md-image md-image"></p>
+<p>After copying/pasting the csv files, the <code>import</code> directory will be as follows:<br>
+<img src="https://i.imgur.com/qLTdMJO.png" alt="" class="md-image md-image"></p>
+<h3 id="Using-Neo4j-installed-via-Docker"><a class="anchor hidden-xs" href="#Using-Neo4j-installed-via-Docker" title="Using-Neo4j-installed-via-Docker"><i class="fa fa-link"></i></a>Using Neo4j installed via Docker</h3>
+<p>This image is related to the community edition of Neo4j and you cannot create a new database but you can load files as follows. You need to find the folder <code>import</code> inside the Neo4j server container where you have to put your files. By default, the path in the container is <code>/var/lib/neo4j/import</code>. You can copy your files there using <code>docker cp</code>.</p>
+</details><h2 id="Using-Memgraph-installed-via-Docker"><a class="anchor hidden-xs" href="#Using-Memgraph-installed-via-Docker" title="Using-Memgraph-installed-via-Docker"><i class="fa fa-link"></i></a>Using Memgraph installed via Docker</h2><p>Here you also cannot create more than the default database <code>memgraph</code> if you do not have the enterprise edition. You can import the dataset files into the database using <code>docker cp</code> and there is no specific folder to put the files in. So, I will assume that you will put the files in the directory <code>/var/lib/memgraph/</code> or maybe you can access the container using <code>bash</code> and create a directory/repository for importing data like <code>/var/lib/memgraph/data</code>. Let’s follow the latter approach.</p><ol>
+<li>Access the container via <code>bash</code>.</li>
+</ol><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span>  <span class="hljs-bullet">-it</span> <span class="hljs-string">memgraph-mage</span> <span class="hljs-string">bash</span>
 </code></pre><ol start="2">
-<li>Create nodes and relationships<br>
-Each of the 3 CSV files needs to be loaded into Neo4j using the LOAD CSV command that reads each row of the file and then assigns the imported values to the nodes and edges of the graph.</li>
-</ol><pre><code class="sql hljs">
-<span class="hljs-comment">/* Create Index for users on userid field */</span>
-<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> <span class="hljs-keyword">FOR</span> (u:<span class="hljs-keyword">User</span>) <span class="hljs-keyword">ON</span> (u.userid)
-    
-<span class="hljs-comment">/* Create Index for posts on postid field */</span>
-<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> <span class="hljs-keyword">FOR</span> (u:Post) <span class="hljs-keyword">ON</span> (u.postid)
+<li>Create the folder</li>
+</ol><pre><code class="yaml hljs"><span class="hljs-string">mkdir</span> <span class="hljs-bullet">-p</span> <span class="hljs-string">/var/lib/memgraph/data</span>
 
-<span class="hljs-comment">/* Load users data */</span>
-<span class="hljs-keyword">LOAD</span> CSV <span class="hljs-keyword">WITH</span> HEADERS 
-<span class="hljs-keyword">FROM</span> <span class="hljs-string">"file:///users.csv"</span> <span class="hljs-keyword">AS</span> <span class="hljs-keyword">row</span> 
-FIELDTERMINATOR <span class="hljs-string">','</span>
-<span class="hljs-keyword">CREATE</span> (
-    :<span class="hljs-keyword">User</span> {
-        userid: toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'userid'</span>]), 
-        <span class="hljs-keyword">name</span>:<span class="hljs-keyword">row</span>[<span class="hljs-string">'name'</span>], 
-        surname: <span class="hljs-keyword">row</span>[<span class="hljs-string">'surname'</span>], 
-        age: toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'age'</span>]), 
-        <span class="hljs-built_in">timestamp</span>: datetime({epochSeconds: toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'timestamp'</span>])})}
+
+<span class="hljs-comment"># You can also run one line for the steps above</span>
+<span class="hljs-comment"># docker exec -it memgraph-mage bash -c "mkdir -p /var/lib/memgraph/data"</span>
+</code></pre><ol start="3">
+<li>Import the data using <code>docker cp</code>.</li>
+</ol><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">cp</span> <span class="hljs-string">&lt;path-to-your-file-in-local-machine&gt;</span> <span class="hljs-attr">memgraph-mage:/var/lib/memgraph/data/</span>
+</code></pre><h2 id="Data-loading-and-creating-nodesrelationships"><a class="anchor hidden-xs" href="#Data-loading-and-creating-nodesrelationships" title="Data-loading-and-creating-nodesrelationships"><i class="fa fa-link"></i></a>Data loading and creating nodes/relationships</h2><p>Each of the 3 CSV files needs to be loaded into Neo4j using the LOAD CSV command that reads each row of the file and then assigns the imported values to the nodes and edges of the graph.</p><div class="alert alert-info">
+<p>The instructions for Neo4j here are a little different than Memgraph but for the queries in the next sections it is the same.</p>
+</div><pre><code class="scala hljs">
+<span class="hljs-comment">// Memgraph</span>
+<span class="hljs-comment">// Create Index for users on userid field</span>
+<span class="hljs-type">CREATE</span> <span class="hljs-type">INDEX</span> <span class="hljs-type">ON</span> :<span class="hljs-type">User</span>(userid);
+
+<span class="hljs-comment">// Neo4j</span>
+<span class="hljs-comment">// Create Index for users on userid field</span>
+<span class="hljs-type">CREATE</span> <span class="hljs-type">INDEX</span> <span class="hljs-type">FOR</span> (u:<span class="hljs-type">User</span>) <span class="hljs-type">ON</span> (u.userid)
+
+
+<span class="hljs-comment">// Memgraph</span>
+<span class="hljs-comment">// Create Index for posts on postid field</span>
+<span class="hljs-type">CREATE</span> <span class="hljs-type">INDEX</span> <span class="hljs-type">ON</span> :<span class="hljs-type">Post</span>(postid);
+
+<span class="hljs-comment">// Neo4j</span>
+<span class="hljs-comment">// Create Index for posts on postid field</span>
+<span class="hljs-type">CREATE</span> <span class="hljs-type">INDEX</span> <span class="hljs-type">FOR</span> (u:<span class="hljs-type">Post</span>) <span class="hljs-type">ON</span> (u.postid)
+
+
+<span class="hljs-comment">// Memgraph</span>
+<span class="hljs-comment">// Load users data</span>
+<span class="hljs-type">LOAD</span> <span class="hljs-type">CSV</span> <span class="hljs-type">FROM</span> <span class="hljs-string">"/var/lib/memgraph/data/users.csv"</span>
+<span class="hljs-type">WITH</span> <span class="hljs-type">HEADER</span> <span class="hljs-type">DELIMITER</span> <span class="hljs-string">","</span> <span class="hljs-type">AS</span> row
+<span class="hljs-type">WITH</span> row, toInteger(row.timestamp) <span class="hljs-type">AS</span> epoch_seconds
+<span class="hljs-type">CALL</span> date.format(epoch_seconds, <span class="hljs-string">"s"</span>, <span class="hljs-string">"%Y-%m-%dT%H:%M:%S"</span>) <span class="hljs-type">YIELD</span> formatted
+<span class="hljs-type">CREATE</span> (:<span class="hljs-type">User</span> {
+userid: toInteger(row.userid),
+name: row.name,
+surname: row.surname,
+age: toInteger(row.age),
+timestamp: localDateTime(formatted)
+});
+
+
+<span class="hljs-comment">// Neo4j</span>
+<span class="hljs-comment">// Load users data</span>
+<span class="hljs-type">LOAD</span> <span class="hljs-type">CSV</span> <span class="hljs-type">WITH</span> <span class="hljs-type">HEADERS</span> 
+<span class="hljs-type">FROM</span> <span class="hljs-string">"file:///users.csv"</span> <span class="hljs-type">AS</span> row 
+<span class="hljs-type">FIELDTERMINATOR</span> ','
+<span class="hljs-type">CREATE</span> (
+    :<span class="hljs-type">User</span> {
+        userid: toInteger(row[<span class="hljs-symbol">'useri</span>d']), 
+        name:row[<span class="hljs-symbol">'nam</span>e'], 
+        surname: row[<span class="hljs-symbol">'surnam</span>e'], 
+        age: toInteger(row[<span class="hljs-symbol">'ag</span>e']), 
+        timestamp: datetime({epochSeconds: toInteger(row[<span class="hljs-symbol">'timestam</span>p'])})}
 );
+
+
     
-    
-<span class="hljs-comment">/* Load posts data */</span>
-<span class="hljs-keyword">LOAD</span> CSV <span class="hljs-keyword">WITH</span> HEADERS 
-<span class="hljs-keyword">FROM</span> <span class="hljs-string">"file:///posts.csv"</span> <span class="hljs-keyword">AS</span> <span class="hljs-keyword">row</span> 
-FIELDTERMINATOR <span class="hljs-string">','</span>
-<span class="hljs-keyword">MATCH</span> (u:<span class="hljs-keyword">User</span>{userid:toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'userid'</span>])})
-<span class="hljs-keyword">MERGE</span> (
-    :Post {
-        postid: toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'postid'</span>]),  
-        userid: toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'userid'</span>]), 
-        posttype:<span class="hljs-keyword">row</span>[<span class="hljs-string">'posttype'</span>]
-        })&lt;-[:<span class="hljs-keyword">ADD</span>{
-    posttimestamp: datetime({epochSeconds: toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'posttimestamp'</span>])})
+
+
+<span class="hljs-comment">// Memgraph</span>
+<span class="hljs-comment">// Load posts data</span>
+<span class="hljs-type">LOAD</span> <span class="hljs-type">CSV</span> <span class="hljs-type">FROM</span> <span class="hljs-string">"/var/lib/memgraph/data/posts.csv"</span> 
+<span class="hljs-type">WITH</span> <span class="hljs-type">HEADER</span> <span class="hljs-type">DELIMITER</span> <span class="hljs-string">","</span> <span class="hljs-type">AS</span> row 
+<span class="hljs-type">CALL</span> date.format(toInteger(row[<span class="hljs-symbol">'posttimestam</span>p']),<span class="hljs-string">"s"</span>, <span class="hljs-string">"%Y-%m-%dT%H:%M:%S"</span>) <span class="hljs-type">YIELD</span> formatted 
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>{userid:toInteger(row[<span class="hljs-symbol">'useri</span>d'])})
+<span class="hljs-type">MERGE</span> (
+    :<span class="hljs-type">Post</span> {
+        postid: toInteger(row[<span class="hljs-symbol">'posti</span>d']),  
+        userid: toInteger(row[<span class="hljs-symbol">'useri</span>d']), 
+        posttype:row[<span class="hljs-symbol">'posttyp</span>e']
+        })&lt;-[:<span class="hljs-type">ADD</span>{
+    posttimestamp: localDateTime(formatted)
     }]-(u);
 
-<span class="hljs-comment">/* Retrieve some nodes */</span>
-MATCH (n)
-RETURN n
-LIMIT 10;
+    
+<span class="hljs-comment">// Neo4j</span>
+<span class="hljs-comment">// Load posts data</span>
+<span class="hljs-type">LOAD</span> <span class="hljs-type">CSV</span> <span class="hljs-type">WITH</span> <span class="hljs-type">HEADERS</span> 
+<span class="hljs-type">FROM</span> <span class="hljs-string">"file:///posts.csv"</span> <span class="hljs-type">AS</span> row 
+<span class="hljs-type">FIELDTERMINATOR</span> ','
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>{userid:toInteger(row[<span class="hljs-symbol">'useri</span>d'])})
+<span class="hljs-type">MERGE</span> (
+    :<span class="hljs-type">Post</span> {
+        postid: toInteger(row[<span class="hljs-symbol">'posti</span>d']),  
+        userid: toInteger(row[<span class="hljs-symbol">'useri</span>d']), 
+        posttype:row[<span class="hljs-symbol">'posttyp</span>e']
+        })&lt;-[:<span class="hljs-type">ADD</span>{
+    posttimestamp: datetime({epochSeconds: toInteger(row[<span class="hljs-symbol">'posttimestam</span>p'])})
+    }]-(u);
 
-<span class="hljs-comment">/* Load Friends */</span>
 
-:auto <span class="hljs-keyword">LOAD</span> CSV <span class="hljs-keyword">WITH</span> HEADERS 
-<span class="hljs-keyword">FROM</span> <span class="hljs-string">"file:///friends.csv"</span> <span class="hljs-keyword">AS</span> <span class="hljs-keyword">row</span> 
-FIELDTERMINATOR <span class="hljs-string">','</span>
-<span class="hljs-keyword">CALL</span> {
-<span class="hljs-keyword">WITH</span> <span class="hljs-keyword">row</span>
-<span class="hljs-keyword">MATCH</span> (u:<span class="hljs-keyword">User</span>{userid:toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'friend1'</span>])})
-<span class="hljs-keyword">MATCH</span> (v:<span class="hljs-keyword">User</span>{userid:toInteger(<span class="hljs-keyword">row</span>[<span class="hljs-string">'friend2'</span>])})
-<span class="hljs-keyword">MERGE</span> (u)-[:FRIEND]-&gt;(v)-[:FRIEND]-&gt;(u)
-} <span class="hljs-keyword">IN</span> TRANSACTIONS <span class="hljs-keyword">OF</span> <span class="hljs-number">1000</span> <span class="hljs-keyword">ROWS</span>
 
-<span class="hljs-comment">/* IN 3 CONCURRENT TRANSACTIONS OF 1000 ROWS */</span>
-<span class="hljs-comment">/*When a write transaction occurs, 
-Neo4j takes locks to preserve data consistency while updating.
 
-A deadlock happens when two transactions are blocked by 
-each other because they are attempting to concurrently 
-modify a node or a relationship that is locked by the 
-other transaction
-*/</span>
+<span class="hljs-comment">// Same for Neo4j/Memgraph</span>
+<span class="hljs-comment">// Retrieve some nodes</span>
+<span class="hljs-type">MATCH</span> (n)
+<span class="hljs-type">RETURN</span> n
+<span class="hljs-type">LIMIT</span> <span class="hljs-number">10</span>;
 
-</code></pre><h1 id="Data-Retrieval-with-Cypher"><a class="anchor hidden-xs" href="#Data-Retrieval-with-Cypher" title="Data-Retrieval-with-Cypher"><i class="fa fa-link"></i></a>Data Retrieval with Cypher</h1><p>Cypher is Neo4j’s graph query language that lets you retrieve data from the graph. It is like SQL for graphs, and was inspired by SQL so it lets you focus on what data you want out of the graph (not how to go get it). It is the easiest graph language to learn by far because of its similarity to other languages and intiutiveness.</p><div class="alert alert-success">
-<h2 id="Exercises3"><a class="anchor hidden-xs" href="#Exercises3" title="Exercises3"><i class="fa fa-link"></i></a>Exercises</h2>
+
+<span class="hljs-comment">// Memgraph</span>
+<span class="hljs-comment">// Load Friends</span>
+<span class="hljs-type">USING</span> <span class="hljs-type">PERIODIC</span> <span class="hljs-type">COMMIT</span> <span class="hljs-number">1000</span> <span class="hljs-comment">// loads 1000 rows per batch</span>
+<span class="hljs-type">LOAD</span> <span class="hljs-type">CSV</span> <span class="hljs-type">FROM</span> <span class="hljs-string">"/var/lib/memgraph/data/friends.csv"</span>
+<span class="hljs-type">WITH</span> <span class="hljs-type">HEADER</span> <span class="hljs-type">DELIMITER</span> <span class="hljs-string">","</span> <span class="hljs-type">AS</span> row 
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>{userid:toInteger(row[<span class="hljs-symbol">'friend</span>1'])})
+<span class="hljs-type">MATCH</span> (v:<span class="hljs-type">User</span>{userid:toInteger(row[<span class="hljs-symbol">'friend</span>2'])})
+<span class="hljs-type">MERGE</span> (u)-[:<span class="hljs-type">FRIEND</span>]-&gt;(v)-[:<span class="hljs-type">FRIEND</span>]-&gt;(u)
+
+<span class="hljs-comment">// Neo4j</span>
+<span class="hljs-comment">// Load Friends</span>
+:auto <span class="hljs-type">USING</span> <span class="hljs-type">PERIODIC</span> <span class="hljs-type">COMMIT</span>
+<span class="hljs-type">LOAD</span> <span class="hljs-type">CSV</span> <span class="hljs-type">WITH</span> <span class="hljs-type">HEADERS</span> 
+<span class="hljs-type">FROM</span> <span class="hljs-string">"file:///friends.csv"</span> <span class="hljs-type">AS</span> row 
+<span class="hljs-type">FIELDTERMINATOR</span> ','
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>{userid:toInteger(row[<span class="hljs-symbol">'friend</span>1'])})
+<span class="hljs-type">MATCH</span> (v:<span class="hljs-type">User</span>{userid:toInteger(row[<span class="hljs-symbol">'friend</span>2'])})
+<span class="hljs-type">MERGE</span> (u)-[:<span class="hljs-type">FRIEND</span>]-&gt;(v)-[:<span class="hljs-type">FRIEND</span>]-&gt;(u)
+</code></pre><h1 id="Data-Retrieval-with-Cypher"><a class="anchor hidden-xs" href="#Data-Retrieval-with-Cypher" title="Data-Retrieval-with-Cypher"><i class="fa fa-link"></i></a>Data Retrieval with Cypher</h1><div class="alert alert-warning">
+<p>All Cypher queries here can run on both engines Neo4j and Memgraph.</p>
+</div><p>Cypher is a graph query language that lets you retrieve data from the graph. It is like SQL for graphs, and was inspired by SQL so it lets you focus on what data you want out of the graph (not how to go get it). It is the easiest graph language to learn by far because of its similarity to other languages and intiutiveness.</p><div class="alert alert-success">
+<h2 id="Exercises"><a class="anchor hidden-xs" href="#Exercises" title="Exercises"><i class="fa fa-link"></i></a>Exercises</h2>
 <ol>
 <li>Who are the users who have posts?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)-[:ADD]-()
-RETURN u
-LIMIT <span class="hljs-number">10</span> <span class="hljs-comment">// This is added just to not display all nodes</span>
+<details>
+<pre><code class="scala hljs"><span class="hljs-comment">// MATCH (u:User)-[:ADD]-()</span>
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)
+<span class="hljs-type">RETURN</span> <span class="hljs-type">DISTINCT</span> u
+<span class="hljs-type">LIMIT</span> <span class="hljs-number">10</span> <span class="hljs-comment">// This is added just to not display all nodes</span>
+
+
+<span class="hljs-comment">// COUNT</span>
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)
+<span class="hljs-type">RETURN</span> <span class="hljs-type">COUNT</span>(<span class="hljs-type">DISTINCT</span> u)
 </code></pre>
+</details>
+</div><div class="alert alert-success">
+<!-- ![](https://i.imgur.com/Zyyr22j.png) -->
 <ol start="2">
-<li>What are the posts of the users?</li>
+<li>How many posts of the first 10 users?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (p:Post)
-RETURN p
-LIMIT <span class="hljs-number">10</span> <span class="hljs-comment">// This is added just to not display all nodes</span>
+<details>
+<pre><code class="scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)
+<span class="hljs-type">WITH</span> u <span class="hljs-type">LIMIT</span> <span class="hljs-number">10</span>
+<span class="hljs-type">MATCH</span> path = (u)-[:<span class="hljs-type">ADD</span>]-&gt;(p:<span class="hljs-type">Post</span>)
+<span class="hljs-type">WITH</span> u, <span class="hljs-type">COUNT</span>(p) <span class="hljs-type">AS</span> posts
+<span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> posts <span class="hljs-type">DESCENDING</span> <span class="hljs-comment">// 117</span>
+<span class="hljs-type">RETURN</span> u, posts
 </code></pre>
+<p>This will return the number of posts added by the first 10 users sorted in descending order of the their number of posts.</p>
+<!-- ![](https://i.imgur.com/4nNlPAU.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="3">
 <li>Which posts published after 2012?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (p:Post)&lt;-[a:ADD]-()
-WHERE a.posttimestamp.year &gt; <span class="hljs-number">2012</span>
-RETURN p
-LIMIT <span class="hljs-number">10</span> <span class="hljs-comment">// This is added just to not display all nodes</span>
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (p:<span class="hljs-type">Post</span>)&lt;-[a:<span class="hljs-type">ADD</span>]-()
+<span class="hljs-type">WHERE</span> a.posttimestamp.year &gt; <span class="hljs-number">2012</span>
+<span class="hljs-type">RETURN</span> p
+<span class="hljs-type">LIMIT</span> <span class="hljs-number">10</span> <span class="hljs-comment">// This is added just to not display all nodes</span>
 </code></pre>
+</details>
+</div><div class="alert alert-success">
+<!-- ![](https://i.imgur.com/y8hbDdb.png) -->
 <ol start="4">
 <li>What is the oldest and recent dates of the posts?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (p:Post)-[a:ADD]-()
-RETURN MAX(a.posttimestamp), MIN(a.posttimestamp)
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (p:<span class="hljs-type">Post</span>)-[a:<span class="hljs-type">ADD</span>]-()
+<span class="hljs-type">RETURN</span> <span class="hljs-type">MAX</span>(a.posttimestamp), <span class="hljs-type">MIN</span>(a.posttimestamp)
 </code></pre>
+<!-- ![](https://i.imgur.com/fqdRSbP.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="5">
 <li>What are the top 5 most recent posts whose type is <code>Image</code>?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (p:Post{<span class="hljs-attr">posttype</span>:<span class="hljs-string">'Image'</span>})-[a:ADD]-()
-RETURN p, a
-ORDER BY a.posttimestamp DESC
-LIMIT <span class="hljs-number">5</span>
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (p:<span class="hljs-type">Post</span>{posttype:<span class="hljs-string">"Image"</span>})-[a:<span class="hljs-type">ADD</span>]-()
+<span class="hljs-type">RETURN</span> p, a
+<span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> a.posttimestamp <span class="hljs-type">DESC</span>
+<span class="hljs-type">LIMIT</span> <span class="hljs-number">5</span>
 </code></pre>
+<!-- ![](https://i.imgur.com/hcPpRHy.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="6">
 <li>Which top 5 users who posted an <code>Image</code> or <code>Video</code> recently?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)-[a:ADD]-&gt;(p:Post)
-WHERE p.posttype IN [<span class="hljs-string">'Image'</span>, <span class="hljs-string">'Video'</span>]
-RETURN u, p
-ORDER BY a.posttimestamp
-LIMIT <span class="hljs-number">5</span>
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)-[a:<span class="hljs-type">ADD</span>]-&gt;(p:<span class="hljs-type">Post</span>)
+<span class="hljs-type">WHERE</span> p.posttype <span class="hljs-type">IN</span> [<span class="hljs-string">"Image"</span>, <span class="hljs-string">"Video"</span>]
+<span class="hljs-type">RETURN</span> u, p
+<span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> a.posttimestamp
+<span class="hljs-type">LIMIT</span> <span class="hljs-number">5</span>
 </code></pre>
+<!-- ![](https://i.imgur.com/LR2DjQ0.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="7">
 <li>What is the age of the eldest and youngest persons?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)
-RETURN MAX(u.age), MIN(u.age)
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)
+<span class="hljs-type">RETURN</span> <span class="hljs-type">MAX</span>(u.age), <span class="hljs-type">MIN</span>(u.age)
 
 <span class="hljs-comment">// Update the age of the person</span>
-MATCH (u:User)
-SET u.age = CASE
-           WHEN u.age &lt; <span class="hljs-number">0</span> THEN -u.age
-           ELSE u.age
-          END
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)
+<span class="hljs-type">SET</span> u.age = <span class="hljs-type">CASE</span>
+           <span class="hljs-type">WHEN</span> u.age &lt; <span class="hljs-number">0</span> <span class="hljs-type">THEN</span> -u.age
+           <span class="hljs-type">ELSE</span> u.age
+          <span class="hljs-type">END</span>
 </code></pre>
+<!-- ![](https://i.imgur.com/oVbKESh.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="8">
 <li>Who is the 2nd youngest person who published <code>Image</code> posts?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)-[:ADD]-&gt;(p:Post{<span class="hljs-attr">posttype</span>:<span class="hljs-string">'Image'</span>})
-RETURN DISTINCT u.name, u.surname, u.age, p.posttype
-ORDER BY u.age ASC
-SKIP <span class="hljs-number">1</span>
-LIMIT <span class="hljs-number">1</span>
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)-[:<span class="hljs-type">ADD</span>]-&gt;(p:<span class="hljs-type">Post</span>{posttype:<span class="hljs-string">"Image"</span>})
+<span class="hljs-type">RETURN</span> <span class="hljs-type">DISTINCT</span> u.name, u.surname, u.age, p.posttype
+<span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> u.age <span class="hljs-type">ASC</span>
+<span class="hljs-type">SKIP</span> <span class="hljs-number">1</span>
+<span class="hljs-type">LIMIT</span> <span class="hljs-number">1</span>
 </code></pre>
+<!-- ![](https://i.imgur.com/ViLraEm.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="9">
 <li>What are the posts that are published by people who are between 20 and 30?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (p:Post)&lt;-[:ADD]-(u:User)
-WHERE u.age IN range(<span class="hljs-number">20</span>, <span class="hljs-number">30</span>)
-RETURN p.postid, p.posttype, u.age, u.userid
-ORDER BY u.age
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (p:<span class="hljs-type">Post</span>)&lt;-[:<span class="hljs-type">ADD</span>]-(u:<span class="hljs-type">User</span>)
+<span class="hljs-type">WHERE</span> u.age <span class="hljs-type">IN</span> range(<span class="hljs-number">20</span>, <span class="hljs-number">30</span>)
+<span class="hljs-type">RETURN</span> p.postid, p.posttype, u.age, u.userid
+<span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> u.age
 </code></pre>
+<!-- ![](https://i.imgur.com/4maQPr1.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="10">
 <li>What are the friends of the youngest person?</li>
 </ol>
-<pre><code class="wrap javascript hljs">CALL{
-    MATCH (u:User)
-    RETURN u.userid AS youngest
-    ORDER BY u.age ASC
-    LIMIT <span class="hljs-number">1</span>
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">CALL</span>{
+    <span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)
+    <span class="hljs-type">RETURN</span> u.userid <span class="hljs-type">AS</span> youngest
+    <span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> u.age <span class="hljs-type">ASC</span>
+    <span class="hljs-type">LIMIT</span> <span class="hljs-number">1</span>
 }
-WITH youngest
-MATCH (u:User{<span class="hljs-attr">userid</span>:youngest})-[:FRIEND]-(f1:User)
-RETURN DISTINCT u.userid AS user, f1.userid AS friend
+<span class="hljs-type">WITH</span> youngest
+<span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>{userid:youngest})-[:<span class="hljs-type">FRIEND</span>]-(f1:<span class="hljs-type">User</span>)
+<span class="hljs-type">RETURN</span> <span class="hljs-type">DISTINCT</span> u.userid <span class="hljs-type">AS</span> user, f1.userid <span class="hljs-type">AS</span> friend
 </code></pre>
+<!-- ![](https://i.imgur.com/u8tOMhU.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="11">
 <li>How many friends for the surname <code>Thronton</code>?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User{<span class="hljs-attr">surname</span>:<span class="hljs-string">'Thronton'</span>})-[:FRIEND]-(f1:User)
-RETURN COUNT(DISTINCT f1)
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>{surname:<span class="hljs-string">"Thronton"</span>})-[:<span class="hljs-type">FRIEND</span>]-(f1:<span class="hljs-type">User</span>)
+<span class="hljs-type">RETURN</span> <span class="hljs-type">COUNT</span>(<span class="hljs-type">DISTINCT</span> f1)
 </code></pre>
+<!-- ![](https://i.imgur.com/PPx1p4m.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="12">
 <li>How many posts for each user?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)--(p:Post)
-RETURN u.userid AS user, COUNT(*) AS c
-ORDER BY c DESC
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)--(p:<span class="hljs-type">Post</span>)
+<span class="hljs-type">RETURN</span> u.userid <span class="hljs-type">AS</span> user, <span class="hljs-type">COUNT</span>(*) <span class="hljs-type">AS</span> c
+<span class="hljs-type">ORDER</span> <span class="hljs-type">BY</span> c <span class="hljs-type">DESC</span>
 </code></pre>
+<!-- ![](https://i.imgur.com/zR5FgIs.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="13">
 <li>Who are the friends of users who posted <code>Image</code>?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (f:User)--(u:User)--(:Post{<span class="hljs-attr">posttype</span>:<span class="hljs-string">'Image'</span>})
-RETURN DISTINCT u.userid, u.name, u.surname, f.userid, f.name, f.surname, f.age
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (f:<span class="hljs-type">User</span>)--(u:<span class="hljs-type">User</span>)--(:<span class="hljs-type">Post</span>{posttype:<span class="hljs-string">"Image"</span>})
+<span class="hljs-type">RETURN</span> <span class="hljs-type">DISTINCT</span> u.userid, u.name, u.surname, f.userid, f.name, f.surname, f.age
 </code></pre>
+<!-- ![](https://i.imgur.com/wcK3RDJ.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="14">
 <li>How many friends of users whose age is less than 20?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)--(f1:User)
-WHERE u.age &lt; <span class="hljs-number">20</span>
-RETURN COUNT(DISTINCT f1.userid) AS c
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)--(f1:<span class="hljs-type">User</span>)
+<span class="hljs-type">WHERE</span> u.age &lt; <span class="hljs-number">20</span>
+<span class="hljs-type">RETURN</span> <span class="hljs-type">COUNT</span>(<span class="hljs-type">DISTINCT</span> f1.userid) <span class="hljs-type">AS</span> c
 </code></pre>
+<!-- ![](https://i.imgur.com/AWYnoRi.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="15">
 <li>How many friends of friends of users whose age is less than 20?</li>
 </ol>
-<pre><code class="wrap javascript hljs">MATCH (u:User)-[:FRIEND*<span class="hljs-number">2</span>]-(f2:User)
-WHERE u.age &lt; <span class="hljs-number">20</span> AND f2.userid &lt;&gt; u.userid
-RETURN COUNT(DISTINCT f2.userid) AS c
+<details>
+<pre><code class="wrap scala hljs"><span class="hljs-type">MATCH</span> (u:<span class="hljs-type">User</span>)-[:<span class="hljs-type">FRIEND</span>*<span class="hljs-number">2</span>]-(f2:<span class="hljs-type">User</span>)
+<span class="hljs-type">WHERE</span> u.age &lt; <span class="hljs-number">20</span> <span class="hljs-type">AND</span> f2.userid &lt;&gt; u.userid
+<span class="hljs-type">RETURN</span> <span class="hljs-type">COUNT</span>(<span class="hljs-type">DISTINCT</span> f2.userid) <span class="hljs-type">AS</span> c
 </code></pre>
+<!-- ![](https://i.imgur.com/2OQLzxv.png) -->
+</details>
+</div><div class="alert alert-success">
 <ol start="16">
 <li>How many users have more than 10 posts?</li>
 <li>What is the average number of posts published at noon and by the friends of the users whose age is more than 40? Calculate the percentage of posts.</li>
@@ -788,60 +1007,68 @@ RETURN COUNT(DISTINCT f2.userid) AS c
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li><a href="#Lab-2---Data-Retrieval-with-SQL-and-Cypher" title="Lab 2 - Data Retrieval with SQL and Cypher">Lab 2 - Data Retrieval with SQL and Cypher</a></li>
-<li><a href="#Dataset" title="Dataset">Dataset</a></li>
-<li><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
-<li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li><a href="#Introduction" title="Introduction">Introduction</a></li>
-<li><a href="#Dataset-Descripion" title="Dataset Descripion">Dataset Descripion</a></li>
-<li><a href="#Access-PostgreSQL-server" title="Access PostgreSQL server">Access PostgreSQL server</a></li>
-<li><a href="#PostgreSQL-Meta-commands" title="PostgreSQL Meta-commands">PostgreSQL Meta-commands</a></li>
-<li><a href="#Build-the-Database" title="Build the Database">Build the Database</a><ul class="nav">
-<li><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
+<li class=""><a href="#Lab-2---Data-Retrieval-with-SQL-and-Cypher" title="Lab 2 - Data Retrieval with SQL and Cypher">Lab 2 - Data Retrieval with SQL and Cypher</a></li>
+<li class=""><a href="#Dataset" title="Dataset">Dataset</a></li>
+<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li class=""><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
+<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li class=""><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li class=""><a href="#Dataset-Descripion" title="Dataset Descripion">Dataset Descripion</a></li>
+<li class=""><a href="#Access-PostgreSQL-server" title="Access PostgreSQL server">Access PostgreSQL server</a></li>
+<li class=""><a href="#PostgreSQL-Meta-commands" title="PostgreSQL Meta-commands">PostgreSQL Meta-commands</a></li>
+<li class=""><a href="#Build-the-Database" title="Build the Database">Build the Database</a><ul class="nav">
+<li class=""><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
 </ul>
 </li>
-<li><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
-<li><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
-<li><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
-<li><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
+<li class=""><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
+<li class=""><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
+<li class=""><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
+<li class=""><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
 </ul>
 </li>
 <li class=""><a href="#Graph-databases" title="Graph databases">Graph databases</a><ul class="nav">
-<li class=""><a href="#Download-and-Install-Neo4j" title="Download and Install Neo4j">Download and Install Neo4j</a><ul class="nav">
+<li class=""><a href="#Download-and-Install-Memgraph" title="Download and Install Memgraph">Download and Install Memgraph</a></li>
+<li class=""><a href="#Download-and-Install-Neo4j-Optional" title="Download and Install Neo4j (Optional)">Download and Install Neo4j (Optional)</a><ul class="nav">
 <li class=""><a href="#Neo4j-docker-image" title="Neo4j docker image">Neo4j docker image</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#Cypher" title="Cypher">Cypher</a><ul class="nav">
-<li><a href="#Property-types" title="Property types">Property types</a></li>
-<li><a href="#Structural-types" title="Structural types">Structural types</a></li>
-<li><a href="#Composite-types" title="Composite types">Composite types</a></li>
-<li><a href="#How-to-define-a-variable" title="How to define a variable">How to define a variable</a></li>
-<li><a href="#Operators" title="Operators">Operators</a><ul class="nav">
-<li><a href="#DISTINCT-aggregation-operator" title="DISTINCT (aggregation operator)">DISTINCT (aggregation operator)</a></li>
-<li><a href="#Property-operators" title="Property operators">Property operators</a></li>
-<li><a href="#Mathemtical-operators" title="Mathemtical operators">Mathemtical operators</a></li>
-<li><a href="#Comparison-operators" title="Comparison operators">Comparison operators</a></li>
-<li><a href="#Boolean-operators" title="Boolean operators">Boolean operators</a></li>
-<li><a href="#String-operators" title="String operators">String operators</a></li>
+<li class=""><a href="#Cypher" title="Cypher">Cypher</a><ul class="nav">
+<li class=""><a href="#Neo4j" title="Neo4j">Neo4j</a></li>
+<li class=""><a href="#Memgraph" title="Memgraph">Memgraph</a></li>
+<li class=""><a href="#Labeled-Property-Graph-LPG-model" title="Labeled Property Graph (LPG) model">Labeled Property Graph (LPG) model</a></li>
+<li class=""><a href="#Graph-Components" title="Graph Components">Graph Components</a><ul class="nav">
+<li class=""><a href="#Nodes" title="Nodes">Nodes</a></li>
+<li class=""><a href="#Relationships" title="Relationships">Relationships</a></li>
+<li class=""><a href="#Labels" title="Labels">Labels</a></li>
+<li class=""><a href="#Properties" title="Properties">Properties</a></li>
 </ul>
 </li>
-<li><a href="#Patterns" title="Patterns">Patterns</a><ul class="nav">
-<li><a href="#Patterns-for-nodes" title="Patterns for nodes">Patterns for nodes</a></li>
-<li><a href="#Patterns-for-related-nodes" title="Patterns for related nodes">Patterns for related nodes</a></li>
-<li><a href="#Patterns-for-labels" title="Patterns for labels">Patterns for labels</a></li>
-<li><a href="#Specifying-properties" title="Specifying properties">Specifying properties</a></li>
-<li><a href="#Patterns-for-relationships" title="Patterns for relationships">Patterns for relationships</a></li>
-<li><a href="#Variable-length-pattern-matching" title="Variable-length pattern matching">Variable-length pattern matching</a></li>
-<li><a href="#Assigning-to-path-variables" title="Assigning to path variables">Assigning to path variables</a></li>
+<li class=""><a href="#Property-types" title="Property types">Property types</a></li>
+<li class=""><a href="#Structural-types" title="Structural types">Structural types</a></li>
+<li class=""><a href="#Composite-types" title="Composite types">Composite types</a></li>
+<li class=""><a href="#How-to-define-a-variable" title="How to define a variable">How to define a variable</a></li>
+<li class=""><a href="#Operators" title="Operators">Operators</a><ul class="nav">
+<li class=""><a href="#DISTINCT-aggregation-operator" title="DISTINCT (aggregation operator)">DISTINCT (aggregation operator)</a></li>
+<li class=""><a href="#Property-operators" title="Property operators">Property operators</a></li>
+<li class=""><a href="#Mathemtical-operators" title="Mathemtical operators">Mathemtical operators</a></li>
+<li class=""><a href="#Comparison-operators" title="Comparison operators">Comparison operators</a></li>
+<li class=""><a href="#Boolean-operators" title="Boolean operators">Boolean operators</a></li>
+<li class=""><a href="#String-operators" title="String operators">String operators</a></li>
 </ul>
 </li>
-<li><a href="#Build-the-database" title="Build the database">Build the database</a></li>
+<li class=""><a href="#Patterns" title="Patterns">Patterns</a><ul class="nav">
+<li class=""><a href="#Patterns-for-nodes" title="Patterns for nodes">Patterns for nodes</a></li>
+<li class=""><a href="#Patterns-for-related-nodes" title="Patterns for related nodes">Patterns for related nodes</a></li>
 </ul>
 </li>
-<li><a href="#Data-Retrieval-with-Cypher" title="Data Retrieval with Cypher">Data Retrieval with Cypher</a></li>
+<li class=""><a href="#Build-the-database-in-Neo4j-Desktop" title="Build the database in Neo4j Desktop">Build the database in Neo4j Desktop</a></li>
+<li class=""><a href="#Using-Memgraph-installed-via-Docker" title="Using Memgraph installed via Docker">Using Memgraph installed via Docker</a></li>
+<li class=""><a href="#Data-loading-and-creating-nodesrelationships" title="Data loading and creating nodes/relationships">Data loading and creating nodes/relationships</a></li>
+</ul>
+</li>
+<li class=""><a href="#Data-Retrieval-with-Cypher" title="Data Retrieval with Cypher">Data Retrieval with Cypher</a></li>
 <li><a href="#Common-issues" title="Common issues">Common issues</a></li>
 <li><a href="#References" title="References">References</a></li>
 </ul>
@@ -856,60 +1083,68 @@ RETURN COUNT(DISTINCT f2.userid) AS c
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li><a href="#Lab-2---Data-Retrieval-with-SQL-and-Cypher" title="Lab 2 - Data Retrieval with SQL and Cypher">Lab 2 - Data Retrieval with SQL and Cypher</a></li>
-<li><a href="#Dataset" title="Dataset">Dataset</a></li>
-<li><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
-<li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li><a href="#Introduction" title="Introduction">Introduction</a></li>
-<li><a href="#Dataset-Descripion" title="Dataset Descripion">Dataset Descripion</a></li>
-<li><a href="#Access-PostgreSQL-server" title="Access PostgreSQL server">Access PostgreSQL server</a></li>
-<li><a href="#PostgreSQL-Meta-commands" title="PostgreSQL Meta-commands">PostgreSQL Meta-commands</a></li>
-<li><a href="#Build-the-Database" title="Build the Database">Build the Database</a><ul class="nav">
-<li><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
+<li class=""><a href="#Lab-2---Data-Retrieval-with-SQL-and-Cypher" title="Lab 2 - Data Retrieval with SQL and Cypher">Lab 2 - Data Retrieval with SQL and Cypher</a></li>
+<li class=""><a href="#Dataset" title="Dataset">Dataset</a></li>
+<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li class=""><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
+<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li class=""><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li class=""><a href="#Dataset-Descripion" title="Dataset Descripion">Dataset Descripion</a></li>
+<li class=""><a href="#Access-PostgreSQL-server" title="Access PostgreSQL server">Access PostgreSQL server</a></li>
+<li class=""><a href="#PostgreSQL-Meta-commands" title="PostgreSQL Meta-commands">PostgreSQL Meta-commands</a></li>
+<li class=""><a href="#Build-the-Database" title="Build the Database">Build the Database</a><ul class="nav">
+<li class=""><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
 </ul>
 </li>
-<li><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
-<li><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
-<li><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
-<li><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
+<li class=""><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
+<li class=""><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
+<li class=""><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
+<li class=""><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
 </ul>
 </li>
 <li class=""><a href="#Graph-databases" title="Graph databases">Graph databases</a><ul class="nav">
-<li class=""><a href="#Download-and-Install-Neo4j" title="Download and Install Neo4j">Download and Install Neo4j</a><ul class="nav">
+<li class=""><a href="#Download-and-Install-Memgraph" title="Download and Install Memgraph">Download and Install Memgraph</a></li>
+<li class=""><a href="#Download-and-Install-Neo4j-Optional" title="Download and Install Neo4j (Optional)">Download and Install Neo4j (Optional)</a><ul class="nav">
 <li class=""><a href="#Neo4j-docker-image" title="Neo4j docker image">Neo4j docker image</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#Cypher" title="Cypher">Cypher</a><ul class="nav">
-<li><a href="#Property-types" title="Property types">Property types</a></li>
-<li><a href="#Structural-types" title="Structural types">Structural types</a></li>
-<li><a href="#Composite-types" title="Composite types">Composite types</a></li>
-<li><a href="#How-to-define-a-variable" title="How to define a variable">How to define a variable</a></li>
-<li><a href="#Operators" title="Operators">Operators</a><ul class="nav">
-<li><a href="#DISTINCT-aggregation-operator" title="DISTINCT (aggregation operator)">DISTINCT (aggregation operator)</a></li>
-<li><a href="#Property-operators" title="Property operators">Property operators</a></li>
-<li><a href="#Mathemtical-operators" title="Mathemtical operators">Mathemtical operators</a></li>
-<li><a href="#Comparison-operators" title="Comparison operators">Comparison operators</a></li>
-<li><a href="#Boolean-operators" title="Boolean operators">Boolean operators</a></li>
-<li><a href="#String-operators" title="String operators">String operators</a></li>
+<li class=""><a href="#Cypher" title="Cypher">Cypher</a><ul class="nav">
+<li class=""><a href="#Neo4j" title="Neo4j">Neo4j</a></li>
+<li class=""><a href="#Memgraph" title="Memgraph">Memgraph</a></li>
+<li class=""><a href="#Labeled-Property-Graph-LPG-model" title="Labeled Property Graph (LPG) model">Labeled Property Graph (LPG) model</a></li>
+<li class=""><a href="#Graph-Components" title="Graph Components">Graph Components</a><ul class="nav">
+<li class=""><a href="#Nodes" title="Nodes">Nodes</a></li>
+<li class=""><a href="#Relationships" title="Relationships">Relationships</a></li>
+<li class=""><a href="#Labels" title="Labels">Labels</a></li>
+<li class=""><a href="#Properties" title="Properties">Properties</a></li>
 </ul>
 </li>
-<li><a href="#Patterns" title="Patterns">Patterns</a><ul class="nav">
-<li><a href="#Patterns-for-nodes" title="Patterns for nodes">Patterns for nodes</a></li>
-<li><a href="#Patterns-for-related-nodes" title="Patterns for related nodes">Patterns for related nodes</a></li>
-<li><a href="#Patterns-for-labels" title="Patterns for labels">Patterns for labels</a></li>
-<li><a href="#Specifying-properties" title="Specifying properties">Specifying properties</a></li>
-<li><a href="#Patterns-for-relationships" title="Patterns for relationships">Patterns for relationships</a></li>
-<li><a href="#Variable-length-pattern-matching" title="Variable-length pattern matching">Variable-length pattern matching</a></li>
-<li><a href="#Assigning-to-path-variables" title="Assigning to path variables">Assigning to path variables</a></li>
+<li class=""><a href="#Property-types" title="Property types">Property types</a></li>
+<li class=""><a href="#Structural-types" title="Structural types">Structural types</a></li>
+<li class=""><a href="#Composite-types" title="Composite types">Composite types</a></li>
+<li class=""><a href="#How-to-define-a-variable" title="How to define a variable">How to define a variable</a></li>
+<li class=""><a href="#Operators" title="Operators">Operators</a><ul class="nav">
+<li class=""><a href="#DISTINCT-aggregation-operator" title="DISTINCT (aggregation operator)">DISTINCT (aggregation operator)</a></li>
+<li class=""><a href="#Property-operators" title="Property operators">Property operators</a></li>
+<li class=""><a href="#Mathemtical-operators" title="Mathemtical operators">Mathemtical operators</a></li>
+<li class=""><a href="#Comparison-operators" title="Comparison operators">Comparison operators</a></li>
+<li class=""><a href="#Boolean-operators" title="Boolean operators">Boolean operators</a></li>
+<li class=""><a href="#String-operators" title="String operators">String operators</a></li>
 </ul>
 </li>
-<li><a href="#Build-the-database" title="Build the database">Build the database</a></li>
+<li class=""><a href="#Patterns" title="Patterns">Patterns</a><ul class="nav">
+<li class=""><a href="#Patterns-for-nodes" title="Patterns for nodes">Patterns for nodes</a></li>
+<li class=""><a href="#Patterns-for-related-nodes" title="Patterns for related nodes">Patterns for related nodes</a></li>
 </ul>
 </li>
-<li><a href="#Data-Retrieval-with-Cypher" title="Data Retrieval with Cypher">Data Retrieval with Cypher</a></li>
+<li class=""><a href="#Build-the-database-in-Neo4j-Desktop" title="Build the database in Neo4j Desktop">Build the database in Neo4j Desktop</a></li>
+<li class=""><a href="#Using-Memgraph-installed-via-Docker" title="Using Memgraph installed via Docker">Using Memgraph installed via Docker</a></li>
+<li class=""><a href="#Data-loading-and-creating-nodesrelationships" title="Data loading and creating nodes/relationships">Data loading and creating nodes/relationships</a></li>
+</ul>
+</li>
+<li class=""><a href="#Data-Retrieval-with-Cypher" title="Data Retrieval with Cypher">Data Retrieval with Cypher</a></li>
 <li><a href="#Common-issues" title="Common issues">Common issues</a></li>
 <li><a href="#References" title="References">References</a></li>
 </ul>
