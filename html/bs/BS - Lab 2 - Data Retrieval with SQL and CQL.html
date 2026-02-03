@@ -260,7 +260,7 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> friends2 <span class="hljs-keyword">RENAME</span> <span class="hljs-keyword">TO</span> friends;
 
 </code></pre><h1 id="Data-Retrieval-using-SQL"><a class="anchor hidden-xs" href="#Data-Retrieval-using-SQL" title="Data-Retrieval-using-SQL"><i class="fa fa-link"></i></a>Data Retrieval using SQL</h1><p>In this part of the lab, we will practice on writing SQL queries to retrieve data from our database.</p><h2 id="Data-Retrieval-from-a-single-table"><a class="anchor hidden-xs" href="#Data-Retrieval-from-a-single-table" title="Data-Retrieval-from-a-single-table"><i class="fa fa-link"></i></a>Data Retrieval from a single table</h2><p>You can return data from a single table by using <code>SELECT</code> command. This kind of data retrieval is the simplest way to get data from a single table.</p><div class="alert alert-success">
-<h3 id="Exercises0"><a class="anchor hidden-xs" href="#Exercises0" title="Exercises0"><i class="fa fa-link"></i></a>Exercises</h3>
+<h3 id="Exercises"><a class="anchor hidden-xs" href="#Exercises" title="Exercises"><i class="fa fa-link"></i></a>Exercises</h3>
 <ol>
 <li>Who are the users who have posts?</li>
 </ol>
@@ -320,7 +320,7 @@ friend2 <span class="hljs-built_in">INT</span> <span class="hljs-keyword">NOT</s
 </div><div class="alert alert-warning">
 <p>In PostgreSQL, double quotes <code>""</code> are used to indicate identifiers within the database, which are objects like tables, column names, and roles. In contrast, single quotes <code>''</code> are used to indicate string literals.</p>
 </div><h2 id="Data-Retrieval-from-multiple-tables-Joining-tables"><a class="anchor hidden-xs" href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data-Retrieval-from-multiple-tables-Joining-tables"><i class="fa fa-link"></i></a>Data Retrieval from multiple tables (Joining tables)</h2><div class="alert alert-success">
-<h3 id="Exercises"><a class="anchor hidden-xs" href="#Exercises" title="Exercises"><i class="fa fa-link"></i></a>Exercises</h3>
+<h3 id="Exercises1"><a class="anchor hidden-xs" href="#Exercises1" title="Exercises1"><i class="fa fa-link"></i></a>Exercises</h3>
 <ol start="8">
 <li>Who is the 2nd youngest person who published <code>Image</code> posts?</li>
 </ol>
@@ -475,7 +475,7 @@ volumes:
   <span class="hljs-keyword">healthcheck</span><span class="bash">-volume:</span>
 </code></pre><ol start="2">
 <li>Create and run a cluster of <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 2.804em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.427em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.565em, 1002.37em, 2.535em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">n</span><span class="mo" id="MathJax-Span-4" style="font-family: MathJax_Main; padding-left: 0.272em;">=</span><span class="mn" id="MathJax-Span-5" style="font-family: MathJax_Main; padding-left: 0.272em;">2</span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mn>2</mn></math></span></span><script type="math/tex" id="MathJax-Element-1">n=2</script></span> nodes.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-comment"># export POSTGRES_PASSWORD=postgres</span>
+</ol><pre><code class="yaml hljs"><span class="hljs-comment"># export POSTGRES_PASSWORD=postgres</span>
 <span class="hljs-string">export</span> <span class="hljs-string">COMPOSE_PROJECT_NAME=citus</span> 
 <span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">up</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--scale</span> <span class="hljs-string">worker=2</span>
 
@@ -483,74 +483,135 @@ volumes:
 <span class="hljs-comment"># docker-compose down</span>
 </code></pre><ol start="3">
 <li>Access psql of the master node (coordinator) and run queries.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">citus_master</span> <span class="hljs-string">psql</span> <span class="hljs-bullet">-U</span> <span class="hljs-string">postgres</span>
+</ol><pre><code class="haskell hljs"><span class="token hvariable">docker</span> <span class="token hvariable">exec</span> <span class="token operator">-</span><span class="token hvariable">it</span> <span class="token hvariable">citus_master</span> <span class="token hvariable">psql</span> <span class="token operator">-</span><span class="token constant">U</span> <span class="token hvariable">postgres</span>
 </code></pre><ol start="4">
 <li>Check if Citus extension is installed or install if not in the Citus master/coordinator on the current database.</li>
-</ol><pre><code class="wrap sql hljs"><span class="hljs-comment"># Run this in all nodes</span>
-<span class="hljs-keyword">CREATE</span> EXTENSION <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> <span class="hljs-string">"citus"</span>;
-
+</ol><pre><code class="wrap haskell hljs"><span class="token comment">-- Run this in all nodes</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">CREATE</span> <span class="token constant">EXTENSION</span> <span class="token constant">IF</span> <span class="token constant">NOT</span> <span class="token constant">EXISTS</span> <span class="token string">"citus"</span><span class="token punctuation">;</span>
 </code></pre><p>You can check which extensions are enabled by running <code>\dx</code> in psql terminal.<br>
-5. Add all workers to the cluster.</p><pre><code class="wrap sql hljs"><span class="hljs-comment">-- list all active nodes</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> master_get_active_worker_nodes();
+5. Add all workers to the cluster.</p><pre><code class="wrap haskell hljs"><span class="token comment">-- list all active nodes</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">master_get_active_worker_nodes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="hljs-comment">-- add one worker node with hostname 'citus-worker-1' and port 5432.</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">from</span> master_add_node(<span class="hljs-string">'citus-worker-1'</span>, <span class="hljs-number">5432</span>);
+<span class="token comment">-- add one worker node with hostname 'citus-worker-1' and port 5432.</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token hvariable">from</span> <span class="token hvariable">master_add_node</span><span class="token punctuation">(</span>'<span class="token hvariable">citus</span><span class="token operator">-</span><span class="token hvariable">worker</span><span class="token operator">-</span><span class="token number">1</span>'<span class="token punctuation">,</span> <span class="token number">5432</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- Do this for all workers</span>
+<span class="token comment">-- ...</span>
+
+<span class="token comment">-- Check if all nodes are added</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">master_get_active_worker_nodes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 </code></pre><ol start="5">
 <li>You can propagate a specific SQL command from the master to all workers as follows:</li>
-</ol><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> run_command_on_workers(<span class="hljs-string">'CREATE EXTENSION IF NOT EXISTS "citus"'</span>);
+</ol><pre><code class="wrap haskell hljs"><span class="token comment">-- Make sure that you have added all worker nodes before you run this procedure</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token hvariable">run_command_on_workers</span><span class="token punctuation">(</span>'<span class="token constant">CREATE</span> <span class="token constant">EXTENSION</span> <span class="token constant">IF</span> <span class="token constant">NOT</span> <span class="token constant">EXISTS</span> <span class="token string">"citus"</span>'<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- But actually this will activate the citus extension only in the current database postgres. Check below on how to do it for your new database.</span>
 </code></pre><ol start="6">
-<li>Create a distributed table.</li>
-</ol><pre><code class="wrap sql hljs"><span class="hljs-comment">-- Create local tables first.</span>
-<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">IF</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> <span class="hljs-keyword">Users</span>(
-userid <span class="hljs-built_in">INT</span> PRIMARY <span class="hljs-keyword">KEY</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>,
-surname <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">50</span>),
-<span class="hljs-keyword">name</span> <span class="hljs-built_in">VARCHAR</span>(<span class="hljs-number">50</span>),
-age <span class="hljs-built_in">INT</span>,
-_timestamp <span class="hljs-built_in">timestamp</span>,
-temp <span class="hljs-built_in">BIGINT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>
-);
+<li>Create a new distributed database <code>social</code> in 3 steps.</li>
+</ol><pre><code class="haskell hljs"><span class="token comment">-- database creation command cannot be automatically propagated to workers</span>
+<span class="token comment">-- You need to execute this command on all workers</span>
+<span class="token comment">-- You either can manually access every database system and execute the commands</span>
+<span class="token comment">-- Or you can use the stored procedure `run_command_on_workers`.</span>
+<span class="token comment">-- Run the commands below in the coorindator node except the command for activating the extension citus.</span>
+
+<span class="token comment">-- Step 1 </span>
+<span class="token comment">-- Create the database in the coordinator and propagate the command to workers </span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">CREATE</span> <span class="token constant">DATABASE</span> <span class="token hvariable">social</span><span class="token punctuation">;</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token hvariable">run_command_on_workers</span><span class="token punctuation">(</span>'<span class="token constant">CREATE</span> <span class="token constant">DATABASE</span> <span class="token hvariable">social'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- You can access the workers and check if the database is there</span>
+<span class="token hvariable">docker</span> <span class="token hvariable">exec</span> <span class="token operator">-</span><span class="token hvariable">it</span> <span class="token hvariable">citus</span><span class="token operator">-</span><span class="token hvariable">worker</span><span class="token operator">-</span><span class="token number">1</span> <span class="token hvariable">psql</span> <span class="token operator">-</span><span class="token constant">U</span> <span class="token hvariable">postgres</span> <span class="token operator">-</span><span class="token hvariable">d</span> <span class="token hvariable">postgres</span> <span class="token operator">-</span><span class="token hvariable">c</span> <span class="token string">"SELECT DATNAME FROM PG_DATABASE;"</span>
+<span class="token comment">--   datname</span>
+<span class="token comment">-- -----------</span>
+<span class="token comment">--  postgres</span>
+<span class="token comment">--  social</span>
+<span class="token comment">--  template1</span>
+<span class="token comment">--  template0</span>
+<span class="token comment">-- (4 rows)</span>
 
 
-<span class="hljs-comment">-- Distribute it using a distribution column (userid)</span>
-<span class="hljs-keyword">SELECT</span> create_distributed_table(<span class="hljs-string">'users'</span>, <span class="hljs-string">'userid'</span>, shard_count := <span class="hljs-number">80</span>);
-<span class="hljs-comment">-- default is 32</span>
+<span class="token comment">-- Step 2</span>
+<span class="token comment">--  Activate the citus extension in the coordinator</span>
+<span class="token hvariable">postgres</span><span class="token operator">=#</span> <span class="token operator">\</span><span class="token hvariable">c</span> <span class="token hvariable">social</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">CREATE</span> <span class="token constant">EXTENSION</span> <span class="token constant">IF</span> <span class="token constant">NOT</span> <span class="token constant">EXISTS</span> <span class="token hvariable">citus</span><span class="token punctuation">;</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token operator">\</span><span class="token hvariable">dx</span>
+
+<span class="token comment">-- Manually activate the citus extension per worker for the database "social"</span>
+<span class="token comment">-- For worker 1, we can run as follows:</span>
+<span class="token hvariable">docker</span> <span class="token hvariable">exec</span> <span class="token operator">-</span><span class="token hvariable">it</span> <span class="token hvariable">citus</span><span class="token operator">-</span><span class="token hvariable">worker</span><span class="token operator">-</span><span class="token number">2</span> <span class="token hvariable">psql</span> <span class="token operator">-</span><span class="token constant">U</span> <span class="token hvariable">postgres</span> <span class="token operator">-</span><span class="token hvariable">d</span> <span class="token hvariable">social</span> <span class="token operator">-</span><span class="token hvariable">c</span> <span class="token string">"CREATE EXTENSION IF NOT EXISTS citus"</span>
+<span class="token comment">-- Do this for all workers</span>
+<span class="token comment">-- ...</span>
+
+<span class="token comment">-- Step 3</span>
+<span class="token comment">-- Add the workers to the cluster for this database "social"</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token hvariable">from</span> <span class="token hvariable">master_add_node</span><span class="token punctuation">(</span>'<span class="token hvariable">citus</span><span class="token operator">-</span><span class="token hvariable">worker</span><span class="token operator">-</span><span class="token number">1</span>'<span class="token punctuation">,</span> <span class="token number">5432</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- Do this for all workers</span>
+<span class="token comment">-- ...</span>
+
+<span class="token comment">-- Check if all nodes are added</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">master_get_active_worker_nodes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><ol start="7">
+<li>Create a distributed table in the previous database <code>social</code>.</li>
+</ol><pre><code class="haskell hljs"><span class="token comment">-- Create local tables first.</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">CREATE</span> <span class="token constant">TABLE</span> <span class="token constant">IF</span> <span class="token constant">NOT</span> <span class="token constant">EXISTS</span> <span class="token constant">Users</span><span class="token punctuation">(</span>
+<span class="token hvariable">userid</span> <span class="token constant">INT</span> <span class="token constant">PRIMARY</span> <span class="token constant">KEY</span> <span class="token constant">NOT</span> <span class="token constant">NULL</span><span class="token punctuation">,</span>
+<span class="token hvariable">surname</span> <span class="token constant">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token hvariable">name</span> <span class="token constant">VARCHAR</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token hvariable">age</span> <span class="token constant">INT</span><span class="token punctuation">,</span>
+<span class="token hvariable">_timestamp</span> <span class="token hvariable">timestamp</span><span class="token punctuation">,</span>
+<span class="token hvariable">temp</span> <span class="token constant">BIGINT</span> <span class="token constant">NOT</span> <span class="token constant">NULL</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 
-<span class="hljs-comment">-- send the files to citus_master container using 'docker cp'</span>
-docker cp ~/citus/relational_social_data/users.csv citus_master:/
+<span class="token comment">-- Distribute it using a distribution column (userid)</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token hvariable">create_distributed_table</span><span class="token punctuation">(</span>'<span class="token hvariable">users'</span><span class="token punctuation">,</span> '<span class="token hvariable">userid'</span><span class="token punctuation">,</span> <span class="token hvariable">shard_count</span> <span class="token operator">:=</span> <span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- default is 32</span>
+
+<span class="token comment">-- Check in workers if you can see the table "users".</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token hvariable">run_command_on_workers</span><span class="token punctuation">(</span>'<span class="token constant">SELECT</span> <span class="token constant">TABLE_NAME</span> <span class="token constant">FROM</span> <span class="token constant">CITUS_TABLES'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- You can alter the shard size if you want later</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token hvariable">alter_distributed_table</span><span class="token punctuation">(</span>'<span class="token hvariable">users'</span><span class="token punctuation">,</span> <span class="token hvariable">shard_count</span> <span class="token operator">:=</span> <span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">-- NOTICE:  creating a new table for public.users</span>
+<span class="token comment">-- NOTICE:  moving the data of public.users</span>
+<span class="token comment">-- NOTICE:  dropping the old public.users</span>
+<span class="token comment">-- NOTICE:  renaming the new table to public.users</span>
 
 
-<span class="hljs-comment">-- upload data</span>
-\COPY Users(userid, surname, name, age, temp)  FROM 'users.csv'  DELIMITER ','  CSV HEADER;
-<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">Users</span> <span class="hljs-keyword">SET</span> _timestamp = TO_TIMESTAMP(temp);
-<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">Users</span> <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">COLUMN</span> temp;
+<span class="token comment">-- send the files to citus_master container using 'docker cp'</span>
+<span class="token comment">-- I have the files stored in ""~/citus/relational_social_data" folder</span>
+<span class="token comment">-- Change it according to your case </span>
+<span class="token hvariable">docker</span> <span class="token hvariable">cp</span> <span class="token operator">~/</span><span class="token hvariable">citus</span><span class="token operator">/</span><span class="token hvariable">relational_social_data</span><span class="token operator">/</span><span class="token hvariable">users</span><span class="token punctuation">.</span><span class="token hvariable">csv</span> <span class="token hvariable">citus_master</span><span class="token operator">:/</span>
 
 
-<span class="hljs-comment">-- create reference table if needed</span>
-<span class="hljs-keyword">SELECT</span> create_reference_table(<span class="hljs-string">'users'</span>);
+<span class="token comment">-- upload data</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token operator">\</span><span class="token constant">COPY</span> <span class="token constant">Users</span><span class="token punctuation">(</span><span class="token hvariable">userid</span><span class="token punctuation">,</span> <span class="token hvariable">surname</span><span class="token punctuation">,</span> <span class="token hvariable">name</span><span class="token punctuation">,</span> <span class="token hvariable">age</span><span class="token punctuation">,</span> <span class="token hvariable">temp</span><span class="token punctuation">)</span>  <span class="token constant">FROM</span> '<span class="token hvariable">users</span><span class="token punctuation">.</span><span class="token hvariable">csv'</span>  <span class="token constant">DELIMITER</span> <span class="token char string">','</span>  <span class="token constant">CSV</span> <span class="token constant">HEADER</span><span class="token punctuation">;</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">UPDATE</span> <span class="token constant">Users</span> <span class="token constant">SET</span> <span class="token hvariable">_timestamp</span> <span class="token operator">=</span> <span class="token constant">TO_TIMESTAMP</span><span class="token punctuation">(</span><span class="token hvariable">temp</span><span class="token punctuation">)</span> <span class="token constant">AT</span> <span class="token constant">TIME</span> <span class="token constant">ZONE</span> '<span class="token constant">UTC</span><span class="token operator">+</span><span class="token number">3</span>'<span class="token punctuation">;</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">ALTER</span> <span class="token constant">TABLE</span> <span class="token constant">Users</span> <span class="token constant">DROP</span> <span class="token constant">COLUMN</span> <span class="token hvariable">temp</span><span class="token punctuation">;</span>
+<span class="token comment">-- Check in workers if you can retrieve the table content</span>
+<span class="token hvariable">social</span><span class="token operator">=#</span> <span class="token constant">SELECT</span> <span class="token hvariable">run_command_on_workers</span><span class="token punctuation">(</span>'<span class="token constant">SELECT</span> <span class="token constant">USERID</span> <span class="token constant">FROM</span> <span class="token constant">USERS</span> <span class="token constant">LIMIT</span> <span class="token number">1</span>'<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="hljs-comment">-- upgrade distributed to reference table</span>
-<span class="hljs-keyword">SELECT</span> upgrade_to_reference_table(<span class="hljs-string">'users'</span>);
 
+<span class="token comment">-- create reference table if needed</span>
+<span class="token comment">-- social=# SELECT create_reference_table('users');</span>
+<span class="token comment">-- You cannot create a reference for already distributed table.</span>
 </code></pre><ol start="7">
 <li>Run some useful diagnostic queries (<a href="https://docs.citusdata.com/en/stable/develop/api_metadata.html" target="_blank" rel="noopener">reference</a>)</li>
-</ol><pre><code class="wrap sql hljs"><span class="hljs-comment">-- A view shows a summary of all tables managed by Citus (distributed and reference tables)</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> citus_tables;
+</ol><pre><code class="wrap haskell hljs"><span class="token comment">-- A view shows a summary of all tables managed by Citus (distributed and reference tables)</span>
+<span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">citus_tables</span><span class="token punctuation">;</span>
 
-<span class="hljs-comment">-- A view helps you inspect shards to find any size imbalances across nodes</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> citus_shards;
+<span class="token comment">-- A view helps you inspect shards to find any size imbalances across nodes</span>
+<span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">citus_shards</span><span class="token punctuation">;</span>
 
-<span class="hljs-comment">-- metadata table about which tables in the database are distributed</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> pg_dist_partition;
-
-
-<span class="hljs-comment">-- metadata table about individual shards of a table</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> pg_dist_shard;
+<span class="token comment">-- metadata table about which tables in the database are distributed</span>
+<span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">pg_dist_partition</span><span class="token punctuation">;</span>
 
 
-<span class="hljs-comment">-- table contains information about the worker nodes in the cluster.</span>
-<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> pg_dist_node;
+<span class="token comment">-- metadata table about individual shards of a table</span>
+<span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">pg_dist_shard</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">-- table contains information about the worker nodes in the cluster.</span>
+<span class="token constant">SELECT</span> <span class="token operator">*</span> <span class="token constant">FROM</span> <span class="token hvariable">pg_dist_node</span><span class="token punctuation">;</span>
+
 </code></pre><ol start="8">
 <li>Run some queries.</li>
 </ol><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> userid
@@ -584,23 +645,24 @@ docker cp ~/citus/relational_social_data/users.csv citus_master:/
 <pre><code class="wrap clike hljs">firasj<span class="hljs-variable">@Lenovo</span><span class="hljs-symbol">:~</span><span class="hljs-variable">$ </span>docker exec -it cass_server cqlsh
 Connection <span class="hljs-symbol">error:</span> (<span class="hljs-string">'Unable to connect to any servers'</span>, {<span class="hljs-string">'127.0.0.1:9042'</span>: ConnectionRefusedError(<span class="hljs-number">111</span>, <span class="hljs-string">"Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused"</span>)})
 </code></pre>
-<p>It could be related to Gossip protocol issue that is used for inter-node communication. Wait till the server properly runs.</p>
+<p>It could be related to Gossip protocol used for inter-node communication in the cluster. Wait till the server properly runs.</p>
 </div><h3 id="Multi-node-Cassandra-cluster"><a class="anchor hidden-xs" href="#Multi-node-Cassandra-cluster" title="Multi-node-Cassandra-cluster"><i class="fa fa-link"></i></a>Multi-node Cassandra cluster</h3><div class="alert alert-danger">
-<p><strong>Important:</strong> Do not deploy multi-node cluster on your local machine if you have less than 16GB RAM memory size since each Cassandra node will minimally need 4GB. If you have 12GB, you may try to run a cluster of two Cassandra nodes.</p>
+<p><strong>Important:</strong> Do not deploy multi-node cluster on your local machine if you have less than 16GB RAM memory size since each Cassandra node (version 4.1.3) will minimally need 8GB. If you have 12GB, you may try to run a cluster of two Cassandra nodes.</p>
 </div><p>We can run a cluster of three Casandra nodes by following one of the ways:</p><h4 id="1-Without-using-Docker-compose"><a class="anchor hidden-xs" href="#1-Without-using-Docker-compose" title="1-Without-using-Docker-compose"><i class="fa fa-link"></i></a>1. Without using Docker compose</h4><ol>
 <li>Pull the Cassandra image.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-attr">cassandra:latest</span>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-attr">cassandra:4.1.3</span>
+<span class="hljs-comment"># the latest one in 2026 will require 8G per node</span>
 </code></pre><ol start="2">
 <li>Create a docker network then run the first node on this network. We assume that the first node is the client node too.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">network</span> <span class="hljs-string">create</span> <span class="hljs-string">cassandra_net</span>
-<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-1</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span> <span class="hljs-attr">cassandra:latest</span>
+<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-1</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span> <span class="hljs-attr">cassandra:4.1.3</span>
 </code></pre><p>To start other instances, just tell each new node where the first is (set the environment variable <code>CASSANDRA_SEEDS</code>).<br>
-3. Run the second node.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-2</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span>  <span class="hljs-bullet">-e</span> <span class="hljs-string">CASSANDRA_SEEDS=cassandra-1</span> <span class="hljs-attr">cassandra:latest</span>
+3. Run the second node.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-2</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span>  <span class="hljs-bullet">-e</span> <span class="hljs-string">CASSANDRA_SEEDS=cassandra-1</span> <span class="hljs-attr">cassandra:4.1.3</span>
 </code></pre><ol start="4">
 <li>Run the third node.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-3</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span>  <span class="hljs-bullet">-e</span> <span class="hljs-string">CASSANDRA_SEEDS=cassandra-2</span> <span class="hljs-attr">cassandra:latest</span>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">cassandra-3</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">cassandra_net</span> <span class="hljs-bullet">-d</span>  <span class="hljs-bullet">-e</span> <span class="hljs-string">CASSANDRA_SEEDS=cassandra-1</span> <span class="hljs-attr">cassandra:4.1.3</span>
 </code></pre><p>You can check the status of the cluster by running the command on one of the nodes:</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-string">cassandra-1</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
-</code></pre><p><img src="https://i.imgur.com/BpQFyTT.png" alt="" class="md-image md-image"></p><p><code>UN</code> means that the servers are up and normal.</p><h4 id="2-Using-Docker-Compose"><a class="anchor hidden-xs" href="#2-Using-Docker-Compose" title="2-Using-Docker-Compose"><i class="fa fa-link"></i></a>2. Using Docker Compose</h4><p>Here, I will share the steps to run a Cassandra cluster of 3 nodes by following the instructions in <a href="https://github.com/kayvansol/Cassandra" target="_blank" rel="noopener">this repository</a>. Make sure that you have Docker compose installed, otherwise follow <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">this tutorial</a> to install it. The steps to create a cluster of 3 Cassandra nodes are:</p><ol>
+</code></pre><p><img src="https://i.imgur.com/4cStAc0.png" alt="" class="md-image md-image"></p><p><code>UN</code> means that the servers are up and normal.</p><h4 id="2-Using-Docker-Compose"><a class="anchor hidden-xs" href="#2-Using-Docker-Compose" title="2-Using-Docker-Compose"><i class="fa fa-link"></i></a>2. Using Docker Compose</h4><p>Here, I will share the steps to run a Cassandra cluster of 3 nodes by following the instructions in <a href="https://github.com/kayvansol/Cassandra" target="_blank" rel="noopener">this repository</a>. Make sure that you have Docker compose installed, otherwise follow <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">this tutorial</a> to install it. The steps to create a cluster of 3 Cassandra nodes are:</p><ol>
 <li>Pull the Cassandra image.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-attr">cassandra:latest</span>
 </code></pre><ol start="2">
@@ -613,7 +675,7 @@ networks:
 services:
 
   cassandra-<span class="hljs-number">1</span>:
-    image: <span class="hljs-string">"cassandra:latest"</span>
+    image: <span class="hljs-string">"cassandra:4.1.3"</span>
     container_name: <span class="hljs-string">"cassandra-1"</span>
     ports:
       - <span class="hljs-number">7000</span>:<span class="hljs-number">7000</span>
@@ -627,6 +689,10 @@ services:
       - CASSANDRA_DC=my-datacenter-<span class="hljs-number">1</span>
     volumes:
       - cassandra-node-<span class="hljs-number">1</span>:/var/lib/cassandra:rw
+    deploy:
+      resources:
+        limits:
+          memory: <span class="hljs-number">4</span>G
     restart:
       on-failure
     <span class="hljs-keyword">healthcheck</span><span class="bash">:</span>
@@ -637,7 +703,7 @@ services:
       retries: <span class="hljs-number">3</span>
 
   cassandra-<span class="hljs-number">2</span>:
-    image: <span class="hljs-string">"cassandra:latest"</span>
+    image: <span class="hljs-string">"cassandra:4.1.3"</span>
     container_name: <span class="hljs-string">"cassandra-2"</span>
     ports:
       - <span class="hljs-number">9043</span>:<span class="hljs-number">9042</span>
@@ -654,6 +720,10 @@ services:
         condition: service_healthy
     volumes:
       - cassandra-node-<span class="hljs-number">2</span>:/var/lib/cassandra:rw
+    deploy:
+      resources:
+        limits:
+          memory: <span class="hljs-number">4</span>G
     restart:
       on-failure
     <span class="hljs-keyword">healthcheck</span><span class="bash">:</span>
@@ -664,7 +734,7 @@ services:
       retries: <span class="hljs-number">3</span>
 
   cassandra-<span class="hljs-number">3</span>:
-    image: <span class="hljs-string">"cassandra:latest"</span>
+    image: <span class="hljs-string">"cassandra:4.1.3"</span>
     container_name: <span class="hljs-string">"cassandra-3"</span>
     ports:
       - <span class="hljs-number">9044</span>:<span class="hljs-number">9042</span>
@@ -681,6 +751,10 @@ services:
         condition: service_healthy
     volumes:
       - cassandra-node-<span class="hljs-number">3</span>:/var/lib/cassandra:rw
+    deploy:
+      resources:
+        limits:
+          memory: <span class="hljs-number">4</span>G
     restart:
       on-failure
     <span class="hljs-keyword">healthcheck</span><span class="bash">:</span>
@@ -697,10 +771,11 @@ volumes:
 </code></pre><ol start="3">
 <li>Deploy the cluster.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-bullet">--file</span> <span class="hljs-string">docker-compose.yaml</span> <span class="hljs-string">up</span> <span class="hljs-bullet">-d</span> 
-</code></pre><p>The containers will start in order (one after another) and you need to wait till all containers join the cluster.</p><p>Make sure that all containers are running and healthy. You will get something like this.<br>
-<img src="https://i.imgur.com/d7pVat3.png" alt="" class="md-image md-image"></p><p>You can use <code>nodetool</code> to check the status of nodes.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-string">cassandra-1</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
-</code></pre><p>Where <code>cassandra-1</code> can be replaced with any node in the cluster.</p><p><img src="https://i.imgur.com/ldSbPrL.png" alt="" class="md-image md-image"><br>
-<code>UN</code> means that the servers are up and normal.</p><h2 id="Cassandra-data-model"><a class="anchor hidden-xs" href="#Cassandra-data-model" title="Cassandra-data-model"><i class="fa fa-link"></i></a>Cassandra data model</h2><p>Apache Cassandra stores data in <strong>tables</strong> (“Column family” is the old name for a table), with each table consisting of <strong>rows</strong> and <strong>columns</strong>. CQL (Cassandra Query Language) is used to query the data stored in tables. Apache Cassandra data model is based around and optimized for <em>querying</em>. Cassandra <strong>does not</strong> support <strong>relational</strong> data modeling intended for relational databases.</p><p>CQL stores data in tables, whose schema defines the layout of the data in the table. Tables are located in keyspaces. A <strong>keyspace</strong> defines options that apply to all the keyspace’s tables. The replication strategy is an important keyspace option, as is the <strong>replication factor</strong>. A good general rule is one keyspace per application.</p><p><img src="https://i.imgur.com/GVWfuTK.png" alt="" class="md-image md-image"></p><p>A <strong>cell</strong> is the smallest unit of the Cassandra data model. Cells are contained within a table. A cell is essentially a key-value pair. The key of a cell is called cell name and value is called cell value. A cell can be represented as a triplet of the cell name, value, and timestamp. The timestamp is used to resolve conflicts during read repair or to reconcile two writes that happen to the same cell at the same time; the one written later wins.</p><div class="alert alert-info">
+
+<span class="hljs-comment"># if some containers do not work properly or unhealthy, then you can restart them manually, for example "cassandra-2" node:</span>
+<span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">restart</span> <span class="hljs-string">cassandra-2</span>
+</code></pre><p>The containers will start in order (one after another) and you need to wait till all containers join the cluster.</p><p>Make sure that all containers are running and healthy. You will get something like this.</p><p><img src="https://i.imgur.com/F2yPHuE.png" alt="" class="md-image md-image"></p><p>You can use <code>nodetool</code> to check the status of nodes.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-string">cassandra-1</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
+</code></pre><h2 id="Cassandra-data-model"><a class="anchor hidden-xs" href="#Cassandra-data-model" title="Cassandra-data-model"><i class="fa fa-link"></i></a>Cassandra data model</h2><p>Apache Cassandra stores data in <strong>tables</strong> (“Column family” is the old name for a table), with each table consisting of <strong>rows</strong> and <strong>columns</strong>. CQL (Cassandra Query Language) is used to query the data stored in tables. Apache Cassandra data model is based around and optimized for <em>querying</em>. Cassandra <strong>does not</strong> support <strong>relational</strong> data modeling intended for relational databases.</p><p>CQL stores data in tables, whose schema defines the layout of the data in the table. Tables are located in keyspaces. A <strong>keyspace</strong> defines options that apply to all the keyspace’s tables. The replication strategy is an important keyspace option, as is the <strong>replication factor</strong>. A good general rule is one keyspace per application.</p><p><img src="https://www.scylladb.com/wp-content/uploads/cassandra-data-model-diagram.png" alt="" class="md-image md-image"></p><p>A <strong>cell</strong> is the smallest unit of the Cassandra data model. Cells are contained within a table. A cell is essentially a key-value pair. The key of a cell is called cell name and value is called cell value. A cell can be represented as a triplet of the cell name, value, and timestamp. The timestamp is used to resolve conflicts during read repair or to reconcile two writes that happen to the same cell at the same time; the one written later wins.</p><p><img src="https://imgur.com/BEIvt11.png" alt="" class="md-image md-image"></p><div class="alert alert-info">
 <p>In Cassandra:</p>
 <ul>
 <li>a table is a list of “nested key-value pairs”. (Row x Column Key x Column value)</li>
@@ -712,7 +787,7 @@ volumes:
 <ul>
 <li>relationships are represented using collections</li>
 </ul>
-</div><p>In Cassandra, data modeling is <strong>query-driven</strong>.</p><ul>
+</div><p><img src="https://imgur.com/pCTutox.png" alt="" class="md-image md-image"></p><p>In Cassandra, data modeling is <strong>query-driven</strong>.</p><ul>
 <li>The data access patterns and application queries determine the structure and organization of data which then used to design the database tables.</li>
 <li>Data is modeled around specific queries. Queries are best designed to access a single table, which implies that all entities involved in a query must be in the same table to make <strong>data access (reads) very fast</strong>.</li>
 <li>Unlike a relational database model in which queries make use of table joins to get data from multiple tables, joins are not supported in Cassandra so all required fields (columns) must be grouped together in a single table.</li>
@@ -741,8 +816,9 @@ volumes:
 <li>View the default paging settings that will be used on reads</li>
 </ul><pre><code class="wrap shell hljs"><span class="hljs-meta">cqlsh&gt;</span><span class="bash"> PAGING;</span>
 </code></pre><p>Enables paging, disables paging, or sets the page size for read queries. When paging is enabled, only one page of data will be fetched at a time and a prompt will appear to fetch the next page. Generally, it’s a good idea to leave paging enabled in an interactive session to avoid fetching and printing large amounts of data at once.</p><h3 id="Some-CRUD-operations"><a class="anchor hidden-xs" href="#Some-CRUD-operations" title="Some-CRUD-operations"><i class="fa fa-link"></i></a>Some CRUD operations</h3><ul>
-<li>Create your own keyspace. Try using tab completion as you enter this command</li>
-</ul><pre><code class="sql hljs"><span class="hljs-keyword">CREATE</span> KEYSPACE my_keyspace <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">replication</span> = {<span class="hljs-string">'class'</span>: <span class="hljs-string">'SimpleStrategy'</span>, <span class="hljs-string">'replication_factor'</span>: <span class="hljs-number">1</span>};
+<li>Create your own keyspace. Try using tab completion as you enter this command. For replication strategy you can use <code>NetworkTopologyStrategy</code> or <code>SimpleStrategy</code>.</li>
+</ul><pre><code class="sql hljs"><span class="hljs-keyword">CREATE</span> KEYSPACE my_keyspace <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">replication</span> = {<span class="hljs-string">'class'</span>: <span class="hljs-string">'NetworkTopologyStrategy'</span>, <span class="hljs-string">'replication_factor'</span>: <span class="hljs-number">3</span>};
+</code></pre><p>You can also drop the keyspace as follows:</p><pre><code class="sql hljs"><span class="hljs-keyword">DROP</span> KEYSPACE <span class="hljs-keyword">IF</span> <span class="hljs-keyword">EXISTS</span> MY_KEYSPACE;
 </code></pre><ul>
 <li>Describe the keyspace you just created. What additional information do you notice?</li>
 </ul><pre><code class="sql hljs"><span class="hljs-keyword">DESCRIBE</span> KEYSPACE my_keyspace;
@@ -796,11 +872,11 @@ volumes:
 </ul><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">JSON</span> * <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span>;
 <span class="hljs-keyword">SELECT</span> first_name, toJson(last_name) <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span>;
 </code></pre><ul>
-<li>To cast a column to a different data type, use the <code>CAST</code> function.</li>
+<li>To convert a string literal to date, use the <code>toDate</code> function.</li>
 </ul><pre><code class="sql hljs"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">id</span> <span class="hljs-keyword">uuid</span>;
 <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">ADD</span> <span class="hljs-built_in">date</span> <span class="hljs-built_in">date</span>;
-<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> <span class="hljs-built_in">date</span>=<span class="hljs-keyword">CAST</span>(<span class="hljs-string">'1994-01-20'</span> <span class="hljs-keyword">AS</span> <span class="hljs-built_in">date</span>) <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Bill'</span>;
-<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> <span class="hljs-built_in">date</span>=<span class="hljs-keyword">CAST</span>(<span class="hljs-string">'2000-05-30'</span> <span class="hljs-keyword">AS</span> <span class="hljs-built_in">date</span>) <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Mary'</span>;
+<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> <span class="hljs-built_in">date</span>=toDate(<span class="hljs-string">'1994-01-20'</span>) <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Bill'</span>;
+<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> <span class="hljs-built_in">date</span>=toDate(<span class="hljs-string">'2000-05-30'</span>) <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Mary'</span>;
 <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> <span class="hljs-keyword">id</span>=<span class="hljs-keyword">uuid</span>() <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Bill'</span>;
 <span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> <span class="hljs-keyword">id</span>=<span class="hljs-keyword">uuid</span>() <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Mary'</span>;
 </code></pre><ul>
@@ -830,9 +906,6 @@ volumes:
 </code></pre><ul>
 <li>Remove the entire table</li>
 </ul><pre><code class="sql hljs"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">user</span>;
-</code></pre><ul>
-<li>Clear the screen of output from previous commands</li>
-</ul><pre><code class="sql hljs">CLEAR
 </code></pre><ul>
 <li>Exit cqlsh</li>
 </ul><pre><code class="sql hljs">EXIT
@@ -925,11 +998,10 @@ volumes:
 
 <span class="hljs-comment"># SASI indexes allow us to perform inequality and text searches such as "like" searches</span>
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">WHERE</span> last_name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'N%'</span>;
-</code></pre><h3 id="Conditional-queries"><a class="anchor hidden-xs" href="#Conditional-queries" title="Conditional-queries"><i class="fa fa-link"></i></a>Conditional queries</h3><p>The <code>WHERE</code> clause is used to filter the rows that are returned. Using <code>WHERE</code>, you can specify a condition that must be met for a row to be included in the result set. The condition can include multiple columns and multiple conditions linked with <code>AND</code>. A subtle variation to the use of <code>AND</code> is using a tuple to group columns to meet a condition.</p><p>everal arithmetic and non-arithmetic operators are used in the <code>WHERE</code> clause to specify the condition.<br>
-<img src="https://i.imgur.com/IhKUvb6.png" alt="" class="md-image md-image"></p><div class="alert alert-warning">
-<p>Some facts about the <code>WHERE</code> and <code>ORDER BY</code> clauses:</p>
+</code></pre><h3 id="Conditional-queries"><a class="anchor hidden-xs" href="#Conditional-queries" title="Conditional-queries"><i class="fa fa-link"></i></a>Conditional queries</h3><p>The <code>WHERE</code> clause is used to filter the rows that are returned. Using <code>WHERE</code>, you can specify a condition that must be met for a row to be included in the result set. The condition can include multiple columns and multiple conditions linked with <code>AND</code>. A subtle variation to the use of <code>AND</code> is using a tuple to group columns to meet a condition.</p><p>Several arithmetic and non-arithmetic operators are used in the <code>WHERE</code> clause to specify the condition.</p><div class="alert alert-warning">
+<p>Some restrictions on the <code>WHERE</code> and <code>ORDER BY</code> clauses:</p>
 <ul>
-<li>The first partition keys always use <code>=</code> operator.</li>
+<li>The first partition keys always use <code>=</code> operator. A partition key must be specified before clustering columns in the <code>WHERE</code> clause. The relationship for clustering columns must specify a <strong>contiguous</strong> set of rows to order.</li>
 </ul>
 <pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> first_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">WHERE</span> first_name=<span class="hljs-string">'Bill'</span>;
 </code></pre>
@@ -974,7 +1046,7 @@ volumes:
   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_3 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_4 &lt;= <span class="hljs-number">2</span>;
 </code></pre><p>The IN operator can impact performance on medium-large datasets. When selecting multiple segments, the database loads and filters all the specified segments. For example, to find all values less than or equal to 2 in both col_1 segments 1 and 2:</p><pre><code class="sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 &gt; <span class="hljs-number">1</span>;
 </code></pre><p>You can see below how the data are stored.<br>
-<img src="https://docs.datastax.com/en/cql/hcd/develop/_images/cqlQueryClusteringColumnSegments.png" alt="" class="md-image md-image"></p><h4 id="Invalid-restrictions"><a class="anchor hidden-xs" href="#Invalid-restrictions" title="Invalid-restrictions"><i class="fa fa-link"></i></a>Invalid restrictions</h4><p>Queries that attempt to return ranges without identifying any of the higher level segments are rejected:</p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_4 &lt;= <span class="hljs-number">2</span>;
+<img src="https://imgur.com/UOREoM0.png" alt="" class="md-image md-image"></p><h4 id="Invalid-restrictions"><a class="anchor hidden-xs" href="#Invalid-restrictions" title="Invalid-restrictions"><i class="fa fa-link"></i></a>Invalid restrictions</h4><p>Queries that attempt to return ranges without identifying any of the higher level segments are rejected:</p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_4 &lt;= <span class="hljs-number">2</span>;
 
 <span class="hljs-comment">-- InvalidRequest: Error from server: code=2200 [Invalid query] message="PRIMARY KEY column "col_4" cannot be restricted as preceding column "col_1" is not restricted"</span>
 </code></pre><div class="alert alert-warning">
@@ -984,11 +1056,11 @@ volumes:
 </code></pre><h4 id="Returning-ranges-that-span-clustering-segments"><a class="anchor hidden-xs" href="#Returning-ranges-that-span-clustering-segments" title="Returning-ranges-that-span-clustering-segments"><i class="fa fa-link"></i></a>Returning ranges that span clustering segments</h4><pre><code class="wrap sql hljs"><span class="hljs-comment"># Slices across full partition</span>
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers
   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> (col_1, col_2, col_3, col_4) &lt;= (<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>);
-</code></pre><p><img src="https://docs.datastax.com/en/cql/hcd/develop/_images/cqlQuerySlicePartition1.png" alt="" class="md-image md-image"></p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers
+</code></pre><p><img src="https://imgur.com/NeKvBBO.png" alt="" class="md-image md-image"></p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers
   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> (col_1, col_2, col_3, col_4) &lt;= (<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>);
 </code></pre><p><img src="https://docs.datastax.com/en/cql/hcd/develop/_images/cqlQuerySlicePartition2.png" alt="" class="md-image md-image"></p><h4 id="Slices-of-clustering-segments"><a class="anchor hidden-xs" href="#Slices-of-clustering-segments" title="Slices-of-clustering-segments"><i class="fa fa-link"></i></a>Slices of clustering segments</h4><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 = <span class="hljs-number">1</span>
   <span class="hljs-keyword">AND</span> (col_3, col_4) &gt;= (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) <span class="hljs-keyword">AND</span> (col_3, col_4) &lt; (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
-</code></pre><p><img src="https://docs.datastax.com/en/cql/hcd/develop/_images/cqlQuerySliceClusteringSegments.png" alt="" class="md-image md-image"></p><pre><code class="wrap sql hljs"><span class="hljs-comment"># Invalid queries</span>
+</code></pre><p><img src="https://imgur.com/zeWwaND.png" alt="" class="md-image md-image"></p><pre><code class="wrap sql hljs"><span class="hljs-comment"># Invalid queries</span>
 
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span>
   <span class="hljs-keyword">AND</span> (col_2, col_3, col_4) &gt;= (<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>)  <span class="hljs-keyword">AND</span> (col_3, col_4) &lt; (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
@@ -1152,25 +1224,44 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
   <span class="hljs-keyword">WHERE</span> hotel_id=<span class="hljs-string">'AZ123'</span> <span class="hljs-keyword">AND</span> <span class="hljs-built_in">date</span>&gt;<span class="hljs-string">'2016-01-05'</span> <span class="hljs-keyword">AND</span> <span class="hljs-built_in">date</span>&lt;<span class="hljs-string">'2016-01-12'</span>
   <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">date</span> <span class="hljs-keyword">DESC</span>;
 </code></pre><h2 id="ScyllaDB-"><a class="anchor hidden-xs" href="#ScyllaDB-" title="ScyllaDB-"><i class="fa fa-link"></i></a>ScyllaDB (<img src="https://www.scylladb.com/wp-content/uploads/scylladb-logo-horizontal.svg" alt="" width="100" height="30" class="md-image md-image">)</h2><p>Scylla is the real-time big data database that is API-compatible with Apache Cassandra and Amazon DynamoDB. ScyllaDB is favored for its exceptional capability to manage high data volumes and support rapid read/write operations. It is particularly effective in environments demanding high throughput, low latency, and the ability to scale.</p><p>ScyllaDB is a C++ rewrite of Cassandra. The primary language for communicating with the ScyllaDB database is the Apache Cassandra Query Language (CQL).</p><h3 id="Install-ScyllaDB"><a class="anchor hidden-xs" href="#Install-ScyllaDB" title="Install-ScyllaDB"><i class="fa fa-link"></i></a>Install ScyllaDB</h3><p>You can similarly install and run a cluster of ScyllaDB nodes using Docker containers.</p><ol>
-<li>Pull the image</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-string">scylladb/scylla</span>
-</code></pre><ol start="2">
-<li>Start a node of ScyllaDB.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span>
-</code></pre><ol start="3">
-<li>Add more nodes if needed.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-comment"># Add node 2</span>
-<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla-node2</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span> <span class="hljs-bullet">--seeds="$(docker</span> <span class="hljs-string">inspect</span> <span class="hljs-bullet">--format='{{.NetworkSettings.Networks.bridge.IPAddress}}'</span> <span class="hljs-string">scylla)"</span>
+<li>
+<p>Pull the image</p>
+<pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-string">scylladb/scylla:latest</span>
+</code></pre>
+</li>
+<li>
+<p>If your machine is using a Linux virtual machine to run a Linux kernel for Docker, please check if <a href="https://www.kernel.org/doc/Documentation/sysctl/fs.txt" target="_blank" rel="noopener">aio-max-nr</a> in <code>/proc/sys/fs/aio-max-nr</code> is large enough. Multiple cores requires setting a proper value to the <code>/proc/sys/fs/aio-max-nr</code>. Before starting the cluster, make sure the  value is high enough (<span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;11026&lt;/mn&gt;&lt;mo&gt;&amp;#x2217;&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x005F;&lt;/mi&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-6" style="width: 8.462em; display: inline-block;"><span style="display: inline-block; position: relative; width: 7.276em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.565em, 1007.22em, 2.751em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-7"><span class="mn" id="MathJax-Span-8" style="font-family: MathJax_Main;">11026</span><span class="mo" id="MathJax-Span-9" style="font-family: MathJax_Main; padding-left: 0.218em;">∗</span><span class="mi" id="MathJax-Span-10" style="font-family: MathJax_Math-italic; padding-left: 0.218em;">c</span><span class="mi" id="MathJax-Span-11" style="font-family: MathJax_Math-italic;">p</span><span class="mi" id="MathJax-Span-12" style="font-family: MathJax_Math-italic;">u</span><span class="mi" id="MathJax-Span-13" style="font-family: MathJax_Main;">_</span><span class="mi" id="MathJax-Span-14" style="font-family: MathJax_Math-italic;">c</span><span class="mi" id="MathJax-Span-15" style="font-family: MathJax_Math-italic;">o</span><span class="mi" id="MathJax-Span-16" style="font-family: MathJax_Math-italic;">r</span><span class="mi" id="MathJax-Span-17" style="font-family: MathJax_Math-italic;">e</span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.309em; border-left: 0px solid; width: 0px; height: 1.128em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>11026</mn><mo>∗</mo><mi>c</mi><mi>p</mi><mi>u</mi><mi mathvariant="normal">_</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi></math></span></span><script type="math/tex" id="MathJax-Element-2">11026 * cpu\_core</script></span> or more). To change this paratemeter, access the file <code>/proc/sys/fs/aio-max-nr</code> using <code>sudo</code> and add the following line to the end of the file:</p>
+<pre><code class="yaml hljs"><span class="hljs-string">fs.aio-max-nr</span> <span class="hljs-string">=</span> <span class="hljs-number">1048576</span>
+</code></pre>
+<p>After that, run the following command with <code>sudo</code>.</p>
+<pre><code class="yaml hljs"><span class="hljs-string">sudo</span> <span class="hljs-string">sysctl</span> <span class="hljs-bullet">-p</span> <span class="hljs-string">/etc/sysctl.conf</span>
+</code></pre>
+</li>
+<li>
+<p>Start a node of ScyllaDB.</p>
+<pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span>
+</code></pre>
+</li>
+<li>
+<p>Add more nodes if needed.</p>
+<pre><code class="wrap yaml hljs"><span class="hljs-comment"># Add node 2</span>
+<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla-node2</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span> <span class="hljs-bullet">--seeds="$(docker</span> <span class="hljs-string">inspect</span> <span class="hljs-bullet">--format='{{.NetworkSettings.Networks.bridge.IPAddress}}'</span> <span class="hljs-string">scylla)"</span>
 
 <span class="hljs-comment"># Add node 3</span>
-<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla-node3</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span> <span class="hljs-bullet">--seeds="$(docker</span> <span class="hljs-string">inspect</span> <span class="hljs-bullet">--format='{{.NetworkSettings.Networks.bridge.IPAddress}}'</span> <span class="hljs-string">scylla)"</span>
-</code></pre><ol start="4">
-<li>Check status of nodes.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">scylla</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
-</code></pre><ol start="5">
-<li>You can start cqlsh to interact with ScyllaDB</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">scylla</span> <span class="hljs-string">cqlsh</span>
-</code></pre><h1 id="References"><a class="anchor hidden-xs" href="#References" title="References"><i class="fa fa-link"></i></a>References</h1><ul>
+<span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">scylla-node3</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">scylladb/scylla</span> <span class="hljs-bullet">--seeds="$(docker</span> <span class="hljs-string">inspect</span> <span class="hljs-bullet">--format='{{.NetworkSettings.Networks.bridge.IPAddress}}'</span> <span class="hljs-string">scylla)"</span>
+</code></pre>
+</li>
+<li>
+<p>Check status of nodes.</p>
+<pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">scylla</span> <span class="hljs-string">nodetool</span> <span class="hljs-string">status</span>
+</code></pre>
+</li>
+<li>
+<p>You can start cqlsh to interact with ScyllaDB</p>
+<pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">scylla</span> <span class="hljs-string">cqlsh</span>
+</code></pre>
+</li>
+</ol><h1 id="References"><a class="anchor hidden-xs" href="#References" title="References"><i class="fa fa-link"></i></a>References</h1><ul>
 <li><a href="https://quickref.me/postgres" target="_blank" rel="noopener">PostgreSQL cheatsheet</a></li>
 <li>Yasin N. Silva, Isadora Almeida, and Michell Queiroz. 2016. SQL: From Traditional Databases to Big Data. In Proceedings of the 47th ACM Technical Symposium on Computing Science Education (SIGCSE '16). Association for Computing Machinery, New York, NY, USA, 413–418. <a href="https://doi.org/10.1145/2839509.2844560" target="_blank" rel="noopener">https://doi.org/10.1145/2839509.2844560</a></li>
 <li><a href="https://www.postgresqltutorial.com" target="_blank" rel="noopener">Comprehensive PostgreSQL Tutorial</a></li>
@@ -1184,6 +1275,7 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="https://docs.citusdata.com/en/v8.1/get_started/tutorial_multi_tenant.html#data-model-and-sample-data" target="_blank" rel="noopener">Citus data getting started</a></li>
 <li><a href="https://www.amazon.com/Cassandra-Design-Patterns-Rajanarayanan-Thottuvaikkatumana/dp/178528570X" target="_blank" rel="noopener">Cassandra design patterns</a></li>
 <li><a href="https://docs.scylladb.com/stable/get-started" target="_blank" rel="noopener">Scylladb | Get-Started</a></li>
+<li><a href="https://github.com/garovu/scylladb-compose" target="_blank" rel="noopener">ScyllaDB Docker Compose</a></li>
 </ul></div>
     <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
         <div class="pull-right dropdown">
@@ -1205,14 +1297,14 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
 </ul>
 </li>
-<li class=""><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
+<li><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
 <li><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
 <li><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
 <li><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
-<li class=""><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
+<li><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
 </ul>
 </li>
-<li><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
+<li class=""><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
 <li><a href="#Installing-Cassandra" title="Installing Cassandra">Installing Cassandra</a><ul class="nav">
 <li><a href="#Single-node-Cassandra-server-installation" title="Single-node Cassandra server installation">Single-node Cassandra server installation</a></li>
 <li><a href="#Multi-node-Cassandra-cluster" title="Multi-node Cassandra cluster">Multi-node Cassandra cluster</a></li>
@@ -1220,26 +1312,26 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 </li>
 <li><a href="#Cassandra-data-model" title="Cassandra data model">Cassandra data model</a></li>
 <li><a href="#CQL" title="CQL">CQL</a></li>
-<li><a href="#CQLSH" title="CQLSH">CQLSH</a><ul class="nav">
+<li class=""><a href="#CQLSH" title="CQLSH">CQLSH</a><ul class="nav">
 <li><a href="#Some-cqlsh-commands" title="Some cqlsh commands">Some cqlsh commands</a></li>
 <li><a href="#Some-CRUD-operations" title="Some CRUD operations">Some CRUD operations</a></li>
 <li><a href="#Collections-in-CQL" title="Collections in CQL">Collections in CQL</a></li>
 <li><a href="#Conditional-queries" title="Conditional queries">Conditional queries</a></li>
-<li><a href="#Clustering-columns" title="Clustering columns">Clustering columns</a></li>
-<li><a href="#Group-by-clause" title="Group by clause">Group by clause</a></li>
-<li><a href="#Distinct" title="Distinct">Distinct</a></li>
+<li class=""><a href="#Clustering-columns" title="Clustering columns">Clustering columns</a></li>
+<li class=""><a href="#Group-by-clause" title="Group by clause">Group by clause</a></li>
+<li class=""><a href="#Distinct" title="Distinct">Distinct</a></li>
 </ul>
 </li>
-<li><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
-<li><a href="#Define-application-queries" title="Define application queries">Define application queries</a></li>
-<li><a href="#Define-logical-data-model" title="Define logical data model">Define logical data model</a></li>
-<li><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
-<li><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
-<li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
+<li class=""><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
+<li class=""><a href="#Define-application-queries" title="Define application queries">Define application queries</a></li>
+<li class=""><a href="#Define-logical-data-model" title="Define logical data model">Define logical data model</a></li>
+<li class=""><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
+<li class=""><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
+<li class=""><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
 </ul>
 </li>
-<li><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul class="nav">
-<li><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
+<li class=""><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul class="nav">
+<li class=""><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
 </ul>
 </li>
 </ul>
@@ -1270,14 +1362,14 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li><a href="#Fix-Friends-table" title="Fix Friends table">Fix Friends table</a></li>
 </ul>
 </li>
-<li class=""><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
+<li><a href="#Data-Retrieval-using-SQL" title="Data Retrieval using SQL">Data Retrieval using SQL</a><ul class="nav">
 <li><a href="#Data-Retrieval-from-a-single-table" title="Data Retrieval from a single table">Data Retrieval from a single table</a></li>
 <li><a href="#Data-Retrieval-from-multiple-tables-Joining-tables" title="Data Retrieval from multiple tables (Joining tables)">Data Retrieval from multiple tables (Joining tables)</a></li>
 <li><a href="#Aggregation-and-grouping" title="Aggregation and grouping">Aggregation and grouping</a></li>
-<li class=""><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
+<li><a href="#Citus-Data" title="Citus Data">Citus Data</a></li>
 </ul>
 </li>
-<li><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
+<li class=""><a href="#Apache-Cassandra" title="Apache Cassandra">Apache Cassandra</a><ul class="nav">
 <li><a href="#Installing-Cassandra" title="Installing Cassandra">Installing Cassandra</a><ul class="nav">
 <li><a href="#Single-node-Cassandra-server-installation" title="Single-node Cassandra server installation">Single-node Cassandra server installation</a></li>
 <li><a href="#Multi-node-Cassandra-cluster" title="Multi-node Cassandra cluster">Multi-node Cassandra cluster</a></li>
@@ -1285,26 +1377,26 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 </li>
 <li><a href="#Cassandra-data-model" title="Cassandra data model">Cassandra data model</a></li>
 <li><a href="#CQL" title="CQL">CQL</a></li>
-<li><a href="#CQLSH" title="CQLSH">CQLSH</a><ul class="nav">
+<li class=""><a href="#CQLSH" title="CQLSH">CQLSH</a><ul class="nav">
 <li><a href="#Some-cqlsh-commands" title="Some cqlsh commands">Some cqlsh commands</a></li>
 <li><a href="#Some-CRUD-operations" title="Some CRUD operations">Some CRUD operations</a></li>
 <li><a href="#Collections-in-CQL" title="Collections in CQL">Collections in CQL</a></li>
 <li><a href="#Conditional-queries" title="Conditional queries">Conditional queries</a></li>
-<li><a href="#Clustering-columns" title="Clustering columns">Clustering columns</a></li>
-<li><a href="#Group-by-clause" title="Group by clause">Group by clause</a></li>
-<li><a href="#Distinct" title="Distinct">Distinct</a></li>
+<li class=""><a href="#Clustering-columns" title="Clustering columns">Clustering columns</a></li>
+<li class=""><a href="#Group-by-clause" title="Group by clause">Group by clause</a></li>
+<li class=""><a href="#Distinct" title="Distinct">Distinct</a></li>
 </ul>
 </li>
-<li><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
-<li><a href="#Define-application-queries" title="Define application queries">Define application queries</a></li>
-<li><a href="#Define-logical-data-model" title="Define logical data model">Define logical data model</a></li>
-<li><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
-<li><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
-<li><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
+<li class=""><a href="#Example-on-Cassandra-database" title="Example on Cassandra database">Example on Cassandra database</a><ul class="nav">
+<li class=""><a href="#Define-application-queries" title="Define application queries">Define application queries</a></li>
+<li class=""><a href="#Define-logical-data-model" title="Define logical data model">Define logical data model</a></li>
+<li class=""><a href="#Physical-data-modeling" title="Physical data modeling">Physical data modeling</a></li>
+<li class=""><a href="#Create-the-database-objects" title="Create the database objects">Create the database objects</a></li>
+<li class=""><a href="#Populate-data-from-csv-file" title="Populate data from csv file">Populate data from csv file</a></li>
 </ul>
 </li>
-<li><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul class="nav">
-<li><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
+<li class=""><a href="#ScyllaDB-" title="ScyllaDB ()">ScyllaDB ()</a><ul class="nav">
+<li class=""><a href="#Install-ScyllaDB" title="Install ScyllaDB">Install ScyllaDB</a></li>
 </ul>
 </li>
 </ul>
