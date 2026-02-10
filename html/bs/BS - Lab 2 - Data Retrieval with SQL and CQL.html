@@ -818,6 +818,7 @@ volumes:
 </code></pre><p>Enables paging, disables paging, or sets the page size for read queries. When paging is enabled, only one page of data will be fetched at a time and a prompt will appear to fetch the next page. Generally, it’s a good idea to leave paging enabled in an interactive session to avoid fetching and printing large amounts of data at once.</p><h3 id="Some-CRUD-operations"><a class="anchor hidden-xs" href="#Some-CRUD-operations" title="Some-CRUD-operations"><i class="fa fa-link"></i></a>Some CRUD operations</h3><ul>
 <li>Create your own keyspace. Try using tab completion as you enter this command. For replication strategy you can use <code>NetworkTopologyStrategy</code> or <code>SimpleStrategy</code>.</li>
 </ul><pre><code class="sql hljs"><span class="hljs-keyword">CREATE</span> KEYSPACE my_keyspace <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">replication</span> = {<span class="hljs-string">'class'</span>: <span class="hljs-string">'NetworkTopologyStrategy'</span>, <span class="hljs-string">'replication_factor'</span>: <span class="hljs-number">3</span>};
+</code></pre><p>You can check for your keyspaces by running:</p><pre><code class="sql hljs"><span class="hljs-keyword">DESCRIBE</span> KEYSPACES;
 </code></pre><p>You can also drop the keyspace as follows:</p><pre><code class="sql hljs"><span class="hljs-keyword">DROP</span> KEYSPACE <span class="hljs-keyword">IF</span> <span class="hljs-keyword">EXISTS</span> MY_KEYSPACE;
 </code></pre><ul>
 <li>Describe the keyspace you just created. What additional information do you notice?</li>
@@ -825,6 +826,7 @@ volumes:
 </code></pre><ul>
 <li>Use the keyspace so you don’t have to enter it on every data manipulation. Note how the prompt changes after you do this.</li>
 </ul><pre><code class="sql hljs"><span class="hljs-keyword">USE</span> my_keyspace;
+</code></pre><p>You can check for your tables by running:</p><pre><code class="sql hljs"><span class="hljs-keyword">DESCRIBE</span> <span class="hljs-keyword">TABLES</span>;
 </code></pre><ul>
 <li>Create a simple table</li>
 </ul><pre><code class="sql hljs"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">user</span> ( first_name <span class="hljs-built_in">text</span>, last_name <span class="hljs-built_in">text</span>, PRIMARY <span class="hljs-keyword">KEY</span> (first_name));
@@ -969,10 +971,31 @@ volumes:
 <span class="hljs-keyword">SELECT</span> login_sessions <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">WHERE</span> first_name = <span class="hljs-string">'Mary'</span>;
 
 
+
+<span class="hljs-comment"># Frozen collections</span>
+<span class="hljs-comment"># A column whose type is a frozen collection (set, map, or list) </span>
+<span class="hljs-comment"># can only have its value replaced as a whole. </span>
+<span class="hljs-comment"># In other words, we can’t add, update, or delete individual </span>
+<span class="hljs-comment"># elements from the collection as we can in non-frozen collection</span>
+<span class="hljs-comment"># types. So, the frozen keyword can be useful, for example, </span>
+<span class="hljs-comment"># when we want to protect collections against single-value updates.</span>
+<span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">ADD</span> whole_login_sessions frozen&lt;<span class="hljs-keyword">map</span>&lt;timeuuid, <span class="hljs-keyword">list</span>&lt;<span class="hljs-built_in">int</span>&gt;&gt;&gt;;
+
+<span class="hljs-comment"># Put some values</span>
+<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> whole_login_sessions = { <span class="hljs-keyword">now</span>(): [<span class="hljs-number">13</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-keyword">now</span>(): [<span class="hljs-number">18</span>, <span class="hljs-number">412</span>,<span class="hljs-number">32</span> ,<span class="hljs-number">43</span>]} <span class="hljs-keyword">WHERE</span> first_name = <span class="hljs-string">'Mary'</span>;
+
+<span class="hljs-comment"># This will not work since the column is frozen</span>
+<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">SET</span> whole_login_sessions = whole_login_sessions + { <span class="hljs-keyword">now</span>(): [<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">54</span>,<span class="hljs-number">2</span>]} <span class="hljs-keyword">WHERE</span> first_name = <span class="hljs-string">'Mary'</span>;
+
+
+
 <span class="hljs-comment"># Indexes</span>
 <span class="hljs-comment"># Query based on a non-primary key column</span>
 <span class="hljs-comment"># Why doesn't this work?</span>
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">WHERE</span> last_name = <span class="hljs-string">'Nguyen'</span>;
+
+<span class="hljs-comment"># update with TTL for only 10 seconds then delete it</span>
+<span class="hljs-keyword">UPDATE</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">USING</span> TTL <span class="hljs-number">10</span> <span class="hljs-keyword">SET</span> last_name = <span class="hljs-string">'Nguyen'</span>;
 
 <span class="hljs-comment"># Create a secondary index for the last_name column.</span>
 <span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">user</span> ( last_name );
@@ -983,22 +1006,34 @@ volumes:
 
 <span class="hljs-comment"># Create indexes on other attributes if desired, even collections</span>
 <span class="hljs-comment"># Note that queries based on indexes are typically more expensive, as they involve talking to more nodes</span>
-<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">user</span> ( addresses );
 <span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">user</span> ( emails );
 <span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> <span class="hljs-keyword">ON</span> <span class="hljs-keyword">user</span> ( phone_numbers );
 
 <span class="hljs-comment"># Drop indexes we no longer want maintained</span>
 <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">INDEX</span> user_last_name_idx;
-<span class="hljs-keyword">DROP</span> <span class="hljs-keyword">INDEX</span> user_addresses_idx;
 <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">INDEX</span> user_emails_idx;
 <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">INDEX</span> user_phone_numbers_idx;
 
+<span class="hljs-comment"># Scylladb does not support this</span>
+<span class="hljs-comment"># Cassandra supports this</span>
 <span class="hljs-comment"># Create a SSTable Attached Secondary Index (SASI), which is a more performant index implementation</span>
 <span class="hljs-keyword">CREATE</span> CUSTOM <span class="hljs-keyword">INDEX</span> user_last_name_sasi_idx <span class="hljs-keyword">ON</span> <span class="hljs-keyword">user</span> (last_name) <span class="hljs-keyword">USING</span> <span class="hljs-string">'org.apache.cassandra.index.sasi.SASIIndex'</span>;
 
 <span class="hljs-comment"># SASI indexes allow us to perform inequality and text searches such as "like" searches</span>
+<span class="hljs-comment"># In Scylladb, you can use LIKE operator for any column without creating an index</span>
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">WHERE</span> last_name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">'N%'</span>;
-</code></pre><h3 id="Conditional-queries"><a class="anchor hidden-xs" href="#Conditional-queries" title="Conditional-queries"><i class="fa fa-link"></i></a>Conditional queries</h3><p>The <code>WHERE</code> clause is used to filter the rows that are returned. Using <code>WHERE</code>, you can specify a condition that must be met for a row to be included in the result set. The condition can include multiple columns and multiple conditions linked with <code>AND</code>. A subtle variation to the use of <code>AND</code> is using a tuple to group columns to meet a condition.</p><p>Several arithmetic and non-arithmetic operators are used in the <code>WHERE</code> clause to specify the condition.</p><div class="alert alert-warning">
+</code></pre><div class="alert alert-info">
+<p><strong>Differences Between ScyllaDB and Cassandra LIKE Operators</strong></p>
+<ul>
+<li>In Apache Cassandra, you must create a SASI index to use LIKE. ScyllaDB supports LIKE as a regular filter.</li>
+<li>Consequently, ScyllaDB LIKE will be less performant than Apache Cassandra LIKE for some workloads.</li>
+<li>ScyllaDB treats underscore (_) as a wildcard; Cassandra doesn’t.</li>
+<li>ScyllaDB treats percent (%) as a wildcard anywhere in the pattern; Cassandra only at the beginning/end.</li>
+<li>ScyllaDB interprets backslash (\) as an escape character; Cassandra doesn’t.</li>
+<li>Cassandra allows case-insensitive LIKE; ScyllaDB doesn’t (see <a href="https://github.com/scylladb/scylla/issues/4911" target="_blank" rel="noopener">#4911</a>).</li>
+<li>ScyllaDB allows empty LIKE pattern; Cassandra doesn’t.</li>
+</ul>
+</div><h3 id="Conditional-queries"><a class="anchor hidden-xs" href="#Conditional-queries" title="Conditional-queries"><i class="fa fa-link"></i></a>Conditional queries</h3><p>The <code>WHERE</code> clause is used to filter the rows that are returned. Using <code>WHERE</code>, you can specify a condition that must be met for a row to be included in the result set. The condition can include multiple columns and multiple conditions linked with <code>AND</code>. A subtle variation to the use of <code>AND</code> is using a tuple to group columns to meet a condition.</p><p>Several arithmetic and non-arithmetic operators are used in the <code>WHERE</code> clause to specify the condition.</p><div class="alert alert-warning">
 <p>Some restrictions on the <code>WHERE</code> and <code>ORDER BY</code> clauses:</p>
 <ul>
 <li>The first partition keys always use <code>=</code> operator. A partition key must be specified before clustering columns in the <code>WHERE</code> clause. The relationship for clustering columns must specify a <strong>contiguous</strong> set of rows to order.</li>
@@ -1044,6 +1079,7 @@ volumes:
 <span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> my_keyspace.numbers(<span class="hljs-keyword">key</span>, col_1, col_2, col_3, col_4) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">100</span>, <span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>);
 </code></pre><p>The database stores and locates the data using a nested sort order. The data is stored in hierarchy that the query must traverse.</p><p>To avoid full scans of the partition and to make queries more efficient, the database requires that the higher level columns in the sort order (col_1, col_2, and col_3) are identified using the equals or <code>IN</code> operators. Ranges are allowed on the last column (col_4). For example, to find only values in column 4 that are less than or equal to 2:</p><pre><code class="sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers
   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_3 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_4 &lt;= <span class="hljs-number">2</span>;
+</code></pre><p>Another example using <code>IN</code> operator.</p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 <span class="hljs-keyword">IN</span> (<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>) <span class="hljs-keyword">AND</span> col_3 <span class="hljs-keyword">IN</span> (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>) <span class="hljs-keyword">AND</span> col_4 &lt;= <span class="hljs-number">2</span>;
 </code></pre><p>The IN operator can impact performance on medium-large datasets. When selecting multiple segments, the database loads and filters all the specified segments. For example, to find all values less than or equal to 2 in both col_1 segments 1 and 2:</p><pre><code class="sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 &gt; <span class="hljs-number">1</span>;
 </code></pre><p>You can see below how the data are stored.<br>
 <img src="https://imgur.com/UOREoM0.png" alt="" class="md-image md-image"></p><h4 id="Invalid-restrictions"><a class="anchor hidden-xs" href="#Invalid-restrictions" title="Invalid-restrictions"><i class="fa fa-link"></i></a>Invalid restrictions</h4><p>Queries that attempt to return ranges without identifying any of the higher level segments are rejected:</p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_4 &lt;= <span class="hljs-number">2</span>;
@@ -1058,16 +1094,24 @@ volumes:
   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> (col_1, col_2, col_3, col_4) &lt;= (<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>);
 </code></pre><p><img src="https://imgur.com/NeKvBBO.png" alt="" class="md-image md-image"></p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers
   <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> (col_1, col_2, col_3, col_4) &lt;= (<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>);
-</code></pre><p><img src="https://docs.datastax.com/en/cql/hcd/develop/_images/cqlQuerySlicePartition2.png" alt="" class="md-image md-image"></p><h4 id="Slices-of-clustering-segments"><a class="anchor hidden-xs" href="#Slices-of-clustering-segments" title="Slices-of-clustering-segments"><i class="fa fa-link"></i></a>Slices of clustering segments</h4><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 = <span class="hljs-number">1</span>
+</code></pre><p><img src="https://docs.datastax.com/en/cql/hcd/develop/_images/cqlQuerySlicePartition2.png" alt="" class="md-image md-image"></p><h4 id="Slices-of-clustering-segments"><a class="anchor hidden-xs" href="#Slices-of-clustering-segments" title="Slices-of-clustering-segments"><i class="fa fa-link"></i></a>Slices of clustering segments</h4><pre><code class="wrap sql hljs"><span class="hljs-comment">-- This query will not work in Scylladb</span>
+<span class="hljs-comment">-- Yet it works in Cassandra</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span> <span class="hljs-keyword">AND</span> col_2 = <span class="hljs-number">1</span>
   <span class="hljs-keyword">AND</span> (col_3, col_4) &gt;= (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) <span class="hljs-keyword">AND</span> (col_3, col_4) &lt; (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
+  
+  
+<span class="hljs-comment">-- The workaround solution in Scylladb is</span>
+<span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> (col_1, col_2, col_3, col_4) &gt;= (<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>) <span class="hljs-keyword">AND</span> (col_1, col_2, col_3, col_4) &lt; (<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
 </code></pre><p><img src="https://imgur.com/zeWwaND.png" alt="" class="md-image md-image"></p><pre><code class="wrap sql hljs"><span class="hljs-comment"># Invalid queries</span>
 
 <span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span> = <span class="hljs-number">100</span> <span class="hljs-keyword">AND</span> col_1 = <span class="hljs-number">1</span>
   <span class="hljs-keyword">AND</span> (col_2, col_3, col_4) &gt;= (<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>)  <span class="hljs-keyword">AND</span> (col_3, col_4) &lt; (<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
+  
+<span class="hljs-comment"># InvalidRequest: Error from server: code=2200 [Invalid query] message="Clustering columns may not be skipped in multi-column relations. They should appear in the PRIMARY KEY order"</span>
 </code></pre><h3 id="Group-by-clause"><a class="anchor hidden-xs" href="#Group-by-clause" title="Group-by-clause"><i class="fa fa-link"></i></a>Group by clause</h3><p>Either one or more primary key columns or a deterministic function or aggregate can be used in the GROUP BY clause.</p><pre><code class="wrap sql hljs">
 <span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">key</span>, col_1, <span class="hljs-keyword">count</span>(*) <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">key</span>, col_1;
 
-<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">key</span>, col_1, <span class="hljs-keyword">count</span>(*) <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span>=<span class="hljs-number">100</span> <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">key</span>, col_1;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">key</span>, col_1, col_2, col_3, <span class="hljs-keyword">count</span>(*) <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span>=<span class="hljs-number">100</span> <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> col_1, col_2, col_3;
 
 <span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">key</span>, col_1, <span class="hljs-keyword">count</span>(*) <span class="hljs-keyword">FROM</span> my_keyspace.numbers <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">key</span>=<span class="hljs-number">100</span> <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> col_1;
 </code></pre><h3 id="Distinct"><a class="anchor hidden-xs" href="#Distinct" title="Distinct"><i class="fa fa-link"></i></a>Distinct</h3><p>This operator can be applied only on partition keys and static keys.</p><pre><code class="wrap sql hljs"><span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> <span class="hljs-keyword">key</span> <span class="hljs-keyword">from</span> my_keyspace.numbers;
@@ -1315,8 +1359,8 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li class=""><a href="#CQLSH" title="CQLSH">CQLSH</a><ul class="nav">
 <li><a href="#Some-cqlsh-commands" title="Some cqlsh commands">Some cqlsh commands</a></li>
 <li><a href="#Some-CRUD-operations" title="Some CRUD operations">Some CRUD operations</a></li>
-<li><a href="#Collections-in-CQL" title="Collections in CQL">Collections in CQL</a></li>
-<li><a href="#Conditional-queries" title="Conditional queries">Conditional queries</a></li>
+<li class=""><a href="#Collections-in-CQL" title="Collections in CQL">Collections in CQL</a></li>
+<li class=""><a href="#Conditional-queries" title="Conditional queries">Conditional queries</a></li>
 <li class=""><a href="#Clustering-columns" title="Clustering columns">Clustering columns</a></li>
 <li class=""><a href="#Group-by-clause" title="Group by clause">Group by clause</a></li>
 <li class=""><a href="#Distinct" title="Distinct">Distinct</a></li>
@@ -1336,7 +1380,7 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 </li>
 </ul>
 </li>
-<li><a href="#References" title="References">References</a></li>
+<li class=""><a href="#References" title="References">References</a></li>
 </ul>
 </div><div class="toc-menu" style="">
     <a class="expand-toggle expand-all" href="#">Expand all</a>
@@ -1380,8 +1424,8 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 <li class=""><a href="#CQLSH" title="CQLSH">CQLSH</a><ul class="nav">
 <li><a href="#Some-cqlsh-commands" title="Some cqlsh commands">Some cqlsh commands</a></li>
 <li><a href="#Some-CRUD-operations" title="Some CRUD operations">Some CRUD operations</a></li>
-<li><a href="#Collections-in-CQL" title="Collections in CQL">Collections in CQL</a></li>
-<li><a href="#Conditional-queries" title="Conditional queries">Conditional queries</a></li>
+<li class=""><a href="#Collections-in-CQL" title="Collections in CQL">Collections in CQL</a></li>
+<li class=""><a href="#Conditional-queries" title="Conditional queries">Conditional queries</a></li>
 <li class=""><a href="#Clustering-columns" title="Clustering columns">Clustering columns</a></li>
 <li class=""><a href="#Group-by-clause" title="Group by clause">Group by clause</a></li>
 <li class=""><a href="#Distinct" title="Distinct">Distinct</a></li>
@@ -1401,7 +1445,7 @@ NY229,<span class="hljs-number">2016</span><span class="hljs-number">-01</span><
 </li>
 </ul>
 </li>
-<li><a href="#References" title="References">References</a></li>
+<li class=""><a href="#References" title="References">References</a></li>
 </ul>
 </div><div class="toc-menu" style="">
     <a class="expand-toggle expand-all" href="#">Expand all</a>
