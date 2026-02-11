@@ -11,6 +11,7 @@ layout: page
 ### [Lab 0 - Docker & Bash](html/ms/Lab 0 - Docker & Bash.html)
 ### [Lab 1 - Installing HDP Sandbox](html/ms/MS - Lab 1 - Installing HDP Sandbox.html)
 ### [Lab 2 - Data Retrieval with SQL and Cypher](html/ms/MS - Lab 2 - Data Retrieval with SQL and Cypher.html)
+### [Lab 3 - Data Retrieval with MongoDB](html/ms/MS - Lab 3 - MongoDB.html)
 <!-- 
 ### [Lab 2 - Data Retrieval with SQL and Cypher](html/ms/MS - Lab 2 - Data Retrieval with SQL and Cypher.html)
 
