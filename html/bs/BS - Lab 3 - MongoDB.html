@@ -176,9 +176,9 @@
 Once you have a MongoDB cluster up and running, you will be able to experiment with it.</li>
 </ol><h4 id="Create-a-Docker-Network"><a class="anchor hidden-xs" href="#Create-a-Docker-Network" title="Create-a-Docker-Network"><i class="fa fa-link"></i></a>Create a Docker Network</h4><p>The first step is to create a Docker network. This network will let each of your containers running in this network see each other. To create a network, run the docker network create command.</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">network</span> <span class="hljs-string">create</span> <span class="hljs-string">mongoCluster</span>
 </code></pre><p>The mongoCluster parameter here is the network’s name; you can pick one that is appropriate for your setup. Note that this command only needs to run once. If you restart your containers afterwards, you won’t need to recreate this network.</p><h4 id="Start-MongoDB-instances"><a class="anchor hidden-xs" href="#Start-MongoDB-instances" title="Start-MongoDB-instances"><i class="fa fa-link"></i></a>Start MongoDB instances</h4><h5 id="Run-1st-MongoDB-instance"><a class="anchor hidden-xs" href="#Run-1st-MongoDB-instance" title="Run-1st-MongoDB-instance"><i class="fa fa-link"></i></a>Run 1st MongoDB instance</h5><p>You are now ready to start your first container with MongoDB. To start the container, use the docker run command.</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">27017</span><span class="hljs-string">:27017</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">mongo1</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">mongoCluster</span> <span class="hljs-attr">mongo:latest</span> <span class="hljs-string">mongod</span> <span class="hljs-bullet">--replSet</span> <span class="hljs-string">myReplicaSet</span> <span class="hljs-bullet">--bind_ip</span> <span class="hljs-string">localhost,mongo1</span>
-</code></pre><p>This command creates a new mongod instance ready for a replica set.</p><h5 id="Run-2nd-MongoDB-instance1"><a class="anchor hidden-xs" href="#Run-2nd-MongoDB-instance1" title="Run-2nd-MongoDB-instance1"><i class="fa fa-link"></i></a>Run 2nd MongoDB instance</h5><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">27018</span><span class="hljs-string">:27017</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">mongo2</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">mongoCluster</span> <span class="hljs-attr">mongo:latest</span> <span class="hljs-string">mongod</span> <span class="hljs-bullet">--replSet</span> <span class="hljs-string">myReplicaSet</span> <span class="hljs-bullet">--bind_ip</span> <span class="hljs-string">localhost,mongo2</span>
+</code></pre><p>This command creates a new mongod instance ready for a replica set.</p><h5 id="Run-2nd-MongoDB-instance"><a class="anchor hidden-xs" href="#Run-2nd-MongoDB-instance" title="Run-2nd-MongoDB-instance"><i class="fa fa-link"></i></a>Run 2nd MongoDB instance</h5><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">27018</span><span class="hljs-string">:27017</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">mongo2</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">mongoCluster</span> <span class="hljs-attr">mongo:latest</span> <span class="hljs-string">mongod</span> <span class="hljs-bullet">--replSet</span> <span class="hljs-string">myReplicaSet</span> <span class="hljs-bullet">--bind_ip</span> <span class="hljs-string">localhost,mongo2</span>
 </code></pre><h5 id="Run-3rd-MongoDB-instance"><a class="anchor hidden-xs" href="#Run-3rd-MongoDB-instance" title="Run-3rd-MongoDB-instance"><i class="fa fa-link"></i></a>Run 3rd MongoDB instance</h5><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--rm</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">27019</span><span class="hljs-string">:27017</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">mongo3</span> <span class="hljs-bullet">--network</span> <span class="hljs-string">mongoCluster</span> <span class="hljs-attr">mongo:latest</span> <span class="hljs-string">mongod</span> <span class="hljs-bullet">--replSet</span> <span class="hljs-string">myReplicaSet</span> <span class="hljs-bullet">--bind_ip</span> <span class="hljs-string">localhost,mongo3</span>
-</code></pre><p>You now have three nodes running MongoDB Replica Set.</p><h4 id="Initiate-the-Replica-Set0"><a class="anchor hidden-xs" href="#Initiate-the-Replica-Set0" title="Initiate-the-Replica-Set0"><i class="fa fa-link"></i></a>Initiate the Replica Set</h4><p>The next step is to create the actual replica set with the three members. To do so, you will need to use <code>mongosh</code> CLI tool. The command to initialize the replica set is:</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">mongo1</span> <span class="hljs-string">mongosh</span> <span class="hljs-bullet">--eval</span> <span class="hljs-string">"rs.initiate({
+</code></pre><p>You now have three nodes running MongoDB Replica Set.</p><h4 id="Initiate-the-Replica-Set"><a class="anchor hidden-xs" href="#Initiate-the-Replica-Set" title="Initiate-the-Replica-Set"><i class="fa fa-link"></i></a>Initiate the Replica Set</h4><p>The next step is to create the actual replica set with the three members. To do so, you will need to use <code>mongosh</code> CLI tool. The command to initialize the replica set is:</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">mongo1</span> <span class="hljs-string">mongosh</span> <span class="hljs-bullet">--eval</span> <span class="hljs-string">"rs.initiate({
  _id: \"myReplicaSet\",
  members: [
    {_id: 0, host: \"mongo1\"},
@@ -202,13 +202,19 @@ Once you have a MongoDB cluster up and running, you will be able to experiment w
 </code></pre><p>You will still see the replica set, but notice that the first member is now down, and one of the other two members has been elected as the primary node. If you start your container mongo1 again, you will be able to see it back in the replica set, but as a secondary member.</p><div class="alert alert-info">
 <p>MongoDB offers two main cluster types: <strong>replica sets</strong> (for high availability) and sharded clusters (for horizontal scaling). Here we did not do sharding. For more information about how to created sharded MongoDB clusters, check the <a href="https://www.mongodb.com/resources/products/fundamentals/clusters" target="_blank" rel="noopener">documentation</a>.</p>
 </div><h2 id="Install-MongoDB-Compass-GUI"><a class="anchor hidden-xs" href="#Install-MongoDB-Compass-GUI" title="Install-MongoDB-Compass-GUI"><i class="fa fa-link"></i></a>Install MongoDB Compass (GUI)</h2><p>This is another software developed to easily explore and manipulate MongoDB databases using a graphical interface. Compass provides detailed schema visualizations, real-time performance metrics, sophisticated querying abilities, and much more.<br>
-<img src="https://imgur.com/LOdazIs.png" alt="" class="md-image md-image"></p><p>You can download it from the <a href="https://www.mongodb.com/try/download/compass" target="_blank" rel="noopener">official website</a>, and I share here some of the direct links to  this brilliant software for the latest stable version 1.45.2.</p><ul>
+<img src="https://imgur.com/LOdazIs.png" alt="" class="md-image md-image"></p><p>You can download it from the <a href="https://www.mongodb.com/try/download/compass" target="_blank" rel="noopener">official website</a>, and I share here some of the direct links to this software for the latest stable version.</p><ul>
 <li><a href="https://downloads.mongodb.com/compass/mongodb-compass-1.49.1-win32-x64.exe" target="_blank" rel="noopener">Windows x64 (10+)</a></li>
 <li><a href="https://downloads.mongodb.com/compass/mongodb-compass_1.49.1_amd64.deb" target="_blank" rel="noopener">Ubuntu 64-bit (16.04+)</a></li>
 <li><a href="https://downloads.mongodb.com/compass/mongodb-compass-1.49.1-darwin-x64.dmg" target="_blank" rel="noopener">macOS 64-bit (10.15+)</a></li>
 <li><a href="https://downloads.mongodb.com/compass/mongodb-compass-1.49.1-darwin-arm64.dmg" target="_blank" rel="noopener">macOS arm64 (M1) (11.0+)</a></li>
 <li><a href="https://downloads.mongodb.com/compass/mongodb-compass-1.49.1.x86_64.rpm" target="_blank" rel="noopener">RedHat 64-bit (8+)</a></li>
-</ul><p>MongoDB Compass comes with a built-in shell for running MongoDB commands but you can also use the <code>mongosh</code> that you download in the previous section.</p><h2 id="MongoDB-Command-Line-Database-Tools"><a class="anchor hidden-xs" href="#MongoDB-Command-Line-Database-Tools" title="MongoDB-Command-Line-Database-Tools"><i class="fa fa-link"></i></a>MongoDB Command Line Database Tools</h2><p>The MongoDB Database Tools are a collection of command-line utilities for working with a MongoDB deployment. These tools release independently from the MongoDB Server, so you need to install them separately. The latest version fo this package of tools is 100.11.0. You can find <a href="https://www.mongodb.com/try/download/database-tools" target="_blank" rel="noopener">here</a> the official download website but I share below the direct links.</p><ul>
+</ul><p>MongoDB Compass comes with a built-in shell for running MongoDB commands but you can also use the <code>mongosh</code> that you download in the previous section.</p><p>To connect to a specific MOngodb server, you need to know the connection string. Go to any MongoDB server (e.g. <code>mongo1</code>) deployed using Docker and run the following:</p><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">mongo1</span> <span class="hljs-string">mongosh</span> <span class="hljs-bullet">--eval</span> <span class="hljs-string">"db.getMongo()"</span>
+</code></pre><p>This will give you the connection string for the node in the Docker network but look how you published the port for this node. If you have published it as <code>27017</code> then no changes are required, otherwise you need to change the port number to the port visible to the host machine. For example, in my case, I mapped the port <code>27017</code> to the port <code>27018</code> in the host machine, so I can connect to the server from MongoDB Compass by performing the following change:</p><pre><code>&lt;!-- The original connection string --&gt;
+mongodb://127.0.0.1:27017/?directConnection=true&amp;serverSelectionTimeoutMS=2000&amp;appName=mongosh+2.6.0
+
+&lt;!-- The valid connection string in my case --&gt;
+mongodb://127.0.0.1:27018/?directConnection=true&amp;serverSelectionTimeoutMS=2000&amp;appName=mongosh+2.6.0
+</code></pre><h2 id="MongoDB-Command-Line-Database-Tools"><a class="anchor hidden-xs" href="#MongoDB-Command-Line-Database-Tools" title="MongoDB-Command-Line-Database-Tools"><i class="fa fa-link"></i></a>MongoDB Command Line Database Tools</h2><p>The MongoDB Database Tools are a collection of command-line utilities for working with a MongoDB deployment.</p><p>The latest version for this package of tools can be found <a href="https://www.mongodb.com/try/download/database-tools" target="_blank" rel="noopener">here</a> the official download website but I share below the direct links.</p><ul>
 <li><a href="https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.14.1.zip" target="_blank" rel="noopener">Windows x86_64</a></li>
 <li><a href="https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2404-x86_64-100.14.1.deb" target="_blank" rel="noopener">Ubuntu 24.04 x86_64</a></li>
 <li><a href="https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2404-arm64-100.14.1.deb" target="_blank" rel="noopener">Ubuntu 24.04 arm64</a></li>
@@ -459,23 +465,6 @@ db.theaters.find(
     }
 ).limit(<span class="hljs-number">3</span>)
 
-<span class="hljs-comment">// wrong</span>
-db.theaters.find(
-    {
-        <span class="hljs-string">"location.address.state"</span>: {
-            <span class="hljs-attr">$regex</span> : <span class="hljs-string">"A$"</span>
-        },
-        <span class="hljs-attr">$expr</span>: {
-            <span class="hljs-attr">$gt</span>: [<span class="hljs-string">"$location.address.zipcode"</span>, <span class="hljs-number">90000</span>]
-        } 
-    },
-    {
-        <span class="hljs-attr">location</span> : <span class="hljs-literal">true</span>,
-        <span class="hljs-attr">theaterId</span> : <span class="hljs-literal">true</span>,
-        <span class="hljs-attr">_id</span> : <span class="hljs-literal">false</span>
-    }
-).limit(<span class="hljs-number">3</span>)
-
 <span class="hljs-comment">// string comparison solution</span>
 db.theaters.find(
     {
@@ -538,11 +527,11 @@ db.theaters.find(
         } 
     },
     {
-        <span class="hljs-attr">location</span> : <span class="hljs-literal">true</span>,
+        <span class="hljs-string">"location.address.zipcode"</span> : <span class="hljs-literal">true</span>,
         <span class="hljs-attr">theaterId</span> : <span class="hljs-literal">true</span>,
         <span class="hljs-attr">_id</span> : <span class="hljs-literal">false</span>
     }
-).count()
+).limit(<span class="hljs-number">3</span>)
 </code></pre>
 </details>
 </div><h2 id="Query-operators"><a class="anchor hidden-xs" href="#Query-operators" title="Query-operators"><i class="fa fa-link"></i></a>Query operators</h2><div class="alert alert-success">
@@ -590,9 +579,7 @@ db.theaters.find(
                 {
                     <span class="hljs-attr">countries</span>: 
                     {
-                        {
                         <span class="hljs-attr">$not</span>:{<span class="hljs-attr">$in</span>: [<span class="hljs-string">"USA"</span>]}
-                        }
                     }
                 }
             ]
@@ -663,7 +650,7 @@ The arguments can be any valid aggregation expression.</p>
 )
 </code></pre>
 <ul>
-<li>Retrieve all movies which contain the sentence “card game”, and does not contain any of the words “money”, “friend”, and “criminal”. Sort the results according to the score of the match.</li>
+<li>Retrieve all movies which contain the sentence “card game”, and does not contain any of the words “money”, “friend”, and “criminal”. Sort the results according to the relevance score of the match.</li>
 </ul>
 <pre><code class="wrap javascript hljs">db.movies.find(
     {
@@ -823,7 +810,9 @@ The arguments can be any valid aggregation expression.</p>
     }
  }
 </code></pre><p>The <code>&lt;accumulator&gt;</code> operator must be one of the following accumulator operators:<br>
-<img src="https://i.imgur.com/PqZ9wTI.png" alt="" class="md-image md-image"></p><p><code>&lt;expressions&gt;</code> can include field paths, literals, system variables, expression objects, and expression operators. Expressions can be nested. Field path is the path to a field in the document. To specify a field path, use a string that prefixes the field name with a dollar sign ($). For example, <code>"$user"</code> to specify the field path for the user field or <code>"$user.name"</code> to specify the field path to <code>"user.name"</code> field. <code>"$&lt;field&gt;"</code> is equivalent to <code>"$$CURRENT.&lt;field&gt;"</code> where the <code>CURRENT</code> is a system variable. Check <a href="https://www.mongodb.com/docs/v4.4/reference/aggregation-variables/#std-label-agg-system-variables" target="_blank" rel="noopener">here</a> for a list of system variables.</p><p>Check the <a href="https://www.mongodb.com/docs/v4.4/meta/aggregation-quick-reference" target="_blank" rel="noopener">documentation</a> for other stages and pipeline operators.</p><div class="alert alert-success">
+<img src="https://i.imgur.com/PqZ9wTI.png" alt="" class="md-image md-image"></p><p><code>&lt;expressions&gt;</code> can include field paths, literals, system variables, expression objects, and expression operators. Expressions can be nested.</p><div class="alert alert-warning">
+<p><strong>Field path</strong> is the path to a field in the document. To specify a field path, use a string that prefixes the field name with a dollar sign ($). For example, <code>"$user"</code> to specify the field path for the user field or <code>"$user.name"</code> to specify the field path to <code>"user.name"</code> field. <code>"$&lt;field&gt;"</code> is equivalent to <code>"$$CURRENT.&lt;field&gt;"</code> where the <code>CURRENT</code> is a system variable. Check <a href="https://www.mongodb.com/docs/v4.4/reference/aggregation-variables/#std-label-agg-system-variables" target="_blank" rel="noopener">here</a> for a list of system variables.</p>
+</div><p>Check the <a href="https://www.mongodb.com/docs/v4.4/meta/aggregation-quick-reference" target="_blank" rel="noopener">documentation</a> for other stages and pipeline operators.</p><div class="alert alert-success">
 <p><strong>Exercises on MonogDB</strong></p>
 <ul>
 <li>Retrieve the average number of comments for each movie type.</li>
@@ -841,8 +830,10 @@ The arguments can be any valid aggregation expression.</p>
 )
 </code></pre>
 <ul>
-<li>Retrieve the average of comments for each movie type casted in China order by the average in ascending order.</li>
-</ul>
+<li>
+<p>Retrieve the average of comments for each movie type casted in China order by the average in ascending order.</p>
+  <details>
+  <summary>Click to expand</summary>
 <pre><code class="wrap javascript hljs">db.movies.aggregate(
     [
         {
@@ -868,9 +859,12 @@ The arguments can be any valid aggregation expression.</p>
     ]
 )
 </code></pre>
-<ul>
-<li>Retrieve the average number of casts for each movie type.</li>
-</ul>
+  </details>
+</li>
+<li>
+<p>Retrieve the average number of casts for each movie type.</p>
+  <details>
+  <summary>Click to expand</summary>
 <pre><code class="wrap javascript hljs">db.movies.aggregate(
     [
         {
@@ -913,9 +907,12 @@ The arguments can be any valid aggregation expression.</p>
     ]
 )
 </code></pre>
-<ul>
-<li>Retrieve the number of movies and series for each country order by count in descending order. Return only top 5 results and store them in a new collection <code>country_movie_count</code>.</li>
-</ul>
+  </details>
+</li>
+<li>
+<p>Retrieve the number of movies and series for each country order by count in descending order. Return only top 5 results and store them in a new collection <code>country_movie_count</code>.</p>
+  <details>
+  <summary>Click to expand</summary>
 <pre><code class="wrap javascript hljs">db.movies.aggregate(
     [
         {
@@ -977,6 +974,9 @@ The arguments can be any valid aggregation expression.</p>
     ]
 )
 </code></pre>
+  </details>
+</li>
+</ul>
 </div><h2 id="Joins"><a class="anchor hidden-xs" href="#Joins" title="Joins"><i class="fa fa-link"></i></a>Joins</h2><p>We can join documents on collections in MongoDB by using the <code>$lookup</code> (Aggregation) function. <code>$lookup</code>(Aggregation) creates an outer left join with another collection and helps to filter data from merged data. If documents are part of a “joined” collection, the <code>$lookup</code> (Aggregation) function will return documents in the form of a subarray of the original collection.<br>
 In MongoDB’s JOIN operation, the goal is to connect one set of data to another set of data. To join two collections, we use the <code>$lookup</code> operator, whose syntax is defined below:</p><pre><code class="go hljs"><span class="token punctuation">{</span>
    $lookup<span class="token punctuation">:</span>
@@ -1203,53 +1203,53 @@ The following examples assume a collection articles that has a version 3 <code>t
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
 <li class=""><a href="#Lab-3---MongoDB" title="Lab 3 - MongoDB">Lab 3 - MongoDB</a><ul class="nav">
-<li class=""><a href="#Dataset" title="Dataset">Dataset</a></li>
-<li class=""><a href="#Readings" title="Readings">Readings</a></li>
+<li><a href="#Dataset" title="Dataset">Dataset</a></li>
+<li><a href="#Readings" title="Readings">Readings</a></li>
 </ul>
 </li>
-<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li class=""><a href="#Introduction" title="Introduction">Introduction</a></li>
-<li class=""><a href="#Install-MongoDB" title="Install MongoDB">Install MongoDB</a><ul class="nav">
-<li class=""><a href="#Install-MongoDB-Shell-mongosh" title="Install MongoDB Shell mongosh">Install MongoDB Shell mongosh</a></li>
-<li class=""><a href="#Install-MongoDB-Server" title="Install MongoDB Server">Install MongoDB Server</a><ul class="nav">
-<li class=""><a href="#1-Install-MongoDB-without-Docker" title="1. Install MongoDB without Docker">1. Install MongoDB without Docker</a></li>
-<li class=""><a href="#2-Install-MongoDB-with-Docker" title="2. Install MongoDB with Docker">2. Install MongoDB with Docker</a></li>
-<li class=""><a href="#3-Create-a-MongoDB-cluster-using-Docker-containers" title="3. Create a MongoDB cluster using Docker containers">3. Create a MongoDB cluster using Docker containers</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#Install-MongoDB" title="Install MongoDB">Install MongoDB</a><ul class="nav">
+<li><a href="#Install-MongoDB-Shell-mongosh" title="Install MongoDB Shell mongosh">Install MongoDB Shell mongosh</a></li>
+<li><a href="#Install-MongoDB-Server" title="Install MongoDB Server">Install MongoDB Server</a><ul class="nav">
+<li><a href="#1-Install-MongoDB-without-Docker" title="1. Install MongoDB without Docker">1. Install MongoDB without Docker</a></li>
+<li><a href="#2-Install-MongoDB-with-Docker" title="2. Install MongoDB with Docker">2. Install MongoDB with Docker</a></li>
+<li><a href="#3-Create-a-MongoDB-cluster-using-Docker-containers" title="3. Create a MongoDB cluster using Docker containers">3. Create a MongoDB cluster using Docker containers</a></li>
 </ul>
 </li>
-<li class=""><a href="#Install-MongoDB-Compass-GUI" title="Install MongoDB Compass (GUI)">Install MongoDB Compass (GUI)</a></li>
-<li class=""><a href="#MongoDB-Command-Line-Database-Tools" title="MongoDB Command Line Database Tools">MongoDB Command Line Database Tools</a></li>
-<li class=""><a href="#optional-Install-Mongodb-on-HDP-sandbox" title="[optional] Install Mongodb on HDP sandbox">[optional] Install Mongodb on HDP sandbox</a></li>
-<li class=""><a href="#Install-PyMongo-package" title="Install PyMongo package">Install PyMongo package</a></li>
+<li><a href="#Install-MongoDB-Compass-GUI" title="Install MongoDB Compass (GUI)">Install MongoDB Compass (GUI)</a></li>
+<li><a href="#MongoDB-Command-Line-Database-Tools" title="MongoDB Command Line Database Tools">MongoDB Command Line Database Tools</a></li>
+<li><a href="#optional-Install-Mongodb-on-HDP-sandbox" title="[optional] Install Mongodb on HDP sandbox">[optional] Install Mongodb on HDP sandbox</a></li>
+<li><a href="#Install-PyMongo-package" title="Install PyMongo package">Install PyMongo package</a></li>
 </ul>
 </li>
-<li class=""><a href="#MongoDB-Databases-and-Collections" title="MongoDB Databases and Collections">MongoDB Databases and Collections</a><ul class="nav">
-<li class=""><a href="#Arrays-Dot-Notation-and-Embedded-documents" title="Arrays, Dot Notation and Embedded documents">Arrays, Dot Notation and Embedded documents</a></li>
+<li><a href="#MongoDB-Databases-and-Collections" title="MongoDB Databases and Collections">MongoDB Databases and Collections</a><ul class="nav">
+<li><a href="#Arrays-Dot-Notation-and-Embedded-documents" title="Arrays, Dot Notation and Embedded documents">Arrays, Dot Notation and Embedded documents</a></li>
 </ul>
 </li>
-<li class=""><a href="#Data-Description" title="Data Description">Data Description</a></li>
-<li class=""><a href="#Build-a-MongoDB-document-store" title="Build a MongoDB document store">Build a MongoDB document store</a></li>
-<li class=""><a href="#MongoDB-CRUD-Operations" title="MongoDB CRUD Operations">MongoDB CRUD Operations</a><ul class="nav">
-<li class=""><a href="#Create-database" title="Create database">Create database</a></li>
-<li class=""><a href="#Drop-database" title="Drop database">Drop database</a></li>
-<li class=""><a href="#Show-databases" title="Show databases">Show databases</a></li>
-<li class=""><a href="#Show-collections" title="Show collections">Show collections</a></li>
-<li class=""><a href="#Create-collections" title="Create collections">Create collections</a></li>
-<li class=""><a href="#Drop-collections" title="Drop collections">Drop collections</a></li>
-<li class=""><a href="#Insert-documents" title="Insert documents">Insert documents</a></li>
-<li class=""><a href="#Retrieve-documents" title="Retrieve documents">Retrieve documents</a><ul class="nav">
-<li class=""><a href="#Select-All-Documents-in-a-Collection" title="Select All Documents in a Collection">Select All Documents in a Collection</a></li>
-<li class=""><a href="#Specify-Equality-Condition" title="Specify Equality Condition">Specify Equality Condition</a></li>
-<li class=""><a href="#Specify-Conditions-Using-Query-Operators" title="Specify Conditions Using Query Operators">Specify Conditions Using Query Operators</a></li>
-<li class=""><a href="#Specify-AND-Conditions" title="Specify AND Conditions">Specify AND Conditions</a></li>
-<li class=""><a href="#Specify-OR-Conditions" title="Specify OR Conditions">Specify OR Conditions</a></li>
-<li class=""><a href="#Specify-AND-as-well-as-OR-Conditions" title="Specify AND as well as OR Conditions">Specify AND as well as OR Conditions</a></li>
-<li class=""><a href="#Query-on-EmbeddedNested-Documents" title="Query on Embedded/Nested Documents">Query on Embedded/Nested Documents</a></li>
-<li class=""><a href="#Query-on-Nested-Field" title="Query on Nested Field">Query on Nested Field</a></li>
+<li><a href="#Data-Description" title="Data Description">Data Description</a></li>
+<li><a href="#Build-a-MongoDB-document-store" title="Build a MongoDB document store">Build a MongoDB document store</a></li>
+<li><a href="#MongoDB-CRUD-Operations" title="MongoDB CRUD Operations">MongoDB CRUD Operations</a><ul class="nav">
+<li><a href="#Create-database" title="Create database">Create database</a></li>
+<li><a href="#Drop-database" title="Drop database">Drop database</a></li>
+<li><a href="#Show-databases" title="Show databases">Show databases</a></li>
+<li><a href="#Show-collections" title="Show collections">Show collections</a></li>
+<li><a href="#Create-collections" title="Create collections">Create collections</a></li>
+<li><a href="#Drop-collections" title="Drop collections">Drop collections</a></li>
+<li><a href="#Insert-documents" title="Insert documents">Insert documents</a></li>
+<li><a href="#Retrieve-documents" title="Retrieve documents">Retrieve documents</a><ul class="nav">
+<li><a href="#Select-All-Documents-in-a-Collection" title="Select All Documents in a Collection">Select All Documents in a Collection</a></li>
+<li><a href="#Specify-Equality-Condition" title="Specify Equality Condition">Specify Equality Condition</a></li>
+<li><a href="#Specify-Conditions-Using-Query-Operators" title="Specify Conditions Using Query Operators">Specify Conditions Using Query Operators</a></li>
+<li><a href="#Specify-AND-Conditions" title="Specify AND Conditions">Specify AND Conditions</a></li>
+<li><a href="#Specify-OR-Conditions" title="Specify OR Conditions">Specify OR Conditions</a></li>
+<li><a href="#Specify-AND-as-well-as-OR-Conditions" title="Specify AND as well as OR Conditions">Specify AND as well as OR Conditions</a></li>
+<li><a href="#Query-on-EmbeddedNested-Documents" title="Query on Embedded/Nested Documents">Query on Embedded/Nested Documents</a></li>
+<li><a href="#Query-on-Nested-Field" title="Query on Nested Field">Query on Nested Field</a></li>
 </ul>
 </li>
-<li class=""><a href="#Query-operators" title="Query operators">Query operators</a></li>
+<li><a href="#Query-operators" title="Query operators">Query operators</a></li>
 </ul>
 </li>
 <li><a href="#Aggregation-operations-in-MongoDB" title="Aggregation operations in MongoDB">Aggregation operations in MongoDB</a><ul class="nav">
@@ -1281,53 +1281,53 @@ The following examples assume a collection articles that has a version 3 <code>t
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
 <li class=""><a href="#Lab-3---MongoDB" title="Lab 3 - MongoDB">Lab 3 - MongoDB</a><ul class="nav">
-<li class=""><a href="#Dataset" title="Dataset">Dataset</a></li>
-<li class=""><a href="#Readings" title="Readings">Readings</a></li>
+<li><a href="#Dataset" title="Dataset">Dataset</a></li>
+<li><a href="#Readings" title="Readings">Readings</a></li>
 </ul>
 </li>
-<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li class=""><a href="#Introduction" title="Introduction">Introduction</a></li>
-<li class=""><a href="#Install-MongoDB" title="Install MongoDB">Install MongoDB</a><ul class="nav">
-<li class=""><a href="#Install-MongoDB-Shell-mongosh" title="Install MongoDB Shell mongosh">Install MongoDB Shell mongosh</a></li>
-<li class=""><a href="#Install-MongoDB-Server" title="Install MongoDB Server">Install MongoDB Server</a><ul class="nav">
-<li class=""><a href="#1-Install-MongoDB-without-Docker" title="1. Install MongoDB without Docker">1. Install MongoDB without Docker</a></li>
-<li class=""><a href="#2-Install-MongoDB-with-Docker" title="2. Install MongoDB with Docker">2. Install MongoDB with Docker</a></li>
-<li class=""><a href="#3-Create-a-MongoDB-cluster-using-Docker-containers" title="3. Create a MongoDB cluster using Docker containers">3. Create a MongoDB cluster using Docker containers</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#Install-MongoDB" title="Install MongoDB">Install MongoDB</a><ul class="nav">
+<li><a href="#Install-MongoDB-Shell-mongosh" title="Install MongoDB Shell mongosh">Install MongoDB Shell mongosh</a></li>
+<li><a href="#Install-MongoDB-Server" title="Install MongoDB Server">Install MongoDB Server</a><ul class="nav">
+<li><a href="#1-Install-MongoDB-without-Docker" title="1. Install MongoDB without Docker">1. Install MongoDB without Docker</a></li>
+<li><a href="#2-Install-MongoDB-with-Docker" title="2. Install MongoDB with Docker">2. Install MongoDB with Docker</a></li>
+<li><a href="#3-Create-a-MongoDB-cluster-using-Docker-containers" title="3. Create a MongoDB cluster using Docker containers">3. Create a MongoDB cluster using Docker containers</a></li>
 </ul>
 </li>
-<li class=""><a href="#Install-MongoDB-Compass-GUI" title="Install MongoDB Compass (GUI)">Install MongoDB Compass (GUI)</a></li>
-<li class=""><a href="#MongoDB-Command-Line-Database-Tools" title="MongoDB Command Line Database Tools">MongoDB Command Line Database Tools</a></li>
-<li class=""><a href="#optional-Install-Mongodb-on-HDP-sandbox" title="[optional] Install Mongodb on HDP sandbox">[optional] Install Mongodb on HDP sandbox</a></li>
-<li class=""><a href="#Install-PyMongo-package" title="Install PyMongo package">Install PyMongo package</a></li>
+<li><a href="#Install-MongoDB-Compass-GUI" title="Install MongoDB Compass (GUI)">Install MongoDB Compass (GUI)</a></li>
+<li><a href="#MongoDB-Command-Line-Database-Tools" title="MongoDB Command Line Database Tools">MongoDB Command Line Database Tools</a></li>
+<li><a href="#optional-Install-Mongodb-on-HDP-sandbox" title="[optional] Install Mongodb on HDP sandbox">[optional] Install Mongodb on HDP sandbox</a></li>
+<li><a href="#Install-PyMongo-package" title="Install PyMongo package">Install PyMongo package</a></li>
 </ul>
 </li>
-<li class=""><a href="#MongoDB-Databases-and-Collections" title="MongoDB Databases and Collections">MongoDB Databases and Collections</a><ul class="nav">
-<li class=""><a href="#Arrays-Dot-Notation-and-Embedded-documents" title="Arrays, Dot Notation and Embedded documents">Arrays, Dot Notation and Embedded documents</a></li>
+<li><a href="#MongoDB-Databases-and-Collections" title="MongoDB Databases and Collections">MongoDB Databases and Collections</a><ul class="nav">
+<li><a href="#Arrays-Dot-Notation-and-Embedded-documents" title="Arrays, Dot Notation and Embedded documents">Arrays, Dot Notation and Embedded documents</a></li>
 </ul>
 </li>
-<li class=""><a href="#Data-Description" title="Data Description">Data Description</a></li>
-<li class=""><a href="#Build-a-MongoDB-document-store" title="Build a MongoDB document store">Build a MongoDB document store</a></li>
-<li class=""><a href="#MongoDB-CRUD-Operations" title="MongoDB CRUD Operations">MongoDB CRUD Operations</a><ul class="nav">
-<li class=""><a href="#Create-database" title="Create database">Create database</a></li>
-<li class=""><a href="#Drop-database" title="Drop database">Drop database</a></li>
-<li class=""><a href="#Show-databases" title="Show databases">Show databases</a></li>
-<li class=""><a href="#Show-collections" title="Show collections">Show collections</a></li>
-<li class=""><a href="#Create-collections" title="Create collections">Create collections</a></li>
-<li class=""><a href="#Drop-collections" title="Drop collections">Drop collections</a></li>
-<li class=""><a href="#Insert-documents" title="Insert documents">Insert documents</a></li>
-<li class=""><a href="#Retrieve-documents" title="Retrieve documents">Retrieve documents</a><ul class="nav">
-<li class=""><a href="#Select-All-Documents-in-a-Collection" title="Select All Documents in a Collection">Select All Documents in a Collection</a></li>
-<li class=""><a href="#Specify-Equality-Condition" title="Specify Equality Condition">Specify Equality Condition</a></li>
-<li class=""><a href="#Specify-Conditions-Using-Query-Operators" title="Specify Conditions Using Query Operators">Specify Conditions Using Query Operators</a></li>
-<li class=""><a href="#Specify-AND-Conditions" title="Specify AND Conditions">Specify AND Conditions</a></li>
-<li class=""><a href="#Specify-OR-Conditions" title="Specify OR Conditions">Specify OR Conditions</a></li>
-<li class=""><a href="#Specify-AND-as-well-as-OR-Conditions" title="Specify AND as well as OR Conditions">Specify AND as well as OR Conditions</a></li>
-<li class=""><a href="#Query-on-EmbeddedNested-Documents" title="Query on Embedded/Nested Documents">Query on Embedded/Nested Documents</a></li>
-<li class=""><a href="#Query-on-Nested-Field" title="Query on Nested Field">Query on Nested Field</a></li>
+<li><a href="#Data-Description" title="Data Description">Data Description</a></li>
+<li><a href="#Build-a-MongoDB-document-store" title="Build a MongoDB document store">Build a MongoDB document store</a></li>
+<li><a href="#MongoDB-CRUD-Operations" title="MongoDB CRUD Operations">MongoDB CRUD Operations</a><ul class="nav">
+<li><a href="#Create-database" title="Create database">Create database</a></li>
+<li><a href="#Drop-database" title="Drop database">Drop database</a></li>
+<li><a href="#Show-databases" title="Show databases">Show databases</a></li>
+<li><a href="#Show-collections" title="Show collections">Show collections</a></li>
+<li><a href="#Create-collections" title="Create collections">Create collections</a></li>
+<li><a href="#Drop-collections" title="Drop collections">Drop collections</a></li>
+<li><a href="#Insert-documents" title="Insert documents">Insert documents</a></li>
+<li><a href="#Retrieve-documents" title="Retrieve documents">Retrieve documents</a><ul class="nav">
+<li><a href="#Select-All-Documents-in-a-Collection" title="Select All Documents in a Collection">Select All Documents in a Collection</a></li>
+<li><a href="#Specify-Equality-Condition" title="Specify Equality Condition">Specify Equality Condition</a></li>
+<li><a href="#Specify-Conditions-Using-Query-Operators" title="Specify Conditions Using Query Operators">Specify Conditions Using Query Operators</a></li>
+<li><a href="#Specify-AND-Conditions" title="Specify AND Conditions">Specify AND Conditions</a></li>
+<li><a href="#Specify-OR-Conditions" title="Specify OR Conditions">Specify OR Conditions</a></li>
+<li><a href="#Specify-AND-as-well-as-OR-Conditions" title="Specify AND as well as OR Conditions">Specify AND as well as OR Conditions</a></li>
+<li><a href="#Query-on-EmbeddedNested-Documents" title="Query on Embedded/Nested Documents">Query on Embedded/Nested Documents</a></li>
+<li><a href="#Query-on-Nested-Field" title="Query on Nested Field">Query on Nested Field</a></li>
 </ul>
 </li>
-<li class=""><a href="#Query-operators" title="Query operators">Query operators</a></li>
+<li><a href="#Query-operators" title="Query operators">Query operators</a></li>
 </ul>
 </li>
 <li><a href="#Aggregation-operations-in-MongoDB" title="Aggregation operations in MongoDB">Aggregation operations in MongoDB</a><ul class="nav">
