@@ -34,7 +34,7 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Lab-4---Apache-Hadoop-HDFS"><a class="anchor hidden-xs" href="#Lab-4---Apache-Hadoop-HDFS" title="Lab-4---Apache-Hadoop-HDFS"><i class="fa fa-link"></i></a>Lab 4 - Apache Hadoop HDFS</h1><p><strong>Course:</strong> Big Data - IU S25<br>
+    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Lab-4---Apache-Hadoop-HDFS"><a class="anchor hidden-xs" href="#Lab-4---Apache-Hadoop-HDFS" title="Lab-4---Apache-Hadoop-HDFS"><i class="fa fa-link"></i></a>Lab 4 - Apache Hadoop HDFS</h1><p><strong>Course:</strong> Big Data - IU<br>
 <strong>Author:</strong> Firas Jolha</p><h1 id="Agenda"><a class="anchor hidden-xs" href="#Agenda" title="Agenda"><i class="fa fa-link"></i></a>Agenda</h1><p></p><div class="toc"><ul>
 <li><a href="#Lab-4---Apache-Hadoop-HDFS" title="Lab 4 - Apache Hadoop HDFS">Lab 4 - Apache Hadoop HDFS</a></li>
 <li><a href="#Agenda" title="Agenda">Agenda</a></li>
@@ -60,6 +60,19 @@
 </li>
 </ul>
 </li>
+<li><a href="#Apache-Ozone" title="Apache Ozone">Apache Ozone</a><ul>
+<li><a href="#Namespace-volumes-buckets-and-keys" title="Namespace (volumes, buckets, and keys)">Namespace (volumes, buckets, and keys)</a></li>
+<li><a href="#Core-components" title="Core components">Core components</a></li>
+</ul>
+</li>
+<li><a href="#Setup-Apache-Ozone" title="Setup Apache Ozone">Setup Apache Ozone</a><ul>
+<li><a href="#Reading-and-Writing-Data-in-Ozone" title="Reading and Writing Data in Ozone">Reading and Writing Data in Ozone</a><ul>
+<li><a href="#Using-Ozone-Shell-ozone-sh0" title="Using Ozone Shell (ozone sh)">Using Ozone Shell (ozone sh)</a></li>
+<li><a href="#Using-S3-API" title="Using S3 API">Using S3 API</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#References" title="References">References</a></li>
 </ul>
 </div><p></p><h1 id="Prerequisites"><a class="anchor hidden-xs" href="#Prerequisites" title="Prerequisites"><i class="fa fa-link"></i></a>Prerequisites</h1><ul>
@@ -76,7 +89,7 @@
 <li>Fully-Distributed mode: Here Hadoop will run on multiple machines where each machine will host one or more of the Hadoop components.</li>
 </ol><h3 id="1-Pseudo-distributed-mode"><a class="anchor hidden-xs" href="#1-Pseudo-distributed-mode" title="1-Pseudo-distributed-mode"><i class="fa fa-link"></i></a>1. Pseudo-distributed mode</h3><p>You can run a single node of Apache Hadoop using Docker as follows (pseudo-distributed mode).</p><ol>
 <li>Pull a Linux image such as Ubuntu 20.04 and setup this image with ssh access.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-attr">ubuntu:20.04</span>
+</ol><pre><code class="wrap bash hljs">docker pull ubuntu:20.04
 </code></pre><pre><code class="wrap dockerfile hljs"><span class="hljs-comment"># Dockerfile</span>
 
 <span class="hljs-comment"># Use the official image as a parent image</span>
@@ -102,7 +115,7 @@
 <span class="hljs-comment"># Run SSH</span>
 <span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"/usr/sbin/sshd"</span>, <span class="hljs-string">"-D"</span>]</span>
 
-</code></pre><p>And build it.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">build</span> <span class="hljs-bullet">-t</span> <span class="hljs-string">ubuntu-ssh</span> <span class="hljs-string">.</span> 
+</code></pre><p>And build it.</p><pre><code class="wrap bash hljs">docker build -t ubuntu-ssh . 
 </code></pre><ol start="2">
 <li>Run a container and access it.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">hadoop_single_node</span> <span class="hljs-string">\</span>
@@ -120,7 +133,7 @@
 <span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">hadoop_single_node</span> <span class="hljs-string">bash</span>
 </code></pre><p>This will run a docker container from Ubuntu image and all these ports are published such that we can access the services of Hadoop.</p><ol start="3">
 <li>Install Java 8, openssh server and any other packages you prefer.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">apt-get</span> <span class="hljs-string">update</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">apt-get</span> <span class="hljs-bullet">-y</span> <span class="hljs-string">dist-upgrade</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">apt-get</span> <span class="hljs-string">install</span> <span class="hljs-bullet">-y</span> <span class="hljs-string">openssh-server</span> <span class="hljs-string">wget</span> <span class="hljs-string">openjdk-8-jdk</span> <span class="hljs-string">vim</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">apt-get</span> <span class="hljs-bullet">-y</span> <span class="hljs-string">update</span>
+</ol><pre><code class="wrap bash hljs">apt-get update &amp;&amp; apt-get -y dist-upgrade &amp;&amp; apt-get install -y openssh-server wget openjdk-8-jdk vim &amp;&amp; apt-get -y update
 </code></pre><ol start="4">
 <li>Set JAVA_HOME environment variable.</li>
 </ol><pre><code class="wrap bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">"export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"</span> &gt;&gt; /etc/profile
@@ -128,25 +141,25 @@
 <span class="hljs-built_in">source</span> /etc/profile
 </code></pre><ol start="5">
 <li>Download Hadoop</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">wget</span> <span class="hljs-bullet">-O</span> <span class="hljs-string">/hadoop.tar.gz</span> <span class="hljs-attr">http://archive.apache.org/dist/hadoop/core/hadoop-3.3.1/hadoop-3.3.1.tar.gz</span>
+</ol><pre><code class="wrap bash hljs">wget -O /hadoop.tar.gz http://archive.apache.org/dist/hadoop/core/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 </code></pre><ol start="6">
 <li>Unzip it and store it in somewhere (we will call it hadoop home directory)</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">tar</span> <span class="hljs-string">xfz</span> <span class="hljs-string">hadoop.tar.gz</span>
-<span class="hljs-string">mv</span> <span class="hljs-string">/hadoop-3.3.1</span> <span class="hljs-string">/usr/local/hadoop</span>
-<span class="hljs-string">rm</span> <span class="hljs-string">/hadoop.tar.gz</span>
+</ol><pre><code class="wrap bash hljs">tar xfz hadoop.tar.gz
+mv /hadoop-3.3.1 /usr/<span class="hljs-built_in">local</span>/hadoop
+rm /hadoop.tar.gz
 </code></pre><ol start="7">
 <li>Set Hadoop home directory.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">echo</span> <span class="hljs-string">"export HADOOP_HOME=/usr/local/hadoop"</span> <span class="hljs-string">&gt;&gt;</span> <span class="hljs-string">/etc/profile</span>
-<span class="hljs-string">source</span> <span class="hljs-string">/etc/profile</span>
+</ol><pre><code class="wrap bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">"export HADOOP_HOME=/usr/local/hadoop"</span> &gt;&gt; /etc/profile
+<span class="hljs-built_in">source</span> /etc/profile
 </code></pre><ol start="8">
 <li>Add Hadoop binaries to system PATH.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">echo</span> <span class="hljs-string">"export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin"</span> <span class="hljs-string">&gt;&gt;</span>  <span class="hljs-string">/etc/profile</span>
+</ol><pre><code class="wrap bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">"export PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$HADOOP_HOME</span>/bin:<span class="hljs-variable">$HADOOP_HOME</span>/sbin"</span> &gt;&gt;  /etc/profile
 
-<span class="hljs-string">source</span> <span class="hljs-string">/etc/profile</span>
+<span class="hljs-built_in">source</span> /etc/profile
 </code></pre><ol start="9">
 <li>Create directories for storing data in the namenode and datanodes.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">mkdir</span> <span class="hljs-bullet">-p</span> <span class="hljs-string">$HADOOP_HOME/hdfs/namenode</span>
-<span class="hljs-string">mkdir</span> <span class="hljs-bullet">-p</span> <span class="hljs-string">$HADOOP_HOME/hdfs/datanode</span>
+</ol><pre><code class="wrap bash hljs">mkdir -p <span class="hljs-variable">$HADOOP_HOME</span>/hdfs/namenode
+mkdir -p <span class="hljs-variable">$HADOOP_HOME</span>/hdfs/datanode
 </code></pre><ol start="10">
 <li>Configuring Hadoop</li>
 </ol><pre><code class="wrap xml hljs"><span class="hljs-comment">&lt;!-- $HADOOP_HOME/etc/hadoop/core-site.xml --&gt;</span>
@@ -165,10 +178,10 @@
 <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
 </code></pre><ol start="11">
 <li>Check that you can ssh to the localhost without a passphrase.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">ssh</span> <span class="hljs-string">localhost</span>
-</code></pre><p>If you cannot ssh to localhost without a passphrase, execute the following commands:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">ssh-keygen</span> <span class="hljs-bullet">-t</span> <span class="hljs-string">rsa</span> <span class="hljs-bullet">-P</span> <span class="hljs-string">''</span> <span class="hljs-bullet">-f</span> <span class="hljs-string">~/.ssh/id_rsa</span>
-<span class="hljs-string">cat</span> <span class="hljs-string">~/.ssh/id_rsa.pub</span> <span class="hljs-string">&gt;&gt;</span> <span class="hljs-string">~/.ssh/authorized_keys</span>
-<span class="hljs-string">chmod</span> <span class="hljs-number">0600</span> <span class="hljs-string">~/.ssh/authorized_keys</span>
+</ol><pre><code class="wrap bash hljs">ssh localhost
+</code></pre><p>If you cannot ssh to localhost without a passphrase, execute the following commands:</p><pre><code class="wrap bash hljs">ssh-keygen -t rsa -P <span class="hljs-string">''</span> -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
 </code></pre><p>Also add the following to <code>~/.shh/config</code> file.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">Host</span> <span class="hljs-string">*</span>
   <span class="hljs-string">StrictHostKeyChecking</span> <span class="hljs-literal">no</span>
   <span class="hljs-string">UserKnownHostsFile</span> <span class="hljs-string">/dev/null</span>
@@ -194,34 +207,35 @@
 
 </code></pre><ol start="13">
 <li>Format the HDFS file system (only for the first time installation). This will delete everything in HDFS.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">namenode</span> <span class="hljs-bullet">-format</span>
+</ol><pre><code class="wrap bash hljs">hdfs namenode -format
 </code></pre><ol start="14">
 <li>Start NameNode daemon and DataNode daemon</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">start-dfs.sh</span>
+</ol><pre><code class="wrap bash hljs">start-dfs.sh
 </code></pre><p>The hadoop daemon log output is written to the <code>$HADOOP_LOG_DIR</code> directory (defaults to <code>$HADOOP_HOME/logs</code>).<br>
 15. Browse the web interface for the NameNode; by default it is available at:</p><ul>
 <li>NameNode - <a href="http://localhost:9870/" target="_blank" rel="noopener">http://localhost:9870/</a></li>
 </ul><ol start="16">
 <li>Test some HDFS commands.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">fsck</span> <span class="hljs-string">/</span>
+</ol><pre><code class="wrap bash hljs">hdfs fsck /
 </code></pre><ol start="17">
 <li>When you are done, stop HDFS daemons.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">stop-dfs.sh</span>
+</ol><pre><code>stop-dfs.sh
 </code></pre><h3 id="2-Fully-distributed-mode"><a class="anchor hidden-xs" href="#2-Fully-distributed-mode" title="2-Fully-distributed-mode"><i class="fa fa-link"></i></a>2. Fully-distributed mode</h3><p>Here I will run hadoop on a cluster of Docker containers. I will share here the repository where you can clone it to setup hadoop hdfs.</p><ol>
 <li>Clone the repository <a href="https://github.com/firas-jolha/docker-spark-yarn-cluster" target="_blank" rel="noopener">https://github.com/firas-jolha/docker-spark-yarn-cluster</a>.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">mkdir</span> <span class="hljs-bullet">-p</span> <span class="hljs-string">~/spark-test</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">cd</span> <span class="hljs-string">~/spark-test</span>
-<span class="hljs-string">git</span> <span class="hljs-string">clone</span> <span class="hljs-attr">https://github.com/firas-jolha/docker-spark-yarn-cluster.git</span>
-<span class="hljs-string">cd</span> <span class="hljs-string">docker-spark-yarn-cluster</span>
+</ol><pre><code class="wrap bash hljs">mkdir -p ~/spark-test &amp;&amp; <span class="hljs-built_in">cd</span> ~/spark-test
+git <span class="hljs-built_in">clone</span> https://github.com/firas-jolha/docker-spark-yarn-cluster.git
+<span class="hljs-built_in">cd</span> docker-spark-yarn-cluster
 </code></pre><p>Explore the files before you execute any scripts.<br>
-2. Run the script <code>startHadoopCluster.sh</code></p><pre><code class="wrap yaml hljs"><span class="hljs-string">bash</span> <span class="hljs-string">startHadoopCluster.sh</span> <span class="hljs-string">&lt;N&gt;</span>
+2. Run the script <code>startHadoopCluster.sh</code></p><pre><code class="wrap bash hljs">bash startHadoopCluster.sh &lt;N&gt;
 <span class="hljs-comment"># N is the number of datanodes to run</span>
-</code></pre><p>This will create<br>
-3. Access the <code>cluster-master</code> node and try to check if all services are running.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">exec</span> <span class="hljs-bullet">-it</span> <span class="hljs-string">cluster-master</span> <span class="hljs-string">bash</span>
+<span class="hljs-comment"># bash startHadoopCluster.sh 2</span>
+</code></pre><p>This will create and setup a Hadoop cluster of 1 namenode (master) and N datanodes (slaves).<br>
+3. Access the <code>cluster-master</code> node and try to check if all services are running.</p><pre><code class="wrap bash hljs">docker <span class="hljs-built_in">exec</span> -it cluster-master bash
 
-<span class="hljs-string">jps</span> <span class="hljs-bullet">-lm</span>
+jps -lm
 </code></pre><ol start="4">
 <li>When you are done. You can run the script <code>remove_containers.sh</code> <strong>(CAUTION)</strong> which will remove all containers whose name contains <code>cluster</code>. <strong>Be careful</strong>, if you have any containers that contains <code>cluster</code> in its name, will also be removed.</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">bash</span> <span class="hljs-string">remove_containers.sh</span>
+</ol><pre><code class="wrap bash hljs">bash remove_containers.sh
 </code></pre><h2 id="Hadoop-HDFS-Configuration"><a class="anchor hidden-xs" href="#Hadoop-HDFS-Configuration" title="Hadoop-HDFS-Configuration"><i class="fa fa-link"></i></a>Hadoop HDFS Configuration</h2><p>Hadoop’s Java configuration is driven by two types of important configuration files:</p><ul>
 <li>Read-only default configuration - <code>core-default.xml</code>, <code>hdfs-default.xml</code>, <code>yarn-default.xml</code> and <code>mapred-default.xml</code>.</li>
 <li>Site-specific configuration - <code>etc/hadoop/core-site.xml</code>, <code>etc/hadoop/hdfs-site.xml</code>, <code>etc/hadoop/yarn-site.xml</code> and <code>etc/hadoop/mapred-site.xml</code>.</li>
@@ -245,8 +259,8 @@
 
     
 <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
-</code></pre><p>Additionally, you can control the Hadoop scripts found in the <code>bin/</code> directory of the distribution, by setting site-specific values via the <code>etc/hadoop/hadoop-env.sh</code> and <code>etc/hadoop/yarn-env.sh</code>.</p><p>After you modify the configuration files, you need to restart HDFS components as follows:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">stop-dfs.sh</span>
-<span class="hljs-string">start-dfs.sh</span>
+</code></pre><p>Additionally, you can control the Hadoop scripts found in the <code>bin/</code> directory of the distribution, by setting site-specific values via the <code>etc/hadoop/hadoop-env.sh</code> and <code>etc/hadoop/yarn-env.sh</code>.</p><p>After you modify the configuration files, you need to restart HDFS components as follows:</p><pre><code class="wrap bash hljs">stop-dfs.sh
+start-dfs.sh
 </code></pre><h3 id="core-sitexml"><a class="anchor hidden-xs" href="#core-sitexml" title="core-sitexml"><i class="fa fa-link"></i></a>core-site.xml</h3><p>This file holds the core settings related to Hadoop components. Some of the properties are:</p><table>
 <thead>
 <tr>
@@ -312,35 +326,307 @@
 <td>If “true”, enable permission checking in HDFS. If “false”, permission checking is turned off, but all other behavior is unchanged.</td>
 </tr>
 </tbody>
-</table><p>You can check <a href="https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">here</a> for all available properties with description.</p><h2 id="Hadoop-HDFS-commands"><a class="anchor hidden-xs" href="#Hadoop-HDFS-commands" title="Hadoop-HDFS-commands"><i class="fa fa-link"></i></a>Hadoop HDFS commands</h2><p>Hadoop HDFS provides a set of commands to manage the files in the file system and also to manage the HDFS components.</p><h3 id="DFS"><a class="anchor hidden-xs" href="#DFS" title="DFS"><i class="fa fa-link"></i></a>DFS</h3><p>Allows to run a filesystem command on the file system supported in Hadoop. The list of commands supported are available in the <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/FileSystemShell.html" target="_blank" rel="noopener">official website</a>. You can check below some examples:</p><p><img src="https://i.imgur.com/OfzCZP2.png" alt="" class="md-image md-image"></p><ul>
-<li>Change the access permission of a file.</li>
-</ul><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">dfs</span> <span class="hljs-bullet">-chmod</span> <span class="hljs-string">go-rwx</span> <span class="hljs-bullet">-R</span> <span class="hljs-string">/</span>
-</code></pre><p>The <code>-R</code> option will make the change recursively through the directory structure.</p><ul>
-<li>Change the replication factor for a file.</li>
-</ul><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">dfs</span> <span class="hljs-bullet">-setrep</span> <span class="hljs-number">3</span> <span class="hljs-string">/README.txt</span>
-</code></pre><p>This will set the replication factor to 3 replicas only for this file. To change the default replication factor for newly added files, you need to update the property <code>dfs.replication</code> in <code>hdfs-site.xml</code> file.</p><p>Check this reference (<a href="https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-common/FileSystemShell.html" target="_blank" rel="noopener">https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-common/FileSystemShell.html</a>) for more options of this command.</p><h3 id="DFSAdmin"><a class="anchor hidden-xs" href="#DFSAdmin" title="DFSAdmin"><i class="fa fa-link"></i></a>DFSAdmin</h3><p>The DFSAdmin command set is used for administering an HDFS cluster. These are commands that are used only by an HDFS administrator.</p><ol>
+</table><p>You can check <a href="https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="noopener">here</a> for all available properties with description.</p><h2 id="Hadoop-HDFS-commands"><a class="anchor hidden-xs" href="#Hadoop-HDFS-commands" title="Hadoop-HDFS-commands"><i class="fa fa-link"></i></a>Hadoop HDFS commands</h2><p>Hadoop HDFS provides a set of commands to manage the files in the file system and also to manage the HDFS components.</p><h3 id="DFS"><a class="anchor hidden-xs" href="#DFS" title="DFS"><i class="fa fa-link"></i></a>DFS</h3><p>Allows to run a filesystem command on the file system supported in Hadoop. The list of commands supported are available in the <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/FileSystemShell.html" target="_blank" rel="noopener">official website</a>. You can check below some examples:</p><p><img src="https://i.imgur.com/OfzCZP2.png" alt="" class="md-image md-image"></p><div class="alert alert-info">
+<ul>
+<li>Change block replicas</li>
+</ul>
+<pre><code>hdfs dfs -setrep [-R] [-w] &lt;noOfReplicas&gt; &lt;path&gt;
+</code></pre>
+</div><h3 id="DFSAdmin"><a class="anchor hidden-xs" href="#DFSAdmin" title="DFSAdmin"><i class="fa fa-link"></i></a>DFSAdmin</h3><p>The DFSAdmin command set is used for administering an HDFS cluster. These are commands that are used only by an HDFS administrator.</p><ol>
 <li>Put the cluster in safe mode</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">dfsadmin</span> <span class="hljs-bullet">-safemode</span> <span class="hljs-string">enter</span>
+</ol><pre><code class="wrap bash hljs">hdfs dfsadmin -safemode enter
 <span class="hljs-comment"># hdfs dfsadmin -safemode leave</span>
 </code></pre><p>Safe mode is a Namenode state in which it:</p><ul>
 <li>does not accept changes to the name space (read-only)</li>
 <li>does not replicate or delete blocks.</li>
 </ul><p>Safe mode is entered automatically at Namenode startup, and leaves safe mode automatically when the configured minimum percentage of blocks satisfies the minimum replication condition. If Namenode detects any anomaly then it will linger in safe mode till that issue is resolved.<br>
-2. Generate a report of avilable datanodes</p><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">dfsadmin</span> <span class="hljs-bullet">-report</span>
+2. Generate a report of avilable datanodes</p><pre><code class="wrap bash hljs">hdfs dfsadmin -report
 </code></pre><ol start="3">
 <li>Recommission or decommission data nodes</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">dfsadmin</span> <span class="hljs-bullet">-refreshNodes</span>
+</ol><pre><code class="wrap bash hljs">hdfs dfsadmin -refreshNodes
 </code></pre><ol start="4">
 <li>Runs the HDFS filesystem checking utility. (it is not dfsadmin command)</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">fsck</span> <span class="hljs-string">&lt;path&gt;</span>
-<span class="hljs-string">hdfs</span> <span class="hljs-string">fsck</span> <span class="hljs-string">/</span>
-</code></pre><ol start="5">
-<li>Check the locations of file blocks (it is not dfsadmin command)</li>
-</ol><pre><code class="wrap yaml hljs"><span class="hljs-string">hdfs</span> <span class="hljs-string">fsck</span> <span class="hljs-string">/README.txt</span> <span class="hljs-bullet">-files</span> <span class="hljs-bullet">-blocks</span> <span class="hljs-bullet">-locations</span>
-</code></pre><h1 id="References"><a class="anchor hidden-xs" href="#References" title="References"><i class="fa fa-link"></i></a>References</h1><ul>
+</ol><pre><code class="wrap bash hljs">hdfs fsck &lt;path&gt;
+hdfs fsck /
+</code></pre><h1 id="Apache-Ozone"><a class="anchor hidden-xs" href="#Apache-Ozone" title="Apache-Ozone"><i class="fa fa-link"></i></a>Apache Ozone</h1><p>Ozone is a distributed object store optimized for Big data workloads. The primary design point of ozone is scalability, and it aims to scale to billions of objects and exabytes of capacity. Ozone achieves better scalability by separating namespace management from block space management.</p><ul>
+<li>The namespace is managed by a daemon called <strong>Ozone Manager (OM)</strong> that handles namespace-related tasks, like managing volumes, buckets, and keys.</li>
+<li>The block space is managed by <strong>Storage Container Manager (SCM)</strong> that is responsible for managing the physical storage layer, including the data nodes and the blocks that form the data.</li>
+</ul><h2 id="Namespace-volumes-buckets-and-keys"><a class="anchor hidden-xs" href="#Namespace-volumes-buckets-and-keys" title="Namespace-volumes-buckets-and-keys"><i class="fa fa-link"></i></a>Namespace (volumes, buckets, and keys)</h2><p>Ozone’s namespace is organized into a hierarchy of volumes, buckets, and keys.</p><ul>
+<li>Volumes are similar to home directories and can only be created by an administrator.</li>
+<li>Buckets are contained within volumes. Users can create many buckets within a volume.</li>
+<li>Keys hold the actual data and reside within buckets.</li>
+</ul><p>This separation of the logical namespace from the physical storage layer is a key aspect of Ozone’s scalability.</p><h2 id="Core-components"><a class="anchor hidden-xs" href="#Core-components" title="Core-components"><i class="fa fa-link"></i></a>Core components</h2><p>The block diagram shows the core components of Ozone.<br>
+<img src="https://ozone.apache.org/docs/1.4.1/concept/ozoneBlockDiagram.png" alt="" class="md-image md-image"></p><ul>
+<li>The <strong>OM</strong> is the name space manager that handles client requests for creating, deleting, or looking up keys.</li>
+<li><strong>SCM</strong> manages the physical data layer. It manages the Datanodes and the replication of data.</li>
+<li><strong>Datanodes</strong> are responsible for storing the actual data, which is organized into logical units called blocks.</li>
+<li><strong>Recon</strong> is the management user interface for Ozone to monitor and manage the Ozone cluster.</li>
+</ul><p>Another way to visualize Ozone is to look at the functional layers below:</p><p><img src="https://ozone.apache.org/docs/1.4.1/concept/FunctionalOzone.png" alt="" class="md-image md-image"></p><ul>
+<li>A metadata data management layer, composed of Ozone Manager and Storage Container Manager.</li>
+<li>A data storage layer, which is basically the data nodes and they are managed by SCM.</li>
+<li>The replication layer, provided by Ratis is used to replicate metadata (OM and SCM) and also used for consistency when data is modified at the data nodes.</li>
+<li>A management server called Recon, that talks to all other components of Ozone and provides a unified management API and UX for Ozone.</li>
+<li>A protocol bus that allows Ozone to be extended via other protocols. Currently, it supports an S3-compatible protocol. Protocol Bus provides a generic notion that you can implement new file system or object store protocols on top of Ozone’s native protocol.</li>
+<li>Containers are the fundamental replication unit of Ozone, they are managed by the Storage Container Manager (SCM) service. Containers are big binary units (5Gb by default) which can contain multiple blocks.</li>
+</ul><h1 id="Setup-Apache-Ozone"><a class="anchor hidden-xs" href="#Setup-Apache-Ozone" title="Setup-Apache-Ozone"><i class="fa fa-link"></i></a>Setup Apache Ozone</h1><p>Here we follow only Docker approach but if you want to install a bare metal version, please check the documentation.</p><ol>
+<li>Download the Docker Compose file from original source.</li>
+</ol><pre><code class="yaml hljs"><span class="hljs-comment"># Download the latest Docker Compose configuration file</span>
+<span class="hljs-string">curl</span> <span class="hljs-bullet">-O</span> <span class="hljs-attr">https://raw.githubusercontent.com/apache/ozone-docker/refs/heads/latest/docker-compose.yaml</span>
+</code></pre><pre><code class="dockerfile hljs"><span class="hljs-comment"># Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="hljs-comment"># or more contributor license agreements.  See the NOTICE file</span>
+<span class="hljs-comment"># distributed with this work for additional information</span>
+<span class="hljs-comment"># regarding copyright ownership.  The ASF licenses this file</span>
+<span class="hljs-comment"># to you under the Apache License, Version 2.0 (the</span>
+<span class="hljs-comment"># "License"); you may not use this file except in compliance</span>
+<span class="hljs-comment"># with the License.  You may obtain a copy of the License at</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="hljs-comment"># distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="hljs-comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="hljs-comment"># See the License for the specific language governing permissions and</span>
+<span class="hljs-comment"># limitations under the License.</span>
+
+x-image:
+   &amp;image
+   image: ${OZONE_IMAGE:-apache/ozone}:${OZONE_IMAGE_VERSION:-<span class="hljs-number">2.1</span>.<span class="hljs-number">0</span>}${OZONE_IMAGE_FLAVOR:-}
+
+x-common-config:
+   &amp;common-config
+   OZONE-SITE.XML_hdds.datanode.dir: <span class="hljs-string">"/data/hdds"</span>
+   OZONE-SITE.XML_ozone.metadata.dirs: <span class="hljs-string">"/data/metadata"</span>
+   OZONE-SITE.XML_ozone.om.address: <span class="hljs-string">"om"</span>
+   OZONE-SITE.XML_ozone.om.http-address: <span class="hljs-string">"om:9874"</span>
+   OZONE-SITE.XML_ozone.recon.address: <span class="hljs-string">"recon:9891"</span>
+   OZONE-SITE.XML_ozone.recon.db.dir: <span class="hljs-string">"/data/metadata/recon"</span>
+   OZONE-SITE.XML_ozone.replication: <span class="hljs-string">"1"</span>
+   OZONE-SITE.XML_ozone.scm.block.client.address: <span class="hljs-string">"scm"</span>
+   OZONE-SITE.XML_ozone.scm.client.address: <span class="hljs-string">"scm"</span>
+   OZONE-SITE.XML_ozone.scm.datanode.id.dir: <span class="hljs-string">"/data/metadata"</span>
+   OZONE-SITE.XML_ozone.scm.names: <span class="hljs-string">"scm"</span>
+   no_proxy: <span class="hljs-string">"om,recon,scm,s3g,localhost,127.0.0.1"</span>
+
+version: <span class="hljs-string">"3"</span>
+services:
+   datanode:
+      &lt;&lt;: *image
+      ports:
+         - <span class="hljs-number">9864</span>
+      command: [<span class="hljs-string">"ozone"</span>,<span class="hljs-string">"datanode"</span>]
+      environment:
+         &lt;&lt;: *common-config
+   om:
+      &lt;&lt;: *image
+      ports:
+         - <span class="hljs-number">9874</span>:<span class="hljs-number">9874</span>
+      environment:
+         &lt;&lt;: *common-config
+         CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: <span class="hljs-string">"*"</span>
+         CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: <span class="hljs-string">"*"</span>
+         ENSURE_OM_INITIALIZED: /data/metadata/om/current/VERSION
+         WAITFOR: scm:<span class="hljs-number">9876</span>
+      command: [<span class="hljs-string">"ozone"</span>,<span class="hljs-string">"om"</span>]
+   scm:
+      &lt;&lt;: *image
+      ports:
+         - <span class="hljs-number">9876</span>:<span class="hljs-number">9876</span>
+      environment:
+         &lt;&lt;: *common-config
+         ENSURE_SCM_INITIALIZED: /data/metadata/scm/current/VERSION
+      command: [<span class="hljs-string">"ozone"</span>,<span class="hljs-string">"scm"</span>]
+   recon:
+      &lt;&lt;: *image
+      ports:
+         - <span class="hljs-number">9888</span>:<span class="hljs-number">9888</span>
+      environment:
+         &lt;&lt;: *common-config
+      command: [<span class="hljs-string">"ozone"</span>,<span class="hljs-string">"recon"</span>]
+   s3g:
+      &lt;&lt;: *image
+      ports:
+         - <span class="hljs-number">9878</span>:<span class="hljs-number">9878</span>
+      environment:
+         &lt;&lt;: *common-config
+      command: [<span class="hljs-string">"ozone"</span>,<span class="hljs-string">"s3g"</span>]
+   httpfs:
+      &lt;&lt;: *image
+      ports:
+         - <span class="hljs-number">14000</span>:<span class="hljs-number">14000</span>
+      environment:
+         &lt;&lt;: *common-config
+         CORE-SITE.XML_fs.defaultFS: <span class="hljs-string">"ofs://om"</span>
+      command: [ <span class="hljs-string">"ozone"</span>,<span class="hljs-string">"httpfs"</span> ]
+</code></pre><ol start="2">
+<li>Start your Ozone cluster with two Datanodes:<pre><code class="yaml hljs">        <span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">up</span> <span class="hljs-bullet">-d</span> <span class="hljs-bullet">--scale</span> <span class="hljs-string">datanode=2</span>
+</code></pre>
+This will create 7 containers (~3 GB memory usage):
+<ol>
+<li><code>om</code>: Ozone Manager.</li>
+<li><code>scm</code>: Storage Container Manager.</li>
+<li><code>datanode-1</code>, <code>datanode-2</code>: Datanodes.</li>
+<li><code>recon</code>: Recon UI</li>
+<li><code>s3g</code>: Apache Ozone’s S3 Gateway (often called S3G) is a component that provides an Amazon S3-compatible REST interface for Ozone’s object store.</li>
+<li><code>httpfs</code>: HttpFS is a service that provides a REST HTTP gateway supporting File System operations (read and write). You can use <code>curl</code> here to manage data in the store.</li>
+</ol>
+</li>
+<li>Check the installation.</li>
+</ol><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">exec</span> <span class="hljs-string">om</span> <span class="hljs-string">ozone</span> <span class="hljs-string">version</span>
+</code></pre><p>Now you are ready to use ozone service.</p><h2 id="Reading-and-Writing-Data-in-Ozone"><a class="anchor hidden-xs" href="#Reading-and-Writing-Data-in-Ozone" title="Reading-and-Writing-Data-in-Ozone"><i class="fa fa-link"></i></a>Reading and Writing Data in Ozone</h2><p>Apache Ozone provides multiple interfaces for reading and writing data, catering to different use cases and client preferences. Here we explain how to use the two primary interfaces within a Docker environment:</p><ol>
+<li><strong>Ozone Shell (ozone sh)</strong> - The native command-line interface</li>
+<li><strong>S3 API</strong> - Amazon S3 compatible REST interface</li>
+</ol><h3 id="Using-Ozone-Shell-ozone-sh0"><a class="anchor hidden-xs" href="#Using-Ozone-Shell-ozone-sh0" title="Using-Ozone-Shell-ozone-sh0"><i class="fa fa-link"></i></a>Using Ozone Shell (<code>ozone sh</code>)</h3><p>Use Ozone shell to manage volumes/buckets/keys. Ozone shell commands take the following form:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">&lt;object-type&gt;</span> <span class="hljs-string">&lt;action&gt;</span> <span class="hljs-string">&lt;path&gt;</span> <span class="hljs-string">[options]</span>
+</code></pre><p>Where  <code>&lt;object-type&gt;</code> is <code>volume</code>, <code>bucket</code>, or <code>key</code>.</p><ol>
+<li>Access the shell</li>
+</ol><pre><code class="yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">compose</span> <span class="hljs-string">exec</span> <span class="hljs-string">om</span> <span class="hljs-string">bash</span>
+
+<span class="hljs-comment"># bash-5.1$  </span>
+<span class="hljs-comment"># </span>
+<span class="hljs-comment"># Now you can run 'ozone sh' commands here</span>
+</code></pre><div class="alert alert-info">
+<p>You can access the Recon UI service typically on the port <code>9888</code> (<a href="http://localhost:9888" target="_blank" rel="noopener">http://localhost:9888</a>) to check the status of the object store.</p>
+</div><ol start="2">
+<li>Working with Volumes</li>
+</ol><pre><code class="wrap yaml hljs">
+<span class="hljs-comment"># Create a volume</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">create</span> <span class="hljs-string">/vol1</span>
+
+<span class="hljs-comment"># List all volumes</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">list</span> <span class="hljs-string">/</span>
+
+<span class="hljs-comment"># Get volume details</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">info</span> <span class="hljs-string">/vol1</span>
+
+<span class="hljs-comment"># Delete a volume (must be empty)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">delete</span> <span class="hljs-string">/vol1</span>
+
+<span class="hljs-comment"># Delete a volume recursively (deletes all buckets and keys within the volume, then the volume itself)</span>
+<span class="hljs-comment"># WARNING: No recovery option after using this command, and no trash for FSO (File System Optimized) buckets that are designed for high-performance Hadoop-compatible workloads. Requires confirmation.</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">delete</span> <span class="hljs-bullet">-r</span> <span class="hljs-string">/vol1</span>
+</code></pre><ol start="3">
+<li>Working with Buckets</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-comment"># First, create a volume (skip this step if the volume vol1 exists)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">create</span> <span class="hljs-string">/vol1</span>
+
+<span class="hljs-comment"># Buckets are containers for keys (objects) within volumes.</span>
+
+<span class="hljs-comment"># Create a bucket</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">create</span> <span class="hljs-string">/vol1/bucket1</span>
+<span class="hljs-comment"># You cannot create bolumes inside volumes</span>
+
+<span class="hljs-comment"># List all buckets in a volume</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">list</span> <span class="hljs-string">/vol1</span>
+
+<span class="hljs-comment"># Get bucket details</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">info</span> <span class="hljs-string">/vol1/bucket1</span>
+
+<span class="hljs-comment"># Delete a bucket (must be empty)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">delete</span> <span class="hljs-string">/vol1/bucket1</span>
+
+<span class="hljs-comment"># Delete a bucket recursively (deletes all keys within the bucket, then the bucket itself)</span>
+<span class="hljs-comment"># WARNING: No recovery option, deleted keys won't move to trash. Requires confirmation.</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">delete</span> <span class="hljs-bullet">-r</span> <span class="hljs-string">/vol1/bucket1</span>
+
+</code></pre><ol start="4">
+<li>Working with Keys (Objects)</li>
+</ol><pre><code class="wrap yaml hljs"><span class="hljs-comment"># First, create a volume (skip this step if the volume vol1 exists)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">volume</span> <span class="hljs-string">create</span> <span class="hljs-string">/vol1</span>
+
+
+<span class="hljs-comment"># Second, create a bucket (skip this step if the bucket bucket1 exists)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">create</span> <span class="hljs-string">/vol1/bucket1</span>
+
+<span class="hljs-comment"># Keys are the actual data objects stored in Ozone.</span>
+<span class="hljs-comment"># Create a test file locally</span>
+<span class="hljs-comment"># echo "Hello Ozone via Shell" &gt; test_shell.txt</span>
+
+<span class="hljs-comment"># Upload a file (put source to destination)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">put</span> <span class="hljs-string">/vol1/bucket1/test_shell.txt</span> <span class="hljs-string">test_shell.txt</span>
+
+<span class="hljs-comment"># Upload with specific replication type</span>
+<span class="hljs-comment"># For RATIS: use -r ONE or THREE</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">put</span> <span class="hljs-bullet">-t</span> <span class="hljs-string">RATIS</span> <span class="hljs-bullet">-r</span> <span class="hljs-string">THREE</span> <span class="hljs-string">/vol1/bucket1/key1_ratis</span> <span class="hljs-string">test_shell.txt</span>
+<span class="hljs-comment"># For EC: use format CODEC-DATA-PARITY-CHUNKSIZE (e.g., rs-3-2-1024k, rs-6-3-1024k, rs-10-4-1024k)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">put</span> <span class="hljs-bullet">-t</span> <span class="hljs-string">EC</span> <span class="hljs-bullet">-r</span> <span class="hljs-string">rs-3-2-1024k</span> <span class="hljs-string">/vol1/bucket1/key1_ec</span> <span class="hljs-string">test_shell.txt</span>
+
+<span class="hljs-comment"># Download a file (get source to destination)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">get</span> <span class="hljs-string">/vol1/bucket1/test_shell.txt</span> <span class="hljs-string">./downloaded_shell.txt</span>
+
+<span class="hljs-comment"># Force overwrite when downloading (use -f or --force)</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">get</span> <span class="hljs-bullet">--force</span> <span class="hljs-string">/vol1/bucket1/test_shell.txt</span> <span class="hljs-string">./downloaded_shell.txt</span>
+
+<span class="hljs-comment"># Get key information</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">info</span> <span class="hljs-string">/vol1/bucket1/test_shell.txt</span>
+
+<span class="hljs-comment"># List keys in a bucket</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">list</span> <span class="hljs-string">/vol1/bucket1</span>
+
+<span class="hljs-comment"># Copy a key within Ozone (not directly supported, use put/get or other interfaces)</span>
+
+<span class="hljs-comment"># Rename a key</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">rename</span> <span class="hljs-string">/vol1/bucket1</span> <span class="hljs-string">test_shell.txt</span> <span class="hljs-string">renamed_shell.txt</span>
+
+<span class="hljs-comment"># Delete a key</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">key</span> <span class="hljs-string">delete</span> <span class="hljs-string">/vol1/bucket1/renamed_shell.txt</span>
+
+<span class="hljs-comment"># Note: In FSO buckets, deleted keys are moved to trash at /&lt;volume&gt;/&lt;bucket&gt;/.Trash/&lt;user&gt;</span>
+<span class="hljs-comment"># In OBS (Object Store Buckets) buckets, deletion is permanent.</span>
+</code></pre><div class="alert alert-info">
+<p>In Apache Ozone, <em>Object Store (OBS)</em> and <em>File System Optimized (FSO)</em> are two different bucket layout formats, designed for distinct use cases within the same distributed storage system.</p>
+<ul>
+<li>OBS is optimized for S3-compatible, flat-namespace, object-storage workloads.</li>
+<li>FSO is optimized for Hadoop Compatible File System (HCFS) workloads, supporting directory hierarchies and atomic operations.</li>
+</ul>
+</div><h3 id="Using-S3-API"><a class="anchor hidden-xs" href="#Using-S3-API" title="Using-S3-API"><i class="fa fa-link"></i></a>Using S3 API</h3><p>The S3 API provides compatibility with applications designed for Amazon S3. It’s accessible via the S3 Gateway service, typically running on port <code>9878</code> in the Docker setup. Ozone’s S3 Gateway acts as a REST front-end that speaks the S3 protocol and bridges it to the Ozone backend.</p><p>In Ozone, data is organized into volumes, buckets, and keys. By default, the S3 Gateway uses a special volume named <code>/s3v</code> to store all S3 buckets. Each S3 bucket created is represented as a bucket under the <code>/s3v</code> volume in Ozone. Objects (keys) are stored within those buckets. This mapping is transparent to the end user.</p><p>The S3 Gateway does the following:</p><ol>
+<li>It receives S3 REST API calls from clients.</li>
+<li>It translates them and forwards metadata operations to OM. It translates REST S3 operations into native Ozone calls.</li>
+<li>It streams data directly to and from Datanodes. It doesn’t store or manage data – it delegates to OM and Datanodes.</li>
+</ol><h4 id="Set-S3-Credentials"><a class="anchor hidden-xs" href="#Set-S3-Credentials" title="Set-S3-Credentials"><i class="fa fa-link"></i></a>Set S3 Credentials</h4><p>In the default non-secure Docker setup, you can use any values for credentials. Run the following commands in the shell of <code>om</code> container.</p><pre><code class="yaml hljs"><span class="hljs-string">export</span> <span class="hljs-string">AWS_ACCESS_KEY_ID=testuser</span>
+<span class="hljs-string">export</span> <span class="hljs-string">AWS_SECRET_ACCESS_KEY=testuser-secret</span>
+<span class="hljs-string">export</span> <span class="hljs-string">AWS_ENDPOINT_URL=http://s3g:9878</span>
+</code></pre><h4 id="Using-AWS-CLI"><a class="anchor hidden-xs" href="#Using-AWS-CLI" title="Using-AWS-CLI"><i class="fa fa-link"></i></a>Using AWS CLI</h4><p>The AWS CLI can be used from your local machine (if installed) or from within a container that has it. Here we will use the container <code>om</code> container where <code>aws</code> CLI is installed.</p><pre><code class="yaml hljs"><span class="hljs-comment"># Create a bucket (maps to /s3v/&lt;bucket-name&gt; in Ozone namespace)</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3api</span> <span class="hljs-string">create-bucket</span> <span class="hljs-bullet">--bucket=s3bucket</span>
+
+<span class="hljs-comment"># List buckets</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3api</span> <span class="hljs-string">list-buckets</span>
+
+
+<span class="hljs-comment"># Upload a file</span>
+<span class="hljs-comment"># echo 'Hello S3' &gt; s3_test.txt</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3</span> <span class="hljs-string">cp</span> <span class="hljs-string">s3_test.txt</span> <span class="hljs-attr">s3://s3bucket/</span>
+<span class="hljs-comment"># If you got errors, check the warning below.</span>
+
+<span class="hljs-comment"># List objects in a bucket</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3</span> <span class="hljs-string">ls</span> <span class="hljs-attr">s3://s3bucket/</span>
+
+<span class="hljs-comment"># Download a file</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3</span> <span class="hljs-string">cp</span> <span class="hljs-attr">s3://s3bucket/s3_test.txt</span> <span class="hljs-string">./downloaded_s3.txt</span>
+
+<span class="hljs-comment"># Delete an object</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3</span> <span class="hljs-string">rm</span> <span class="hljs-attr">s3://s3bucket/s3_test.txt</span>
+
+<span class="hljs-comment"># Delete a bucket (must be empty)</span>
+<span class="hljs-string">aws</span> <span class="hljs-string">s3api</span> <span class="hljs-string">delete-bucket</span> <span class="hljs-bullet">--bucket=s3bucket</span>
+<span class="hljs-comment"># aws s3 rb s3://s3bucket --force</span>
+</code></pre><div class="alert alert-info">
+<ul>
+<li><code>aws s3</code> vs. <code>aws s3api</code>:<br>
+Both commands provide different functionality, whereas <code>s3api</code> supports all of the functionality provided by S3, <code>s3</code> supports a limited and higher-level set of functionality. In essence, use the <code>aws s3</code> commands for daily object operations and the <code>aws s3api</code> commands when you need direct control over specific S3 API functions.</li>
+</ul>
+</div><div class="alert alert-warning">
+<p><strong>Warning:</strong> If you are getting some errors related to replication configs. You can change the configs for a specific bucket as follows:</p>
+<pre><code class="yaml hljs"><span class="hljs-string">ozone</span> <span class="hljs-string">sh</span> <span class="hljs-string">bucket</span> <span class="hljs-string">set-replication-config</span> <span class="hljs-bullet">-r=2</span> <span class="hljs-string">/s3v/s3bucket</span>
+</code></pre>
+</div><div class="alert alert-warning">
+<p><strong>Warning:</strong> If you the SCM component is in safe mode, you can exit this mode as follows:</p>
+<pre><code class="yaml hljs"><span class="hljs-string">ozone</span> <span class="hljs-string">admin</span> <span class="hljs-string">safemode</span> <span class="hljs-string">status</span>
+<span class="hljs-string">ozone</span> <span class="hljs-string">admin</span> <span class="hljs-string">safemode</span> <span class="hljs-string">exit</span>
+</code></pre>
+</div><h1 id="References"><a class="anchor hidden-xs" href="#References" title="References"><i class="fa fa-link"></i></a>References</h1><ul>
 <li><a href="https://hadoop.apache.org/" target="_blank" rel="noopener">Apache Hadoop</a></li>
 <li><a href="https://www.oreilly.com/library/view/big-data-analytics/9781788628846/" target="_blank" rel="noopener">Big Data Analytics with Hadoop 3</a></li>
 <li><a href="https://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/" target="_blank" rel="noopener">Writing a hadoop mapreduce program in Python</a></li>
+<li><a href="https://gist.github.com/cereblanco/5d1dc6687d426d644c02141d0de90ef0" target="_blank" rel="noopener">aws-cli cheatsheet</a></li>
 </ul></div>
     <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
         <div class="pull-right dropdown">
@@ -349,26 +635,39 @@
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li class=""><a href="#Lab-4---Apache-Hadoop-HDFS" title="Lab 4 - Apache Hadoop HDFS">Lab 4 - Apache Hadoop HDFS</a></li>
-<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li class=""><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
-<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li class=""><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#Lab-4---Apache-Hadoop-HDFS" title="Lab 4 - Apache Hadoop HDFS">Lab 4 - Apache Hadoop HDFS</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
+<li><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
 <li class=""><a href="#Hadoop-HDFS" title="Hadoop HDFS">Hadoop HDFS</a><ul class="nav">
-<li class=""><a href="#NameNode-and-DataNodes" title="NameNode and DataNodes">NameNode and DataNodes</a></li>
-<li class=""><a href="#Setup-Hadoop-HDFS" title="Setup Hadoop HDFS">Setup Hadoop HDFS</a><ul class="nav">
-<li class=""><a href="#1-Pseudo-distributed-mode" title="1. Pseudo-distributed mode">1. Pseudo-distributed mode</a></li>
-<li class=""><a href="#2-Fully-distributed-mode" title="2. Fully-distributed mode">2. Fully-distributed mode</a></li>
+<li><a href="#NameNode-and-DataNodes" title="NameNode and DataNodes">NameNode and DataNodes</a></li>
+<li><a href="#Setup-Hadoop-HDFS" title="Setup Hadoop HDFS">Setup Hadoop HDFS</a><ul class="nav">
+<li><a href="#1-Pseudo-distributed-mode" title="1. Pseudo-distributed mode">1. Pseudo-distributed mode</a></li>
+<li><a href="#2-Fully-distributed-mode" title="2. Fully-distributed mode">2. Fully-distributed mode</a></li>
 </ul>
 </li>
-<li class=""><a href="#Hadoop-HDFS-Configuration" title="Hadoop HDFS Configuration">Hadoop HDFS Configuration</a><ul class="nav">
-<li class=""><a href="#core-sitexml" title="core-site.xml">core-site.xml</a></li>
-<li class=""><a href="#hdfs-sitexml" title="hdfs-site.xml">hdfs-site.xml</a></li>
+<li><a href="#Hadoop-HDFS-Configuration" title="Hadoop HDFS Configuration">Hadoop HDFS Configuration</a><ul class="nav">
+<li><a href="#core-sitexml" title="core-site.xml">core-site.xml</a></li>
+<li><a href="#hdfs-sitexml" title="hdfs-site.xml">hdfs-site.xml</a></li>
 </ul>
 </li>
 <li class=""><a href="#Hadoop-HDFS-commands" title="Hadoop HDFS commands">Hadoop HDFS commands</a><ul class="nav">
 <li class=""><a href="#DFS" title="DFS">DFS</a></li>
-<li class=""><a href="#DFSAdmin" title="DFSAdmin">DFSAdmin</a></li>
+<li><a href="#DFSAdmin" title="DFSAdmin">DFSAdmin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Apache-Ozone" title="Apache Ozone">Apache Ozone</a><ul class="nav">
+<li><a href="#Namespace-volumes-buckets-and-keys" title="Namespace (volumes, buckets, and keys)">Namespace (volumes, buckets, and keys)</a></li>
+<li><a href="#Core-components" title="Core components">Core components</a></li>
+</ul>
+</li>
+<li><a href="#Setup-Apache-Ozone" title="Setup Apache Ozone">Setup Apache Ozone</a><ul class="nav">
+<li><a href="#Reading-and-Writing-Data-in-Ozone" title="Reading and Writing Data in Ozone">Reading and Writing Data in Ozone</a><ul class="nav">
+<li><a href="#Using-Ozone-Shell-ozone-sh0" title="Using Ozone Shell (ozone sh)">Using Ozone Shell (ozone sh)</a></li>
+<li><a href="#Using-S3-API" title="Using S3 API">Using S3 API</a></li>
 </ul>
 </li>
 </ul>
@@ -386,26 +685,39 @@
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li class=""><a href="#Lab-4---Apache-Hadoop-HDFS" title="Lab 4 - Apache Hadoop HDFS">Lab 4 - Apache Hadoop HDFS</a></li>
-<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li class=""><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
-<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li class=""><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#Lab-4---Apache-Hadoop-HDFS" title="Lab 4 - Apache Hadoop HDFS">Lab 4 - Apache Hadoop HDFS</a></li>
+<li><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
+<li><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
 <li class=""><a href="#Hadoop-HDFS" title="Hadoop HDFS">Hadoop HDFS</a><ul class="nav">
-<li class=""><a href="#NameNode-and-DataNodes" title="NameNode and DataNodes">NameNode and DataNodes</a></li>
-<li class=""><a href="#Setup-Hadoop-HDFS" title="Setup Hadoop HDFS">Setup Hadoop HDFS</a><ul class="nav">
-<li class=""><a href="#1-Pseudo-distributed-mode" title="1. Pseudo-distributed mode">1. Pseudo-distributed mode</a></li>
-<li class=""><a href="#2-Fully-distributed-mode" title="2. Fully-distributed mode">2. Fully-distributed mode</a></li>
+<li><a href="#NameNode-and-DataNodes" title="NameNode and DataNodes">NameNode and DataNodes</a></li>
+<li><a href="#Setup-Hadoop-HDFS" title="Setup Hadoop HDFS">Setup Hadoop HDFS</a><ul class="nav">
+<li><a href="#1-Pseudo-distributed-mode" title="1. Pseudo-distributed mode">1. Pseudo-distributed mode</a></li>
+<li><a href="#2-Fully-distributed-mode" title="2. Fully-distributed mode">2. Fully-distributed mode</a></li>
 </ul>
 </li>
-<li class=""><a href="#Hadoop-HDFS-Configuration" title="Hadoop HDFS Configuration">Hadoop HDFS Configuration</a><ul class="nav">
-<li class=""><a href="#core-sitexml" title="core-site.xml">core-site.xml</a></li>
-<li class=""><a href="#hdfs-sitexml" title="hdfs-site.xml">hdfs-site.xml</a></li>
+<li><a href="#Hadoop-HDFS-Configuration" title="Hadoop HDFS Configuration">Hadoop HDFS Configuration</a><ul class="nav">
+<li><a href="#core-sitexml" title="core-site.xml">core-site.xml</a></li>
+<li><a href="#hdfs-sitexml" title="hdfs-site.xml">hdfs-site.xml</a></li>
 </ul>
 </li>
 <li class=""><a href="#Hadoop-HDFS-commands" title="Hadoop HDFS commands">Hadoop HDFS commands</a><ul class="nav">
 <li class=""><a href="#DFS" title="DFS">DFS</a></li>
-<li class=""><a href="#DFSAdmin" title="DFSAdmin">DFSAdmin</a></li>
+<li><a href="#DFSAdmin" title="DFSAdmin">DFSAdmin</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#Apache-Ozone" title="Apache Ozone">Apache Ozone</a><ul class="nav">
+<li><a href="#Namespace-volumes-buckets-and-keys" title="Namespace (volumes, buckets, and keys)">Namespace (volumes, buckets, and keys)</a></li>
+<li><a href="#Core-components" title="Core components">Core components</a></li>
+</ul>
+</li>
+<li><a href="#Setup-Apache-Ozone" title="Setup Apache Ozone">Setup Apache Ozone</a><ul class="nav">
+<li><a href="#Reading-and-Writing-Data-in-Ozone" title="Reading and Writing Data in Ozone">Reading and Writing Data in Ozone</a><ul class="nav">
+<li><a href="#Using-Ozone-Shell-ozone-sh0" title="Using Ozone Shell (ozone sh)">Using Ozone Shell (ozone sh)</a></li>
+<li><a href="#Using-S3-API" title="Using S3 API">Using S3 API</a></li>
 </ul>
 </li>
 </ul>
