@@ -11,6 +11,7 @@ layout: page
 ### [Lab 1 - Installing HDP Sandbox](html/bs/BS - Lab 1 - Installing HDP Sandbox.html)
 ### [Lab 2 - Data Retrieval with SQL and CQL](html/bs/BS - Lab 2 - Data Retrieval with SQL and CQL.html)
 ### [Lab 3 - MongoDB](html/bs/BS - Lab 3 - MongoDB.html)
+### [Lab 4 - Apache Hadoop HDFS](html/bs/BS - Lab 4 - Apache Hadoop HDFS.html)
 
 <!-- ### [Lab 2 - Data Retrieval with SQL and CQL](html/bs/BS - Lab 2 - Data Retrieval with SQL and CQL.html)
 
@@ -28,9 +29,9 @@ layout: page
 
 
 
-<!-- ## Assignments
-### [Assignment 1 - SQL and NoSQL databases](html/bs/BS%20-%20Assignment%201%20-%20SQL%20%26%20NoSQL%20Databases.html)
-### [Assignment 2 - Simple Search Engine using Hadoop MapReduce](html/bs/BS - Assignment 2 - Simple Search Engine using Hadoop MapReduce.html)
+## Assignments
+### [Assignment 1 - SQL and NoSQL databases](html/bs/BS - Assignment 1 - Big Data Storage in SQL vs. NoSQL Databases.html)
+<!-- ### [Assignment 2 - Simple Search Engine using Hadoop MapReduce](html/bs/BS - Assignment 2 - Simple Search Engine using Hadoop MapReduce.html)
 ### [Assignment 3 - Apache Spark SQL & MLlib](html/bs/BS - Assignment 3 - Apache Spark SQL & MLlib.html) -->
 
 
