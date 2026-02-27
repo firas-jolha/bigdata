@@ -26,9 +26,9 @@ layout: page
 <!-- ## Midterm
 ### [MS - Midterm Prerequisites](html/ms/MS - Midterm Prerequisites 2025.html)
 
-## Assignments
+<!-- ## Assignments -->
 ### [Assignment 2 - Big data storage](html/ms/MS - Assignment 2 - Big data storage.html)
-### [Assignment 3 - Big Data Analytics using Apache Spark](html/ms/MS - Assignment 3 - Big Data Analytics using Apache Spark.html) -->
+<!-- ### [Assignment 3 - Big Data Analytics using Apache Spark](html/ms/MS - Assignment 3 - Big Data Analytics using Apache Spark.html) --> -->
 
 
 
