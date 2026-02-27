@@ -23,7 +23,7 @@ layout: page
 ### [Lab 5 - Apache Spark MLlib](html/ms/MS Lab 5 - Apache Spark MLlib.html) -->
 
 ## Assignments
-### [Assignment 2 - Big data storage](html/ms/MS - Assignment 2 - Big data storage.html)
+### [Assignment 2 - Big Data Storage and Retrieval](html/ms/MS - Assignment 2 - Big Data Storage & Retrieval.html)
 
 <!-- ## Midterm
 ### [MS - Midterm Prerequisites](html/ms/MS - Midterm Prerequisites 2025.html)
