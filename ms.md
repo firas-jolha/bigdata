@@ -22,12 +22,13 @@ layout: page
 ### [Lab 4 - Apache Spark Core & SQL](html/ms/MS - Lab 4 - Apache Spark Core & SQL.html)
 ### [Lab 5 - Apache Spark MLlib](html/ms/MS Lab 5 - Apache Spark MLlib.html) -->
 
+## Assignments
+### [Assignment 2 - Big data storage](html/ms/MS - Assignment 2 - Big data storage.html)
 
 <!-- ## Midterm
 ### [MS - Midterm Prerequisites](html/ms/MS - Midterm Prerequisites 2025.html)
 
-<!-- ## Assignments -->
-### [Assignment 2 - Big data storage](html/ms/MS - Assignment 2 - Big data storage.html)
+
 <!-- ### [Assignment 3 - Big Data Analytics using Apache Spark](html/ms/MS - Assignment 3 - Big Data Analytics using Apache Spark.html) --> -->
 
 
