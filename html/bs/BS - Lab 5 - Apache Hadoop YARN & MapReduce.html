@@ -41,7 +41,13 @@
 <li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
 <li><a href="#Objectives" title="Objectives">Objectives</a></li>
 <li><a href="#Hadoop-MapReduce" title="Hadoop MapReduce">Hadoop MapReduce</a><ul>
-<li><a href="#MapReduce-framework" title="MapReduce framework">MapReduce framework</a></li>
+<li><a href="#MapReduce-framework" title="MapReduce framework">MapReduce framework</a><ul>
+<li><a href="#Versions-1-2-and-3" title="Versions 1, 2 and 3">Versions 1, 2 and 3</a></li>
+<li><a href="#MaReduce-vs-HDFS" title="MaReduce vs. HDFS">MaReduce vs. HDFS</a></li>
+<li><a href="#MapReduce-in-Functional-Programmming" title="MapReduce in Functional Programmming">MapReduce in Functional Programmming</a></li>
+<li><a href="#Hadoop-MapReduce-jobs" title="Hadoop MapReduce jobs">Hadoop MapReduce jobs</a></li>
+</ul>
+</li>
 <li><a href="#mapred-sitexml" title="mapred-site.xml">mapred-site.xml</a></li>
 <li><a href="#Word-Count-MapReduce-Example" title="Word Count MapReduce Example">Word Count MapReduce Example</a></li>
 <li><a href="#Inverted-Index-MapReduce-Example" title="Inverted Index MapReduce Example">Inverted Index MapReduce Example</a></li>
@@ -65,9 +71,11 @@
 <li>Run MapReduce server</li>
 <li>Write MapReduce jobs in Python</li>
 <li>Run MapReduce jobs on YARN</li>
-</ul><h1 id="Hadoop-MapReduce"><a class="anchor hidden-xs" href="#Hadoop-MapReduce" title="Hadoop-MapReduce"><i class="fa fa-link"></i></a>Hadoop MapReduce</h1><p>Hadoop MapReduce is a software framework for easily writing applications which process vast amounts of data (multi-terabyte data-sets) in-parallel on large clusters (thousands of nodes) of commodity hardware in a reliable, fault-tolerant manner.</p><p>A MapReduce job usually splits the input data-set into independent chunks which are processed by the map tasks in a completely parallel manner. The framework sorts the outputs of the maps, which are then input to the reduce tasks. Typically both the input and the output of the job are stored in a file-system. The framework takes care of scheduling tasks, monitoring them and re-executes the failed tasks.</p><h2 id="MapReduce-framework"><a class="anchor hidden-xs" href="#MapReduce-framework" title="MapReduce-framework"><i class="fa fa-link"></i></a>MapReduce framework</h2><p>The MapReduce framework <strong>version 1</strong> consists of a single master <strong>JobTracker</strong> and one slave <strong>TaskTracker</strong> per cluster-node. The master is responsible for scheduling the jobs’ component tasks on the slaves, monitoring them and re-executing the failed tasks. The slaves execute the tasks as directed by the master. Both processes are now deprecated in MRv2 (or Hadoop version 2) and replaced by Resource Manager, Application Master and Node Manager Daemons.</p><p>The Hadoop MapReduce framework <strong>versions 2 and 3</strong> (running on YARN) consists of a single master <em>ResourceManager</em>, one worker <em>NodeManager</em> per cluster-node, and <em>MRAppMaster</em> per application.</p><p>Typically the compute nodes and the storage nodes are the same, that is, the MapReduce framework and the Hadoop Distributed File System are running on the same set of nodes. This configuration allows the framework to effectively schedule tasks on the nodes where data is already present, resulting in very high aggregate bandwidth across the cluster.</p><p><img src="https://i.imgur.com/l7hLN1u.png" alt="" class="md-image md-image"></p><p>A classic example of showing the MapReduce framework at work is the word count example. The following are the various stages of processing the input data, first splitting the input across multiple worker nodes and then finally generating the output, the word counts:</p><p><img src="https://i.imgur.com/V3wKqv5.png" alt="" class="md-image md-image"></p><p>A MapReduce job usually splits the input data-set into independent chunks which are processed by the map tasks in a completely parallel manner. The framework sorts the outputs of the maps, which are then input to the reduce tasks. Typically both the input and the output of the job are stored in a file-system. The framework takes care of scheduling tasks, monitoring them and re-executes the failed tasks.</p><div class="alert alert-info">
-<p>Regardless of Hadoop Map-Reduce, Map-reduce is a programming model that has its roots in functional programming. In addition to often producing short, elegant code for problems involving lists or collections, this model has proven very useful for large-scale highly parallel data processing. In Python, we can define a simple map-reduce program as follows.</p>
-<pre><code class="python hljs"><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> reduce
+</ul><h1 id="Hadoop-MapReduce"><a class="anchor hidden-xs" href="#Hadoop-MapReduce" title="Hadoop-MapReduce"><i class="fa fa-link"></i></a>Hadoop MapReduce</h1><p>Hadoop MapReduce is a software framework for easily writing applications which process vast amounts of data (multi-terabyte data-sets) in-parallel on large clusters (thousands of nodes) of commodity hardware in a reliable, fault-tolerant manner.</p><p>A MapReduce job usually splits the input data-set into independent chunks which are processed by the map tasks in a completely parallel manner. The framework sorts the outputs of the maps, which are then input to the reduce tasks. Typically both the input and the output of the job are stored in a file-system. The framework takes care of scheduling tasks, monitoring them and re-executes the failed tasks.</p><h2 id="MapReduce-framework"><a class="anchor hidden-xs" href="#MapReduce-framework" title="MapReduce-framework"><i class="fa fa-link"></i></a>MapReduce framework</h2><h3 id="Versions-1-2-and-3"><a class="anchor hidden-xs" href="#Versions-1-2-and-3" title="Versions-1-2-and-3"><i class="fa fa-link"></i></a>Versions 1, 2 and 3</h3><p>The MapReduce framework <strong>version 1</strong> consists of a single master <strong>JobTracker</strong> and one slave <strong>TaskTracker</strong> per cluster-node. The master is responsible for scheduling the jobs’ component tasks on the slaves, monitoring them and re-executing the failed tasks. The slaves execute the tasks as directed by the master. Both processes are now deprecated in MRv2 (or Hadoop version 2) and replaced by Resource Manager, Application Master and Node Manager Daemons.</p><center>
+<p><img src="https://imgur.com/5r0oDDi.png" alt="" class="md-image md-image"></p>
+</center><p>The Hadoop MapReduce framework <strong>versions 2 and 3</strong> (running on YARN) consists of a single master <em>ResourceManager</em>, one worker <em>NodeManager</em> per cluster-node, and <em>MRAppMaster</em> per application.</p><center>
+<p><img src="https://imgur.com/L54luA3.png" alt="" class="md-image md-image"></p>
+</center><h3 id="MaReduce-vs-HDFS"><a class="anchor hidden-xs" href="#MaReduce-vs-HDFS" title="MaReduce-vs-HDFS"><i class="fa fa-link"></i></a>MaReduce vs. HDFS</h3><p>Typically the compute nodes and the storage nodes are the same, that is, the MapReduce framework and the Hadoop Distributed File System are running on the same set of nodes. This configuration allows the framework to effectively schedule tasks on the nodes where data is already present, resulting in very high aggregate bandwidth across the cluster.</p><h3 id="MapReduce-in-Functional-Programmming"><a class="anchor hidden-xs" href="#MapReduce-in-Functional-Programmming" title="MapReduce-in-Functional-Programmming"><i class="fa fa-link"></i></a>MapReduce in Functional Programmming</h3><p>Regardless of Hadoop Map-Reduce, Map-reduce is a programming model that has its roots in functional programming. In addition to often producing short, elegant code for problems involving lists or collections, this model has proven very useful for large-scale highly parallel data processing. In Python, we can define a simple map-reduce program as follows.</p><pre><code class="python hljs"><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> reduce
 <span class="hljs-keyword">from</span> operator <span class="hljs-keyword">import</span> add, mul
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">mapper</span><span class="hljs-params">(x)</span>:</span> 
@@ -81,11 +89,13 @@ output = reduce(add, res) <span class="hljs-comment"># computes (((((1+4)+9)+16)
 
 print(output) <span class="hljs-comment"># output is 328350</span>
 
-</code></pre>
-</div><p>Minimally, applications specify the input/output locations and supply map and reduce functions via implementations of appropriate interfaces and/or abstract-classes. These, and other job parameters, comprise the job configuration. Although the Hadoop framework is implemented in Java™, MapReduce applications need not be written in Java. Here we will use Python language to write MapReduce apps.</p><p><a href="https://hadoop.apache.org/docs/stable/api/org/apache/hadoop/streaming/package-summary.html" target="_blank" rel="noopener">Hadoop Streaming</a> is a utility which allows users to create and run Map-Reduce jobs with any executables (e.g. shell utilities) as the <strong>mapper</strong> and/or the <strong>reducer</strong>.</p><p>The Hadoop job client then submits the job and configuration to the <em>ResourceManager</em> which then assumes the responsibility of distributing the software/configuration to the workers, scheduling tasks and monitoring them, providing status and diagnostic information to the job-client.</p><p>The MapReduce framework operates exclusively on <strong>&lt;key, value&gt; pairs</strong>, that is, the framework views the <strong>input</strong> to the job as a set of &lt;key, value&gt; pairs and produces a set of &lt;key, value&gt; pairs as the <strong>output</strong> of the job, conceivably of different types.</p><p>Input and Output types of a MapReduce job are:</p><pre><code>(input) &lt;k1, v1&gt; -&gt; map -&gt; &lt;k2, v2&gt; -&gt; combine -&gt; &lt;k2, v2&gt; -&gt; reduce -&gt; &lt;k3, v3&gt; (output)
-</code></pre><p><strong>Mapper</strong> maps input key/value pairs to a set of intermediate key/value pairs. Maps are the individual tasks that transform input records into intermediate records. The transformed intermediate records do not need to be of the same type as the input records. A given input pair may map to zero or many output pairs.</p><p>The number of maps is usually driven by the total size of the inputs, that is, the total number of blocks of the input files. The right level of parallelism for maps seems to be around 10-100 maps per-node, although it has been set up to 300 maps for very cpu-light map tasks. Task setup takes a while, so it is best if the maps take at least a minute to execute. Thus, if you expect 10TB of input data and have a blocksize of 128MB, you’ll end up with 82,000 maps.</p><p><strong>Reducer</strong> reduces a set of intermediate values which share a key to a smaller set of values. Reducer has 3 primary phases: <strong>shuffle</strong>, <strong>sort</strong> and <strong>reduce</strong>. The input to the Reducer is the <strong>sorted</strong> output of the mappers. In this phase the framework fetches the relevant partition of the output of all the mappers, via HTTP. The framework <strong>groups</strong> Reducer <strong>inputs</strong> by <strong>keys</strong> (since different mappers may have output the same key) in this stage. The shuffle and sort phases occur simultaneously; while map-outputs are being fetched they are merged.</p><p>The right number of reduces seems to be 0.95 or 1.75 multiplied by (<em>&lt;no. of nodes&gt; * &lt;no. of maximum containers per node&gt;</em>). With 0.95 all of the reduces can launch immediately and start transferring map outputs as the maps finish. With 1.75 the faster nodes will finish their first round of reduces and launch a second wave of reduces doing a much better job of load balancing. Increasing the number of reduces increases the framework overhead, but increases load balancing and lowers the cost of failures. The scaling factors above are slightly less than whole numbers to reserve a few reduce slots in the framework for speculative-tasks and failed tasks. It is legal to set the number of reduce-tasks to <strong>zero</strong> if <strong>no reduction is desired</strong>.</p><p><strong>Partitioner</strong> partitions the key space. Partitioner controls the partitioning of the keys of the intermediate map-outputs. The key (or a subset of the key) is used to derive the partition, typically by a hash function. The total number of partitions is the same as the number of reduce tasks for the job. Hence this controls which of the <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>m</mi></math>" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 1.026em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.865em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.781em, 1000.87em, 2.535em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">m</span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.628em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">m</script></span> reduce tasks the intermediate key (and hence the record) is sent to for reduction. HashPartitioner is the default Partitioner. You can start the MapReduce history server as follows.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">mapred</span> <span class="hljs-bullet">--daemon</span> <span class="hljs-string">start</span> <span class="hljs-string">historyserver</span>
+</code></pre><h3 id="Hadoop-MapReduce-jobs"><a class="anchor hidden-xs" href="#Hadoop-MapReduce-jobs" title="Hadoop-MapReduce-jobs"><i class="fa fa-link"></i></a>Hadoop MapReduce jobs</h3><p>Hadoop MapReduce jobs are divided into a set of <strong>map</strong> tasks and <strong>reduce</strong> tasks that run in a distributed fashion on a cluster of computers. Each task works on the small subset of the data it has been assigned so that the load is spread across the cluster.</p><ul>
+<li>The map tasks generally load, parse, transform, and filter data.</li>
+<li>Each reduce task is responsible for handling a subset of the map task output. Intermediate data is then copied from mapper tasks by the reducer tasks in order to group and aggregate the data.</li>
+</ul><p>A MapReduce job usually splits the input data-set into independent chunks which are processed by the map tasks in a completely parallel manner. The framework sorts the outputs of the maps, which are then input to the reduce tasks. Typically both the input and the output of the job are stored in a file-system. The framework takes care of scheduling tasks, monitoring them and re-executes the failed tasks.</p><p>Minimally, applications specify the input/output locations and supply map and reduce functions via implementations of appropriate interfaces and/or abstract-classes. These, and other job parameters, comprise the job configuration. Although the Hadoop framework is implemented in Java™, MapReduce applications need not be written in Java. Here we will use Python language to write MapReduce apps.</p><p><a href="https://hadoop.apache.org/docs/stable/api/org/apache/hadoop/streaming/package-summary.html" target="_blank" rel="noopener">Hadoop Streaming</a> is a utility which allows users to create and run Map-Reduce jobs with any executables (e.g. shell utilities) as the <strong>mapper</strong> and/or the <strong>reducer</strong>.</p><p>The Hadoop job client then submits the job and configuration to the <em>ResourceManager</em> which then assumes the responsibility of distributing the software/configuration to the workers, scheduling tasks and monitoring them, providing status and diagnostic information to the job-client.</p><p>The MapReduce framework operates exclusively on <strong>&lt;key, value&gt; pairs</strong>, that is, the framework views the <strong>input</strong> to the job as a set of &lt;key, value&gt; pairs and produces a set of &lt;key, value&gt; pairs as the <strong>output</strong> of the job, conceivably of different types.</p><p>Input and Output types of a MapReduce job are:</p><pre><code>(input) &lt;k1, v1&gt; -&gt; map -&gt; &lt;k2, v2&gt; -&gt; combine -&gt; &lt;k2, v2&gt; -&gt; reduce -&gt; &lt;k3, v3&gt; (output)
+</code></pre><h4 id="Motivational-Example"><a class="anchor hidden-xs" href="#Motivational-Example" title="Motivational-Example"><i class="fa fa-link"></i></a>Motivational Example</h4><p>A classic example of showing the MapReduce framework at work is the word count example. The following are the various stages of processing the input data, first splitting the input across multiple worker nodes and then finally generating the output, the word counts:</p><p><img src="https://imgur.com/O5UXpKo.png" alt="" class="md-image md-image"></p><p><strong>Mapper</strong> maps input key/value pairs to a set of intermediate key/value pairs. Maps are the individual tasks that transform input records into intermediate records. The transformed intermediate records do not need to be of the same type as the input records. A given input pair may map to zero or many output pairs.</p><p>The number of maps is usually driven by the total size of the inputs, that is, the total number of blocks of the input files. The right level of parallelism for maps seems to be around 10-100 maps per-node, although it has been set up to 300 maps for very cpu-light map tasks. Task setup takes a while, so it is best if the maps take at least a minute to execute. Thus, if you expect 10TB of input data and have a blocksize of 128MB, you’ll end up with 82,000 maps.</p><p><strong>Reducer</strong> reduces a set of intermediate values which share a key to a smaller set of values. Reducer has 3 primary phases: <strong>shuffle</strong>, <strong>sort</strong> and <strong>reduce</strong>. The input to the Reducer is the <strong>sorted</strong> output of the mappers. In this phase the framework fetches the relevant partition of the output of all the mappers, via HTTP. The framework <strong>groups</strong> Reducer <strong>inputs</strong> by <strong>keys</strong> (since different mappers may have output the same key) in this stage. The shuffle and sort phases occur simultaneously; while map-outputs are being fetched they are merged.</p><p>The right number of reduces seems to be 0.95 or 1.75 multiplied by (<em>&lt;no. of nodes&gt; * &lt;no. of maximum containers per node&gt;</em>). With 0.95 all of the reduces can launch immediately and start transferring map outputs as the maps finish. With 1.75 the faster nodes will finish their first round of reduces and launch a second wave of reduces doing a much better job of load balancing. Increasing the number of reduces increases the framework overhead, but increases load balancing and lowers the cost of failures. The scaling factors above are slightly less than whole numbers to reserve a few reduce slots in the framework for speculative-tasks and failed tasks. It is legal to set the number of reduce-tasks to <strong>zero</strong> if <strong>no reduction is desired</strong>.</p><p><strong>Partitioner</strong> partitions the key space. Partitioner controls the partitioning of the keys of the intermediate map-outputs. The key (or a subset of the key) is used to derive the partition, typically by a hash function. The total number of partitions is the same as the number of reduce tasks for the job. Hence this controls which of the <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-9-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-25" style="width: 1.026em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.865em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.781em, 1000.87em, 2.535em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-26"><span class="mi" id="MathJax-Span-27" style="font-family: MathJax_Math-italic;">m</span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.628em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></span></span><script type="math/tex" id="MathJax-Element-9">m</script></span> reduce tasks the intermediate key (and hence the record) is sent to for reduction. HashPartitioner is the default Partitioner. You can start the MapReduce history server as follows.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">mapred</span> <span class="hljs-bullet">--daemon</span> <span class="hljs-string">start</span> <span class="hljs-string">historyserver</span>
 </code></pre><p>You can access the web UI of this server hosted on (<a href="http://localhost:19888" target="_blank" rel="noopener">http://localhost:19888</a>) where the default port is 19888.<br>
-<img src="https://i.imgur.com/v6UHvlY.png" alt="" class="md-image md-image"></p><h2 id="mapred-sitexml"><a class="anchor hidden-xs" href="#mapred-sitexml" title="mapred-sitexml"><i class="fa fa-link"></i></a>mapred-site.xml</h2><p>This is the configuration file for MapReduce in Hadoop. This file exists in Hadoop home directory in the folder <code>etc/hadoop</code>. You can find the documentation of this file from the <a href="https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml" target="_blank" rel="noopener">official website</a>. Here I present some of the important properties to set as follows.</p><ul>
+<img src="https://imgur.com/ztrif17.png" alt="" class="md-image md-image"></p><h2 id="mapred-sitexml"><a class="anchor hidden-xs" href="#mapred-sitexml" title="mapred-sitexml"><i class="fa fa-link"></i></a>mapred-site.xml</h2><p>This is the configuration file for MapReduce in Hadoop. This file exists in Hadoop home directory in the folder <code>etc/hadoop</code>. You can find the documentation of this file from the <a href="https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml" target="_blank" rel="noopener">official website</a>. Here I present some of the important properties to set as follows.</p><ul>
 <li><code>mapreduce.framework.name</code>
 <ul>
 <li>The runtime framework for executing MapReduce jobs. Can be one of local (default), classic or yarn.</li>
@@ -137,7 +147,7 @@ print(output) <span class="hljs-comment"># output is 328350</span>
         <span class="hljs-comment"># Reduce step, i.e. the input for reducer.py</span>
         <span class="hljs-comment">#</span>
         <span class="hljs-comment"># tab-delimited; the trivial word count is 1</span>
-        <span class="hljs-keyword">print</span> <span class="hljs-string">f'<span class="hljs-subst">{word}</span>\t1'</span>
+        print(<span class="hljs-string">f'<span class="hljs-subst">{word}</span>\t1'</span>)
 </code></pre><pre><code class="wrap python hljs"><span class="hljs-comment"># app/mapreduce/wordcount/reducer.py</span>
 <span class="hljs-keyword">from</span> operator <span class="hljs-keyword">import</span> itemgetter
 <span class="hljs-keyword">import</span> sys
@@ -216,40 +226,71 @@ hdfs dfs -cat /gutenberg/gutenberg.output/part-00000
 </code></pre><h2 id="Inverted-Index-MapReduce-Example"><a class="anchor hidden-xs" href="#Inverted-Index-MapReduce-Example" title="Inverted-Index-MapReduce-Example"><i class="fa fa-link"></i></a>Inverted Index MapReduce Example</h2><p>An Inverted Index is a data structure used in information retrieval systems to efficiently retrieve documents or web pages containing a specific term or set of terms. In an inverted index, the index is organized by terms (words), and each term points to a list of documents or web pages that contain that term.</p><p><img src="https://spotintelligence.com/wp-content/uploads/2023/10/inverted-index.png" alt="" class="md-image md-image"></p><p>Inverted indexes are widely used in search engines, database systems, and other applications where efficient text search is required. They are especially useful for large collections of documents, where searching through all the documents would be prohibitively slow.</p><p>Here we will build a MapReduce application for creating the inverted index for input documents where each input line is considered here as a single document.</p><pre><code class="wrap python hljs"><span class="hljs-comment"># app/mapreduce/inverted_index/mapper.py</span>
 <span class="hljs-keyword">import</span> sys
 
-i = <span class="hljs-number">1</span>
+doc_id = <span class="hljs-number">1</span>
 <span class="hljs-comment"># input comes from STDIN (standard input)</span>
 <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> sys.stdin:
     <span class="hljs-comment"># remove leading and trailing whitespace</span>
     line = line.strip()
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> line:  <span class="hljs-comment"># skip empty lines</span>
+        <span class="hljs-keyword">continue</span>
+        
     <span class="hljs-comment"># split the line into words</span>
     words = line.split()
-    <span class="hljs-comment"># increase counters</span>
+    
+    <span class="hljs-comment"># Emit each word with document ID</span>
     <span class="hljs-keyword">for</span> word <span class="hljs-keyword">in</span> words:
         <span class="hljs-comment"># write the results to STDOUT (standard output);</span>
         <span class="hljs-comment"># what we output here will be the input for the</span>
         <span class="hljs-comment"># Reduce step, i.e. the input for reducer.py</span>
         <span class="hljs-comment"># We are storing here the line number as document identifier</span>
-        <span class="hljs-comment">#  where lines start from 1</span>
-        print(<span class="hljs-string">f'<span class="hljs-subst">{word}</span>\t<span class="hljs-subst">{i}</span>'</span>)
-    i+=<span class="hljs-number">1</span>
+        
+        <span class="hljs-comment"># Basic word cleaning</span>
+        word = word.strip(<span class="hljs-string">'.,!?;:"\'()[]{}'</span>).lower()
+        
+        <span class="hljs-keyword">if</span> word:  <span class="hljs-comment"># skip empty words</span>
+            print(<span class="hljs-string">f"<span class="hljs-subst">{word}</span>\t<span class="hljs-subst">{doc_id}</span>"</span>)
+    doc_id+=<span class="hljs-number">1</span>
 
 </code></pre><pre><code class="wrap python hljs"><span class="hljs-comment"># app/mapreduce/inverted_index/reducer.py</span>
 <span class="hljs-keyword">import</span> sys
 
-key   = <span class="hljs-literal">None</span>
-total = <span class="hljs-number">0</span>
-index = {}
-<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> sys.stdin:
-    word, loc  = line.split(<span class="hljs-string">'\t'</span>, <span class="hljs-number">1</span>)
-    word = word.strip()
-    loc = loc.strip()
-    <span class="hljs-keyword">if</span> word <span class="hljs-keyword">in</span> index:
-        index[word].add(loc)
-    <span class="hljs-keyword">else</span>:
-        index[word] = set([loc])
+current_word = <span class="hljs-literal">None</span>
+current_docs = []  <span class="hljs-comment"># Store document IDs for current word</span>
 
-<span class="hljs-keyword">for</span> word, docs <span class="hljs-keyword">in</span> index.items():
-    print(<span class="hljs-string">'{}\t{}'</span>.format(word, docs))
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> sys.stdin:
+    line = line.strip()
+    
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> line:
+        <span class="hljs-keyword">continue</span>
+    
+    <span class="hljs-comment"># Parse input</span>
+    <span class="hljs-keyword">try</span>:
+        word, doc_id = line.split(<span class="hljs-string">'\t'</span>, <span class="hljs-number">1</span>)
+    <span class="hljs-keyword">except</span> ValueError:
+        <span class="hljs-keyword">continue</span>
+    
+    <span class="hljs-comment"># New word encountered</span>
+    <span class="hljs-keyword">if</span> current_word != word:
+        <span class="hljs-comment"># Output previous word's document list</span>
+        <span class="hljs-keyword">if</span> current_word:
+            <span class="hljs-comment"># Remove duplicates by converting to set, then sort</span>
+            unique_docs = sorted(set(current_docs))
+            docs_str = <span class="hljs-string">'['</span> + <span class="hljs-string">','</span>.join(unique_docs) + <span class="hljs-string">']'</span>
+            print(<span class="hljs-string">f"<span class="hljs-subst">{current_word}</span>\t<span class="hljs-subst">{docs_str}</span>"</span>)
+        
+        <span class="hljs-comment"># Reset for new word</span>
+        current_word = word
+        current_docs = [doc_id]
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-comment"># Same word, add document ID</span>
+        current_docs.append(doc_id)
+
+<span class="hljs-comment"># Output last word</span>
+<span class="hljs-keyword">if</span> current_word:
+    unique_docs = sorted(set(current_docs))
+    docs_str = <span class="hljs-string">'['</span> + <span class="hljs-string">','</span>.join(unique_docs) + <span class="hljs-string">']'</span>
+    print(<span class="hljs-string">f"<span class="hljs-subst">{current_word}</span>\t<span class="hljs-subst">{docs_str}</span>"</span>)
 </code></pre><p>We can test the source code on a simple input text as follows:</p><pre><code class="wrap clike hljs"><span class="hljs-comment"># Testing the mapper</span>
 printf <span class="hljs-string">"hello map reduce world map \n reduce hadoop engine \n world engine hello"</span> | python3 <span class="hljs-regexp">/app/m</span>apreduce<span class="hljs-regexp">/inverted_index/m</span>apper.py 
 
@@ -268,7 +309,7 @@ printf <span class="hljs-string">"hello map reduce world map \n reduce hadoop en
 <span class="hljs-comment"># -rw-r--r--   1 root supergroup    4087036 2025-03-11 06:03 /gutenberg/gutenberg.output3/part-00000</span>
 <span class="hljs-comment"># -rw-r--r--   1 root supergroup    4236668 2025-03-11 06:03 /gutenberg/gutenberg.output3/part-00001</span>
 <span class="hljs-comment"># -rw-r--r--   1 root supergroup    4545167 2025-03-11 06:03 /gutenberg/gutenberg.output3/part-00002</span>
-</code></pre><h1 id="Hadoop-YARN"><a class="anchor hidden-xs" href="#Hadoop-YARN" title="Hadoop-YARN"><i class="fa fa-link"></i></a>Hadoop YARN</h1><p>When an application wants to run, the client launches the ApplicationMaster, which then negotiates with the <strong>ResourceManager</strong> to get resources in the cluster in the form of containers. A container represents CPUs (cores) and memory allocated on a single node to be used to run tasks and processes. Containers are supervised by the <strong>NodeManager</strong> and scheduled by the ResourceManager.</p><p><img src="https://i.imgur.com/xbeyrHp.png" alt="" class="md-image md-image"></p><p>The fundamental idea of YARN is to split up the functionalities of resource management and job scheduling/monitoring into separate daemons. The idea is to have a global ResourceManager (RM) and per-application <strong>ApplicationMaster</strong> (AM). An application is either a single job or a DAG of jobs.</p><p>The ResourceManager and the NodeManager form the data-computation framework. The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system. The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p><p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p><p>The ResourceManager has two main components: <strong>Scheduler</strong> and <strong>ApplicationsManager</strong>. The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The current schedulers such as the <strong>CapacityScheduler</strong> and the <strong>FairScheduler</strong> would be some examples of plug-ins. The <strong>ApplicationsManager</strong> is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure. The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p><h2 id="Start-Hadoop-YARN"><a class="anchor hidden-xs" href="#Start-Hadoop-YARN" title="Start-Hadoop-YARN"><i class="fa fa-link"></i></a>Start Hadoop YARN</h2><p>Hadoop Yarn is included within Hadoop installation and you can start its components as follows.</p><pre><code class="wrap yaml hljs"><span class="hljs-comment"># Starting YARN</span>
+</code></pre><h1 id="Hadoop-YARN"><a class="anchor hidden-xs" href="#Hadoop-YARN" title="Hadoop-YARN"><i class="fa fa-link"></i></a>Hadoop YARN</h1><p>When an application wants to run, the client launches the ApplicationMaster, which then negotiates with the <strong>ResourceManager</strong> to get resources in the cluster in the form of containers. A container represents CPUs (cores) and memory allocated on a single node to be used to run tasks and processes. Containers are supervised by the <strong>NodeManager</strong> and scheduled by the ResourceManager.</p><p><img src="https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/yarn_architecture.gif" alt="" class="md-image md-image"></p><p>The fundamental idea of YARN is to split up the functionalities of resource management and job scheduling/monitoring into separate daemons. The idea is to have a global ResourceManager (RM) and per-application <strong>ApplicationMaster</strong> (AM). An application is either a single job or a DAG of jobs.</p><p>The ResourceManager and the NodeManager form the data-computation framework. The ResourceManager is the ultimate authority that arbitrates resources among all the applications in the system. The NodeManager is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.</p><p>The per-application ApplicationMaster is, in effect, a framework specific library and is tasked with negotiating resources from the ResourceManager and working with the NodeManager(s) to execute and monitor the tasks.</p><p>The ResourceManager has two main components: <strong>Scheduler</strong> and <strong>ApplicationsManager</strong>. The Scheduler is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The current schedulers such as the <strong>CapacityScheduler</strong> and the <strong>FairScheduler</strong> would be some examples of plug-ins. The <strong>ApplicationsManager</strong> is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure. The per-application ApplicationMaster has the responsibility of negotiating appropriate resource containers from the Scheduler, tracking their status and monitoring for progress.</p><h2 id="Start-Hadoop-YARN"><a class="anchor hidden-xs" href="#Start-Hadoop-YARN" title="Start-Hadoop-YARN"><i class="fa fa-link"></i></a>Start Hadoop YARN</h2><p>Hadoop Yarn is included within Hadoop installation and you can start its components as follows.</p><pre><code class="wrap yaml hljs"><span class="hljs-comment"># Starting YARN</span>
 <span class="hljs-string">start-yarn.sh</span>
 
 <span class="hljs-comment"># Starting YARN + HDFS</span>
@@ -424,21 +465,27 @@ Here is an example with three top-level child-queues a, b and c and some sub-que
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
 <li class=""><a href="#Lab-5---Apache-Hadoop-YARN-amp-MapReduce" title="Lab 5 - Apache Hadoop YARN &amp; MapReduce">Lab 5 - Apache Hadoop YARN &amp; MapReduce</a></li>
-<li><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
-<li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li><a href="#Hadoop-MapReduce" title="Hadoop MapReduce">Hadoop MapReduce</a><ul class="nav">
-<li><a href="#MapReduce-framework" title="MapReduce framework">MapReduce framework</a></li>
-<li><a href="#mapred-sitexml" title="mapred-site.xml">mapred-site.xml</a></li>
-<li><a href="#Word-Count-MapReduce-Example" title="Word Count MapReduce Example">Word Count MapReduce Example</a></li>
-<li><a href="#Inverted-Index-MapReduce-Example" title="Inverted Index MapReduce Example">Inverted Index MapReduce Example</a></li>
+<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li class=""><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
+<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li class=""><a href="#Hadoop-MapReduce" title="Hadoop MapReduce">Hadoop MapReduce</a><ul class="nav">
+<li class=""><a href="#MapReduce-framework" title="MapReduce framework">MapReduce framework</a><ul class="nav">
+<li class=""><a href="#Versions-1-2-and-3" title="Versions 1, 2 and 3">Versions 1, 2 and 3</a></li>
+<li class=""><a href="#MaReduce-vs-HDFS" title="MaReduce vs. HDFS">MaReduce vs. HDFS</a></li>
+<li class=""><a href="#MapReduce-in-Functional-Programmming" title="MapReduce in Functional Programmming">MapReduce in Functional Programmming</a></li>
+<li class=""><a href="#Hadoop-MapReduce-jobs" title="Hadoop MapReduce jobs">Hadoop MapReduce jobs</a></li>
 </ul>
 </li>
-<li><a href="#Hadoop-YARN" title="Hadoop YARN">Hadoop YARN</a><ul class="nav">
-<li><a href="#Start-Hadoop-YARN" title="Start Hadoop YARN">Start Hadoop YARN</a></li>
-<li><a href="#yarn-tool" title="yarn tool">yarn tool</a></li>
-<li><a href="#yarn-sitexml" title="yarn-site.xml">yarn-site.xml</a></li>
-<li><a href="#capacity-schedulerxml" title="capacity-scheduler.xml">capacity-scheduler.xml</a></li>
+<li class=""><a href="#mapred-sitexml" title="mapred-site.xml">mapred-site.xml</a></li>
+<li class=""><a href="#Word-Count-MapReduce-Example" title="Word Count MapReduce Example">Word Count MapReduce Example</a></li>
+<li class=""><a href="#Inverted-Index-MapReduce-Example" title="Inverted Index MapReduce Example">Inverted Index MapReduce Example</a></li>
+</ul>
+</li>
+<li class=""><a href="#Hadoop-YARN" title="Hadoop YARN">Hadoop YARN</a><ul class="nav">
+<li class=""><a href="#Start-Hadoop-YARN" title="Start Hadoop YARN">Start Hadoop YARN</a></li>
+<li class=""><a href="#yarn-tool" title="yarn tool">yarn tool</a></li>
+<li class=""><a href="#yarn-sitexml" title="yarn-site.xml">yarn-site.xml</a></li>
+<li class=""><a href="#capacity-schedulerxml" title="capacity-scheduler.xml">capacity-scheduler.xml</a></li>
 </ul>
 </li>
 <li><a href="#References" title="References">References</a></li>
@@ -455,21 +502,27 @@ Here is an example with three top-level child-queues a, b and c and some sub-que
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
 <li class=""><a href="#Lab-5---Apache-Hadoop-YARN-amp-MapReduce" title="Lab 5 - Apache Hadoop YARN &amp; MapReduce">Lab 5 - Apache Hadoop YARN &amp; MapReduce</a></li>
-<li><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
-<li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li><a href="#Hadoop-MapReduce" title="Hadoop MapReduce">Hadoop MapReduce</a><ul class="nav">
-<li><a href="#MapReduce-framework" title="MapReduce framework">MapReduce framework</a></li>
-<li><a href="#mapred-sitexml" title="mapred-site.xml">mapred-site.xml</a></li>
-<li><a href="#Word-Count-MapReduce-Example" title="Word Count MapReduce Example">Word Count MapReduce Example</a></li>
-<li><a href="#Inverted-Index-MapReduce-Example" title="Inverted Index MapReduce Example">Inverted Index MapReduce Example</a></li>
+<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li class=""><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
+<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li class=""><a href="#Hadoop-MapReduce" title="Hadoop MapReduce">Hadoop MapReduce</a><ul class="nav">
+<li class=""><a href="#MapReduce-framework" title="MapReduce framework">MapReduce framework</a><ul class="nav">
+<li class=""><a href="#Versions-1-2-and-3" title="Versions 1, 2 and 3">Versions 1, 2 and 3</a></li>
+<li class=""><a href="#MaReduce-vs-HDFS" title="MaReduce vs. HDFS">MaReduce vs. HDFS</a></li>
+<li class=""><a href="#MapReduce-in-Functional-Programmming" title="MapReduce in Functional Programmming">MapReduce in Functional Programmming</a></li>
+<li class=""><a href="#Hadoop-MapReduce-jobs" title="Hadoop MapReduce jobs">Hadoop MapReduce jobs</a></li>
 </ul>
 </li>
-<li><a href="#Hadoop-YARN" title="Hadoop YARN">Hadoop YARN</a><ul class="nav">
-<li><a href="#Start-Hadoop-YARN" title="Start Hadoop YARN">Start Hadoop YARN</a></li>
-<li><a href="#yarn-tool" title="yarn tool">yarn tool</a></li>
-<li><a href="#yarn-sitexml" title="yarn-site.xml">yarn-site.xml</a></li>
-<li><a href="#capacity-schedulerxml" title="capacity-scheduler.xml">capacity-scheduler.xml</a></li>
+<li class=""><a href="#mapred-sitexml" title="mapred-site.xml">mapred-site.xml</a></li>
+<li class=""><a href="#Word-Count-MapReduce-Example" title="Word Count MapReduce Example">Word Count MapReduce Example</a></li>
+<li class=""><a href="#Inverted-Index-MapReduce-Example" title="Inverted Index MapReduce Example">Inverted Index MapReduce Example</a></li>
+</ul>
+</li>
+<li class=""><a href="#Hadoop-YARN" title="Hadoop YARN">Hadoop YARN</a><ul class="nav">
+<li class=""><a href="#Start-Hadoop-YARN" title="Start Hadoop YARN">Start Hadoop YARN</a></li>
+<li class=""><a href="#yarn-tool" title="yarn tool">yarn tool</a></li>
+<li class=""><a href="#yarn-sitexml" title="yarn-site.xml">yarn-site.xml</a></li>
+<li class=""><a href="#capacity-schedulerxml" title="capacity-scheduler.xml">capacity-scheduler.xml</a></li>
 </ul>
 </li>
 <li><a href="#References" title="References">References</a></li>
