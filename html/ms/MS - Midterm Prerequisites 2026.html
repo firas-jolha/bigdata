@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <title>
-        MS - Midterm Prerequisites 2025 - CodiMD
+        MS - Midterm Prerequisites 2026 - CodiMD
     </title>
     <link rel="icon" type="image/png" href="http://localhost:3000/favicon.png">
     <link rel="apple-touch-icon" href="http://localhost:3000/apple-touch-icon.png">
@@ -34,13 +34,29 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Midterm-Prerequisites"><a class="anchor hidden-xs" href="#Midterm-Prerequisites" title="Midterm-Prerequisites"><i class="fa fa-link"></i></a>Midterm Prerequisites</h1><p><strong>Course:</strong> Big Data - IU S25<br>
-<strong>Date:</strong> Tuesday - March 13, 2025<br>
-<strong>Start time:</strong> 14:30<br>
-<strong>Total points:</strong> 100/4</p><h1 id="Hadoop-Spark-Cluster-using-Docker"><a class="anchor hidden-xs" href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop-Spark-Cluster-using-Docker"><i class="fa fa-link"></i></a>Hadoop Spark Cluster using Docker</h1><ul>
+    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Midterm-Prerequisites-2026"><a class="anchor hidden-xs" href="#Midterm-Prerequisites-2026" title="Midterm-Prerequisites-2026"><i class="fa fa-link"></i></a>Midterm Prerequisites 2026</h1><p><strong>Course:</strong> Big Data - IU S26<br>
+<strong>Date:</strong> Tuesday - March 12, 2026<br>
+<strong>Start time:</strong> 12:50<br>
+<strong>Total points:</strong> 100/4</p><div class="alert alert-warning">
+<p>I tested most of the tools here on WSL 2 installed on Windows 11. You can see below the version of the operating system that runs the services. Some UI tools like MongoDB Compass is installed directly on Windows 11.</p>
+<pre><code class="cpp hljs">&gt; cat /etc/os-release
+PRETTY_NAME=<span class="hljs-string">"Ubuntu 22.04.5 LTS"</span>
+NAME=<span class="hljs-string">"Ubuntu"</span>
+VERSION_ID=<span class="hljs-string">"22.04"</span>
+VERSION=<span class="hljs-string">"22.04.5 LTS (Jammy Jellyfish)"</span>
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL=<span class="hljs-string">"https://www.ubuntu.com/"</span>
+SUPPORT_URL=<span class="hljs-string">"https://help.ubuntu.com/"</span>
+BUG_REPORT_URL=<span class="hljs-string">"https://bugs.launchpad.net/ubuntu/"</span>
+PRIVACY_POLICY_URL=<span class="hljs-string">"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"</span>
+UBUNTU_CODENAME=jammy
+</code></pre>
+</div><h1 id="Hadoop-Spark-Cluster-using-Docker"><a class="anchor hidden-xs" href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop-Spark-Cluster-using-Docker"><i class="fa fa-link"></i></a>Hadoop Spark Cluster using Docker</h1><ul>
 <li><a href="https://github.com/firas-jolha/docker-spark-yarn-cluster" target="_blank" rel="noopener">docker-spark-yarn-cluster</a></li>
 </ul><h1 id="Agenda"><a class="anchor hidden-xs" href="#Agenda" title="Agenda"><i class="fa fa-link"></i></a>Agenda</h1><p></p><div class="toc"><ul>
-<li><a href="#Midterm-Prerequisites" title="Midterm Prerequisites">Midterm Prerequisites</a></li>
+<li><a href="#Midterm-Prerequisites-2026" title="Midterm Prerequisites 2026">Midterm Prerequisites 2026</a></li>
 <li><a href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop Spark Cluster using Docker">Hadoop Spark Cluster using Docker</a></li>
 <li><a href="#Agenda" title="Agenda">Agenda</a></li>
 <li><a href="#Objectives" title="Objectives">Objectives</a></li>
@@ -48,56 +64,41 @@
 <li><a href="#Software-requirements" title="Software requirements">Software requirements</a></li>
 <li><a href="#Install-Docker-and-Docker-compose" title="Install Docker and Docker compose">Install Docker and Docker compose</a></li>
 <li><a href="#Install-Apache-Hadoop" title="Install Apache Hadoop">Install Apache Hadoop</a><ul>
+<li><a href="#Pesudo-distributed-mode-without-using-Docker" title="Pesudo-distributed mode without using Docker">Pesudo-distributed mode without using Docker</a></li>
+<li><a href="#Fully-distributed-mode-Using-Docker" title="Fully-distributed mode Using Docker">Fully-distributed mode Using Docker</a></li>
+</ul>
+</li>
+<li><a href="#Install-MapReduce" title="Install MapReduce">Install MapReduce</a></li>
+<li><a href="#Install-Spark-and-PySpark-package" title="Install Spark and PySpark package">Install Spark and PySpark package</a></li>
+<li><a href="#Install-PostgreSQL" title="Install PostgreSQL">Install PostgreSQL</a><ul>
 <li><a href="#Without-Docker" title="Without Docker">Without Docker</a></li>
 <li><a href="#Using-Docker" title="Using Docker">Using Docker</a></li>
 </ul>
 </li>
-<li><a href="#Install-Spark-and-PySpark-package" title="Install Spark and PySpark package">Install Spark and PySpark package</a></li>
-<li><a href="#Install-PostgreSQL" title="Install PostgreSQL">Install PostgreSQL</a><ul>
-<li><a href="#Without-Docker1" title="Without Docker">Without Docker</a></li>
-<li><a href="#Using-Docker1" title="Using Docker">Using Docker</a></li>
-</ul>
-</li>
-<li><a href="#Install-Neo4j-server---Enterprise-edition" title="Install Neo4j server - Enterprise edition">Install Neo4j server - Enterprise edition</a><ul>
-<li><a href="#Without-Docker2" title="Without Docker">Without Docker</a><ul>
-<li><a href="#Windows-user" title="Windows user">Windows user</a></li>
-<li><a href="#Ubuntu-user-tested-on-Ubuntu-22043" title="Ubuntu user (tested on Ubuntu 22.04.3)">Ubuntu user (tested on Ubuntu 22.04.3)</a></li>
-</ul>
-</li>
-<li><a href="#Using-Docker2" title="Using Docker">Using Docker</a></li>
-</ul>
-</li>
+<li><a href="#Install-Memgraph" title="Install Memgraph">Install Memgraph</a></li>
 <li><a href="#Install-MongoDB-tools" title="Install MongoDB tools">Install MongoDB tools</a></li>
 <li><a href="#Self-check-tasks" title="Self-check tasks">Self-check tasks</a></li>
 </ul>
-</div><p></p><h1 id="Objectives"><a class="anchor hidden-xs" href="#Objectives" title="Objectives"><i class="fa fa-link"></i></a>Objectives</h1><p>This tutorial is written to provide you with the requirements that you need to check and prepare before you come to the midterm. If you do not meet the requirements, then you need to satisfy them during the midterm and it will take from your time, so make sure that your PC meets the requirements. If you have issues related to the requirements, please contact your TA at least two days before the midterm.</p><h1 id="Hardware-requirements"><a class="anchor hidden-xs" href="#Hardware-requirements" title="Hardware-requirements"><i class="fa fa-link"></i></a>Hardware requirements</h1><ul>
+</div><p></p><h1 id="Objectives"><a class="anchor hidden-xs" href="#Objectives" title="Objectives"><i class="fa fa-link"></i></a>Objectives</h1><p>This tutorial is written to provide you with the requirements that you need to check and prepare before you come to the midterm. If you do not meet the requirements, then you need to satisfy them during the midterm and it will take from your time, so make sure that your PC meets the requirements. If you have issues related to the requirements, please contact your TA <strong>at least three days before</strong> the midterm.</p><h1 id="Hardware-requirements"><a class="anchor hidden-xs" href="#Hardware-requirements" title="Hardware-requirements"><i class="fa fa-link"></i></a>Hardware requirements</h1><ul>
 <li>CPU (4 cores or more)</li>
-<li>Memory (8GB or more)</li>
+<li>Memory (6-8GB or more)
+<ul>
+<li>If you have 4GB then you can use the resources on <a href="http://vm.innopolis.university/" target="_blank" rel="noopener">(vm.innopolis.university)</a> to install some services like Hadoop or PostgreSQL and others on your local machine.</li>
+<li>We do not need HDP Sandbox for labs anymore, so you can delete it.</li>
+</ul>
+</li>
 <li>Storage (~50 GB)</li>
 </ul><h1 id="Software-requirements"><a class="anchor hidden-xs" href="#Software-requirements" title="Software-requirements"><i class="fa fa-link"></i></a>Software requirements</h1><ul>
-<li>You have an Ubuntu (e.g. 20.04 or 22.04) or Windows operating system with Ubuntu WSL (22.04). There is no guarantee that the tools will work with other Linux distro or MacOS but you have to check them with this document.</li>
+<li>You have an Ubuntu (e.g. 22.04) or Windows operating system with Ubuntu WSL (22.04). There is no guarantee that the tools will work with other Linux distro or MacOS but you have to check them with this tutorial. Please do not check them during the exam, you will waste your time. You should come ready for the exam.</li>
 <li>Install Docker and Docker Compose</li>
-<li>Install Apache Hadoop
-<ul>
-<li>Version 3.3.1</li>
-</ul>
-</li>
-<li>Install Apache Spark
-<ul>
-<li>Version 3.5.4</li>
-</ul>
-</li>
+<li>Install Apache Hadoop 3</li>
+<li>Install Apache Spark 3</li>
 <li>Install PostgreSQL</li>
-<li>Install Neo4j server - Enterprise edition.
-<ul>
-<li>Do not install community edition.</li>
-</ul>
-</li>
-<li>Install MongoDB server</li>
-<li>Install MongoDB Compass</li>
-<li>Download MongoDB shell tool</li>
-<li>Download MongoDB Database CLI tools</li>
-</ul><h1 id="Install-Docker-and-Docker-compose"><a class="anchor hidden-xs" href="#Install-Docker-and-Docker-compose" title="Install-Docker-and-Docker-compose"><i class="fa fa-link"></i></a>Install Docker and Docker compose</h1><p>One of the requirements of the midterm is to have Docker and Docker compose on your machine. You need to make sure that Docker engine and Docker compose work on your machine. You can test the <code>docker-compose.yml</code> in the repository that is shared with you in lab 4. You can follow the instructions in the official website to install <a href="https://docs.docker.com/engine/install/" target="_blank" rel="noopener">Docker</a> and <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">Docker compose</a>.</p><h1 id="Install-Apache-Hadoop"><a class="anchor hidden-xs" href="#Install-Apache-Hadoop" title="Install-Apache-Hadoop"><i class="fa fa-link"></i></a>Install Apache Hadoop</h1><p>There are mainly two ways to install Hadoop.</p><h2 id="Without-Docker"><a class="anchor hidden-xs" href="#Without-Docker" title="Without-Docker"><i class="fa fa-link"></i></a>Without Docker</h2><p>You can install Hadoop on your local machine as follows. If you have Windows OS then you can use Ubuntu WSL which is the setup of my machine. Make sure that you have <code>sudo</code> access to the machine.</p><ol>
+<li>Install Memgraph</li>
+<li>Install MongoDB</li>
+</ul><h1 id="Install-Docker-and-Docker-compose"><a class="anchor hidden-xs" href="#Install-Docker-and-Docker-compose" title="Install-Docker-and-Docker-compose"><i class="fa fa-link"></i></a>Install Docker and Docker compose</h1><p>One of the requirements of the midterm is to have Docker and Docker compose on your machine. You need to make sure that Docker engine and Docker compose work on your machine. You can test the <code>docker-compose.yml</code> in the repository that is shared with you in the labs. You can follow the instructions in the official website to install <a href="https://docs.docker.com/engine/install/" target="_blank" rel="noopener">Docker</a> and <a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">Docker compose</a>.</p><h1 id="Install-Apache-Hadoop"><a class="anchor hidden-xs" href="#Install-Apache-Hadoop" title="Install-Apache-Hadoop"><i class="fa fa-link"></i></a>Install Apache Hadoop</h1><p>There are mainly two modes to install Hadoop.</p><div class="alert alert-warning">
+<p>You should test both modes and there is no optional modes here but the mode is determined during the midterm time.</p>
+</div><h2 id="Pesudo-distributed-mode-without-using-Docker"><a class="anchor hidden-xs" href="#Pesudo-distributed-mode-without-using-Docker" title="Pesudo-distributed-mode-without-using-Docker"><i class="fa fa-link"></i></a>Pesudo-distributed mode without using Docker</h2><p>You can install Hadoop on your local machine as follows. If you have Windows OS then you can use Ubuntu WSL which is the setup of my machine. Make sure that you have <code>sudo</code> access to the machine.</p><ol>
 <li>Install <code>openssh-server</code>.</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">sudo</span> <span class="hljs-string">apt-get</span> <span class="hljs-string">install</span> <span class="hljs-bullet">-y</span> <span class="hljs-string">openssh-server</span>
 </code></pre><ol start="2">
@@ -267,90 +268,57 @@
 | Spark jobs per application | 4040  |
 | Spark history server       | 18080 |
      -->
-</center><p>This was a single node installation for Hadoop and for fully-distributed installation, you need to use Docker in the next section.</p><h2 id="Using-Docker"><a class="anchor hidden-xs" href="#Using-Docker" title="Using-Docker"><i class="fa fa-link"></i></a>Using Docker</h2><p>Here you can follow instructions in the repository shared with you in lab4 to check the steps of installation for pseduo-distributed and fully-distributed modes.</p><ul>
+</center><p>This was a single node installation for Hadoop and for fully-distributed installation, you need to use Docker in the next section.</p><h2 id="Fully-distributed-mode-Using-Docker"><a class="anchor hidden-xs" href="#Fully-distributed-mode-Using-Docker" title="Fully-distributed-mode-Using-Docker"><i class="fa fa-link"></i></a>Fully-distributed mode Using Docker</h2><p>Here you can follow instructions in the repository shared with you in the labs to check the steps of installation for pseduo-distributed and fully-distributed modes.</p><ul>
 <li><a href="https://github.com/firas-jolha/docker-spark-yarn-cluster" target="_blank" rel="noopener">https://github.com/firas-jolha/docker-spark-yarn-cluster</a></li>
-</ul><h1 id="Install-Spark-and-PySpark-package"><a class="anchor hidden-xs" href="#Install-Spark-and-PySpark-package" title="Install-Spark-and-PySpark-package"><i class="fa fa-link"></i></a>Install Spark and PySpark package</h1><p>You can install Spark by following the steps shared in lab4 and make sure that you can run <code>pyspark</code> applications on local machine, on Spark cluster and on YARN cluster.</p><h1 id="Install-PostgreSQL"><a class="anchor hidden-xs" href="#Install-PostgreSQL" title="Install-PostgreSQL"><i class="fa fa-link"></i></a>Install PostgreSQL</h1><h2 id="Without-Docker1"><a class="anchor hidden-xs" href="#Without-Docker1" title="Without-Docker1"><i class="fa fa-link"></i></a>Without Docker</h2><p>Ubuntu includes PostgreSQL by default. To install PostgreSQL on Ubuntu, use the apt (or other apt-driving) command:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">apt</span> <span class="hljs-string">install</span> <span class="hljs-string">postgresql</span>
+</ul><h1 id="Install-MapReduce"><a class="anchor hidden-xs" href="#Install-MapReduce" title="Install-MapReduce"><i class="fa fa-link"></i></a>Install MapReduce</h1><p>If you successfully installed Hadoop, then you should be able to run MapReduce pipelines using <code>mapred streaming</code> command on YARN cluster.</p><h1 id="Install-Spark-and-PySpark-package"><a class="anchor hidden-xs" href="#Install-Spark-and-PySpark-package" title="Install-Spark-and-PySpark-package"><i class="fa fa-link"></i></a>Install Spark and PySpark package</h1><p>You can install Spark by following the steps shared in the labs and make sure that you can run <code>pyspark</code> applications on local machine, on Spark cluster and on YARN cluster.</p><h1 id="Install-PostgreSQL"><a class="anchor hidden-xs" href="#Install-PostgreSQL" title="Install-PostgreSQL"><i class="fa fa-link"></i></a>Install PostgreSQL</h1><h2 id="Without-Docker"><a class="anchor hidden-xs" href="#Without-Docker" title="Without-Docker"><i class="fa fa-link"></i></a>Without Docker</h2><p>Ubuntu includes PostgreSQL by default, if not then use the apt (or other apt-driving) command to install PostgreSQL on Ubuntu:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">apt</span> <span class="hljs-string">install</span> <span class="hljs-string">postgresql</span>
 </code></pre><p>You can check the installation by running:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">psql</span> <span class="hljs-bullet">-V</span>
 <span class="hljs-comment"># output</span>
 <span class="hljs-comment"># psql (PostgreSQL) 17.4 (Ubuntu 17.4-1.pgdg22.04+2)</span>
-</code></pre><h2 id="Using-Docker1"><a class="anchor hidden-xs" href="#Using-Docker1" title="Using-Docker1"><i class="fa fa-link"></i></a>Using Docker</h2><p>You can install it via Docker as follows:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-string">postgres</span>
+</code></pre><h2 id="Using-Docker"><a class="anchor hidden-xs" href="#Using-Docker" title="Using-Docker"><i class="fa fa-link"></i></a>Using Docker</h2><p>You can install it via Docker as follows:</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-string">postgres</span>
 </code></pre><p>Then run a container.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">some-postgres</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">5432</span><span class="hljs-string">:5432</span> <span class="hljs-bullet">-e</span> <span class="hljs-string">POSTGRES_PASSWORD=mysecretpassword</span> <span class="hljs-bullet">-d</span> <span class="hljs-string">postgres</span>
-</code></pre><h1 id="Install-Neo4j-server---Enterprise-edition"><a class="anchor hidden-xs" href="#Install-Neo4j-server---Enterprise-edition" title="Install-Neo4j-server---Enterprise-edition"><i class="fa fa-link"></i></a>Install Neo4j server - Enterprise edition</h1><h2 id="Without-Docker2"><a class="anchor hidden-xs" href="#Without-Docker2" title="Without-Docker2"><i class="fa fa-link"></i></a>Without Docker</h2><p>You can download the server from the official website from <a href="https://neo4j.com/deployment-center/#enterprise" target="_blank" rel="noopener">here</a>. You can also follow the direct download links below.</p><ul>
-<li><a href="https://disk.yandex.com/d/XKO_JkFwWRmdBw" target="_blank" rel="noopener">Windows</a></li>
-<li><a href="https://disk.yandex.com/d/bM7YjFrrv4bqfw" target="_blank" rel="noopener">Linux or Macos</a></li>
-</ul><hr><div class="alert alert-danger">
-<p>Before you install Neo4j server, stop/kill all Neo4j services if you have running ones.</p>
-</div><p>The installation steps are very similar with slight difference in Windows. Please follow the installation approach according to your local operating system.</p><h3 id="Windows-user"><a class="anchor hidden-xs" href="#Windows-user" title="Windows-user"><i class="fa fa-link"></i></a><strong>Windows user</strong></h3><p>You need to download the zipped folder, unzip it and you can access the server folder as shown below.<br>
-<img src="https://i.imgur.com/ecs2iQ5.png" alt="" class="md-image md-image"></p><p>The server CLI tool is <code>.\bin\neo4j.bat</code>. In order to run this server, you need to install it as Windows service. You can do that by simply running the command as follows.</p><pre><code class="wrap sh hljs">.\<span class="hljs-keyword">bin\neo4j.bat </span>windows-service <span class="hljs-keyword">install
-</span></code></pre><p>You can check that the service is installed by visiting the local Windows services <code>services.msc</code>.</p><p><img src="https://i.imgur.com/5Mv1pHw.png" alt="" class="md-image md-image"></p><div class="alert alert-warning">
-<p>Notice that you may have issues as follows:<br>
-<img src="https://i.imgur.com/UnvByU2.png" alt="" class="md-image md-image"></p>
-<p>This means that you are already have a neo4j service with the <strong>same name</strong> as shown below.<br>
-<img src="https://i.imgur.com/ExkmijW.png" alt="" class="md-image md-image"></p>
-<p>You can fix it by renaming the service name in <code>.\conf\neo4j.conf</code> to a different name as follows.<br>
-<img src="https://i.imgur.com/jUKijE4.png" alt="" class="md-image md-image"></p>
-<p>and install the service again with the new name.</p>
-</div><p>If you successfully installed the service, the service will be added to <code>services.msc</code> and you would see such output <code>Neo4j service installed.</code>.<br>
-<img src="https://i.imgur.com/OrRHqzW.png" alt="" class="md-image md-image"></p><p>Now the server is not running. We can change the configuration of the server in <code>.\conf\neo4j.conf</code>.<br>
-<img src="https://i.imgur.com/MvtlZWl.png" alt="" class="md-image md-image"></p><div class="alert alert-danger">
-<p>Before you start the server, you have to accept the evaluation license as follows:</p>
-<pre><code class="wrap shell hljs">.\bin\neo4j-admin server license --accept-evaluation
-</code></pre>
-</div><p>We can run the server as follows:</p><pre><code class="wrap sh hljs">.\bin\neo4j<span class="hljs-selector-class">.bat</span> start
-</code></pre><p>Check in <code>services.msc</code> that it is <code>running</code>. After running the server, it will give you an address where you can access the Neo4j DBMS instance. For the default settings, you can access the server on <code>http://localhost:7474</code><br>
-<img src="https://i.imgur.com/onicvF0.png" alt="" class="md-image md-image"></p><p>You can connect to the server in the browser as follows (the default username and password are <code>neo4j</code>):</p><pre><code class="neo4j hljs">:<span class="hljs-keyword">server</span> <span class="hljs-keyword">connect</span>
-</code></pre><p><img src="https://i.imgur.com/ho8Arwp.png" alt="" class="md-image md-image"></p><p>Then it will ask you to change the default password.<br>
-<img src="https://i.imgur.com/ZGB5Z2I.png" alt="" class="md-image md-image"><br>
-You can set a password like <code>neo4jneo4j</code>, then you will be able to connect to the server.</p><p>We can stop the service as follows:</p><pre><code class="wrap sh hljs">.\bin\neo4j<span class="hljs-selector-class">.bat</span> stop
-</code></pre><p>For more information about this tool, you can run <code>.\bin\neo4j.bat --help</code>.</p><p>You can delete the service from your Windows system <code>services.msc</code> as follows:</p><pre><code class="pony hljs"><span class="hljs-type">C</span>:\<span class="hljs-type">Windows</span>\<span class="hljs-type">System32</span>\sc.exe delete <span class="hljs-type">ServiceName</span>
-</code></pre><p>Where <code>ServiceName</code> is your Neo4j Windows service name <code>neo4j2</code>.</p><h3 id="Ubuntu-user-tested-on-Ubuntu-22043"><a class="anchor hidden-xs" href="#Ubuntu-user-tested-on-Ubuntu-22043" title="Ubuntu-user-tested-on-Ubuntu-22043"><i class="fa fa-link"></i></a><strong>Ubuntu user <em>(tested on Ubuntu 22.04.3)</em></strong></h3><p>You first need to unzip the compressed folder as follows:</p><pre><code class="wrap sh hljs"><span class="hljs-selector-tag">tar</span> <span class="hljs-selector-tag">zxf</span> <span class="hljs-selector-tag">neo4j-enterprise-5</span><span class="hljs-selector-class">.17</span><span class="hljs-selector-class">.0-unix</span><span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span>
-</code></pre><p>You will get the server instance folder as follows:<br>
-<img src="https://i.imgur.com/e5ZwDpI.png" alt="" class="md-image md-image"></p><p>Access that folder and you will see as follows:<br>
-<img src="https://i.imgur.com/LbZCOVT.png" alt="" class="md-image md-image"></p><p>The server CLI tool is <code>.\bin\neo4j</code>. Now the server is not running. We can change the configuration of the server in <code>./conf/neo4j.conf</code>.<br>
-<img src="https://i.imgur.com/fusyjzt.png" alt="" class="md-image md-image"></p><div class="alert alert-warning">
-<p>Make sure that you have Java 21 installed and your JAVA_HOME is set to the path of the home directory of Java.</p>
-</div><div class="alert alert-info">
-<p>You can install Java 21 on Ubuntu 22 as follows:</p>
-<pre><code class="sh hljs"><span class="hljs-quote">&gt; sudo apt update</span>
-<span class="hljs-quote">&gt; sudo apt install openjdk-21-jdk</span>
-</code></pre>
-</div><div class="alert alert-danger">
-<p>Before you start the server, you have to accept the evaluation license as follows:</p>
-<pre><code class="wrap shell hljs">./bin/neo4j-admin server license --accept-evaluation
-</code></pre>
-</div><p>We can run the server as follows:</p><pre><code class="wrap sh hljs">./<span class="hljs-keyword">bin/neo4j </span>start
-</code></pre><p>After running the server, it will give you an address where you can access the Neo4j DBMS instance. For the default settings, you can access the server on <code>http://localhost:7474</code></p><p><img src="https://i.imgur.com/6XwUYqT.png" alt="" class="md-image md-image"></p><p>You can connect to the server in the browser as follows (the default username and password are <code>neo4j</code>):</p><pre><code class="neo4j hljs">:<span class="hljs-keyword">server</span> <span class="hljs-keyword">connect</span>
-</code></pre><p><img src="https://i.imgur.com/ho8Arwp.png" alt="" class="md-image md-image"></p><p>Then it will ask you to change the default password.<br>
-<img src="https://i.imgur.com/ZGB5Z2I.png" alt="" class="md-image md-image"><br>
-You can set a password like <code>neo4jneo4j</code>, then you will be able to connect to the server.</p><p>We can stop the service as follows:</p><pre><code class="wrap sh hljs">./bin/neo4j <span class="hljs-built_in">stop</span>
-</code></pre><p>Or by killing the process whose <em>pid</em> is given when you started the server.<br>
-<img src="https://i.imgur.com/6XwUYqT.png" alt="" class="md-image md-image"></p><p>For instance, to kill the server running at the process (pid:5899), we can write as follows:</p><pre><code class="wrap sh hljs">kill <span class="hljs-number">5899</span>
-</code></pre><p>If it does not terminate with SIGTERM then send SIGKILL signal to force the termination as follows:</p><pre><code class="wrap sh hljs">kill <span class="hljs-number">-9</span> <span class="hljs-number">5899</span>
-</code></pre><p>For more information about this tool, you can run <code>./bin/neo4j --help</code>.</p><h2 id="Using-Docker2"><a class="anchor hidden-xs" href="#Using-Docker2" title="Using-Docker2"><i class="fa fa-link"></i></a>Using Docker</h2><p>You can pull the docker image for enterprise edition of Neo4j server as follows.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">pull</span> <span class="hljs-attr">neo4j:5.17.0-enterprise</span>
+</code></pre><h1 id="Install-Memgraph"><a class="anchor hidden-xs" href="#Install-Memgraph" title="Install-Memgraph"><i class="fa fa-link"></i></a>Install Memgraph</h1><p>You can download the Docker image for Memgraph and run a container. You can find more detail in <a href="https://memgraph.com/docs/getting-started/install-memgraph/docker" target="_blank" rel="noopener">this official page</a>. Memgraph comes with different Docker images. The main repositories that contain <code>memgraph</code> are:</p><ul>
+<li><code>memgraph/memgraph-mage</code> - includes Memgraph database, command-line interface <code>mgconsole</code> and MAGE graph algorithms library. If tagged with cuGraph, it also includes NVIDIA cuGraph GPU-powered graph algorithms.</li>
+<li><code>memgraph/memgraph</code> - includes Memgraph database and command-line interface <code>mgconsole</code>.</li>
+</ul><p>There are also two additional standalone images that do not include the Memgraph:</p><ul>
+<li><code>memgraph/lab</code> - includes a web interface Memgraph Lab that helps you explore the data stored in Memgraph.</li>
+<li><code>memgraph/mgconsole</code> - includes a command-line interface mgconsole that allows you to interact with Memgraph from the command line.</li>
+</ul><p>For this lab, you can just need two containers. One is the graph engine and another the web user interface. You can run a multi-container memgraph as follows:</p><pre><code class="dockerfile hljs">services:
+  memgraph:
+    image: memgraph/memgraph-mage:latest
+    container_name: memgraph-mage
+    ports:
+      - <span class="hljs-string">"7687:7687"</span>
+      - <span class="hljs-string">"7444:7444"</span>
+    command: [<span class="hljs-string">"--log-level=TRACE"</span>]
 
-</code></pre><p>Then run a container.</p><pre><code class="wrap yaml hljs"><span class="hljs-string">docker</span> <span class="hljs-string">run</span> <span class="hljs-bullet">--name</span> <span class="hljs-string">neo4j_server_enterprise</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">7474</span><span class="hljs-string">:7474</span> <span class="hljs-bullet">-p</span> <span class="hljs-number">7687</span><span class="hljs-string">:7687</span> <span class="hljs-bullet">--env=NEO4J_ACCEPT_LICENSE_AGREEMENT=yes</span> <span class="hljs-bullet">-v</span> <span class="hljs-string">$HOME/neo4j/data:/data</span> <span class="hljs-attr">neo4j:5.17.0-enterprise</span>
-</code></pre><p>You can connect to the server in the browser as follows (the default username and password are <code>neo4j</code>):</p><pre><code class="neo4j hljs">:<span class="hljs-keyword">server</span> <span class="hljs-keyword">connect</span>
-</code></pre><p><img src="https://i.imgur.com/ho8Arwp.png" alt="" class="md-image md-image"></p><p>Then it will ask you to change the default password.<br>
-<img src="https://i.imgur.com/ZGB5Z2I.png" alt="" class="md-image md-image"><br>
-You can set a password like <code>neo4jneo4j</code>, then you will be able to connect to the server. You can stop the server by running the command <code>docker stop neo4j_server_enterprise</code>.</p><h1 id="Install-MongoDB-tools"><a class="anchor hidden-xs" href="#Install-MongoDB-tools" title="Install-MongoDB-tools"><i class="fa fa-link"></i></a>Install MongoDB tools</h1><div class="alert alert-danger">
+  lab:
+    image: memgraph/lab:latest
+    container_name: memgraph-lab
+    ports:
+      - <span class="hljs-string">"3001:3000"</span>
+    depends_on:
+      - memgraph
+    environment:
+      - QUICK_CONNECT_MG_HOST=memgraph
+      - QUICK_CONNECT_MG_PORT=<span class="hljs-number">7687</span>
+</code></pre><p>You can just put this content in a file <code>docker-compose.yaml</code> and then run it using <code>docker compose up -d</code>. Then you can open the Memgraph lab (<a href="http://localhost:3001" target="_blank" rel="noopener">http://localhost:3001</a>) in the browser to access the web UI as shown below.</p><p><img src="https://imgur.com/nw1skMx.png" alt="" class="md-image md-image"></p><p>You can also access the console of the graph if you selected to not use the Memgraph lab web UI as follows:</p><pre><code>docker exec -it memgraph-mage mgconsole
+</code></pre><p>This will open the console for Memgraph where you can write your queries in Cypher language.</p><h1 id="Install-MongoDB-tools"><a class="anchor hidden-xs" href="#Install-MongoDB-tools" title="Install-MongoDB-tools"><i class="fa fa-link"></i></a>Install MongoDB tools</h1><div class="alert alert-danger">
 <p>Before you install MongoDB server, stop/kill all MongoDB services if you have running ones.</p>
 </div><p>Here we need to download and install four tools:</p><ul>
 <li>
 <p><strong>The server (Community edition is enough)</strong></p>
 <ul>
-<li>Wihtout Docker
+<li>Without Docker
 <ul>
 <li>Download website
 <ul>
-<li><a href="https://www.mongodb.com/try/download/community" target="_blank" rel="noopener">https://www.mongodb.com/try/download/community</a><br>
-<img src="https://i.imgur.com/csVMwZY.png" alt="" class="md-image md-image"></li>
-<li>Make sure that the package is tgz (which includes both the server and mongos) <!-- ![](https://i.imgur.com/AvPmelP.png)  --></li>
+<li><a href="https://www.mongodb.com/try/download/community" target="_blank" rel="noopener">https://www.mongodb.com/try/download/community</a></li>
 </ul>
 </li>
 <li>Go to the directory where the server is installed and locate the <code>bin</code> folder. Add the path of this <code>bin</code> folder to <code>PATH</code> environment variable.<br>
 <img src="https://i.imgur.com/Zgo8Oqt.png" alt="" class="md-image md-image">
 <div class="alert alert-warning">
-<p><strong>Note:</strong> Make sure that you have both the database server <code>mongod</code> and <code>mongos</code> executables.</p>
+<p><strong>Note:</strong> Make sure that you have all the executables as shown in the screenshot above.</p>
 </div>
 </li>
 </ul>
@@ -386,7 +354,7 @@ You can set a password like <code>neo4jneo4j</code>, then you will be able to co
 <li>
 <p><strong>The Database CLI tools</strong></p>
 <ul>
-<li>You can download these tools using the instructions provided in lab 3.</li>
+<li>You can download these tools using the instructions provided in the lab materials.</li>
 </ul>
 </li>
 </ul><h1 id="Self-check-tasks"><a class="anchor hidden-xs" href="#Self-check-tasks" title="Self-check-tasks"><i class="fa fa-link"></i></a>Self-check tasks</h1><ol>
@@ -395,9 +363,9 @@ You can set a password like <code>neo4jneo4j</code>, then you will be able to co
 <li>Check that you installed all Spark and PySpark package.</li>
 <li>Check that you installed PostgreSQL server.</li>
 <li>Check that you installed all required tools for mongodb (The compass, the server, database CLI tools and the shell) and can access the databases.</li>
-<li>Check that you can start a Neo4j server in Enterprise edition.</li>
+<li>Check that you can start a Memgraph server and access the UI.</li>
 <li>Check that you have a Google account to Colab notebooks.</li>
-</ol><p>Good luck in the midterm <img class="emoji" alt=":+1:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/+1.png"></p></div>
+</ol><p>Good luck in the midterm <img class="emoji" alt=":blush:" src="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/images/basic/blush.png"></p></div>
     <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
         <div class="pull-right dropdown">
             <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
@@ -405,34 +373,27 @@ You can set a password like <code>neo4jneo4j</code>, then you will be able to co
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li class=""><a href="#Midterm-Prerequisites" title="Midterm Prerequisites">Midterm Prerequisites</a></li>
-<li><a href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop Spark Cluster using Docker">Hadoop Spark Cluster using Docker</a></li>
-<li><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li><a href="#Hardware-requirements" title="Hardware requirements">Hardware requirements</a></li>
-<li><a href="#Software-requirements" title="Software requirements">Software requirements</a></li>
-<li><a href="#Install-Docker-and-Docker-compose" title="Install Docker and Docker compose">Install Docker and Docker compose</a></li>
-<li><a href="#Install-Apache-Hadoop" title="Install Apache Hadoop">Install Apache Hadoop</a><ul class="nav">
-<li><a href="#Without-Docker" title="Without Docker">Without Docker</a></li>
-<li><a href="#Using-Docker" title="Using Docker">Using Docker</a></li>
+<li class=""><a href="#Midterm-Prerequisites-2026" title="Midterm Prerequisites 2026">Midterm Prerequisites 2026</a></li>
+<li class=""><a href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop Spark Cluster using Docker">Hadoop Spark Cluster using Docker</a></li>
+<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li class=""><a href="#Hardware-requirements" title="Hardware requirements">Hardware requirements</a></li>
+<li class=""><a href="#Software-requirements" title="Software requirements">Software requirements</a></li>
+<li class=""><a href="#Install-Docker-and-Docker-compose" title="Install Docker and Docker compose">Install Docker and Docker compose</a></li>
+<li class=""><a href="#Install-Apache-Hadoop" title="Install Apache Hadoop">Install Apache Hadoop</a><ul class="nav">
+<li class=""><a href="#Pesudo-distributed-mode-without-using-Docker" title="Pesudo-distributed mode without using Docker">Pesudo-distributed mode without using Docker</a></li>
+<li class=""><a href="#Fully-distributed-mode-Using-Docker" title="Fully-distributed mode Using Docker">Fully-distributed mode Using Docker</a></li>
 </ul>
 </li>
+<li class=""><a href="#Install-MapReduce" title="Install MapReduce">Install MapReduce</a></li>
 <li><a href="#Install-Spark-and-PySpark-package" title="Install Spark and PySpark package">Install Spark and PySpark package</a></li>
-<li><a href="#Install-PostgreSQL" title="Install PostgreSQL">Install PostgreSQL</a><ul class="nav">
-<li><a href="#Without-Docker1" title="Without Docker">Without Docker</a></li>
-<li><a href="#Using-Docker1" title="Using Docker">Using Docker</a></li>
+<li class=""><a href="#Install-PostgreSQL" title="Install PostgreSQL">Install PostgreSQL</a><ul class="nav">
+<li class=""><a href="#Without-Docker" title="Without Docker">Without Docker</a></li>
+<li class=""><a href="#Using-Docker" title="Using Docker">Using Docker</a></li>
 </ul>
 </li>
-<li><a href="#Install-Neo4j-server---Enterprise-edition" title="Install Neo4j server - Enterprise edition">Install Neo4j server - Enterprise edition</a><ul class="nav">
-<li><a href="#Without-Docker2" title="Without Docker">Without Docker</a><ul class="nav">
-<li><a href="#Windows-user" title="Windows user">Windows user</a></li>
-<li><a href="#Ubuntu-user-tested-on-Ubuntu-22043" title="Ubuntu user (tested on Ubuntu 22.04.3)">Ubuntu user (tested on Ubuntu 22.04.3)</a></li>
-</ul>
-</li>
-<li><a href="#Using-Docker2" title="Using Docker">Using Docker</a></li>
-</ul>
-</li>
-<li><a href="#Install-MongoDB-tools" title="Install MongoDB tools">Install MongoDB tools</a></li>
+<li class=""><a href="#Install-Memgraph" title="Install Memgraph">Install Memgraph</a></li>
+<li class=""><a href="#Install-MongoDB-tools" title="Install MongoDB tools">Install MongoDB tools</a></li>
 <li><a href="#Self-check-tasks" title="Self-check tasks">Self-check tasks</a></li>
 </ul>
 </div><div class="toc-menu" style="">
@@ -446,34 +407,27 @@ You can set a password like <code>neo4jneo4j</code>, then you will be able to co
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li class=""><a href="#Midterm-Prerequisites" title="Midterm Prerequisites">Midterm Prerequisites</a></li>
-<li><a href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop Spark Cluster using Docker">Hadoop Spark Cluster using Docker</a></li>
-<li><a href="#Agenda" title="Agenda">Agenda</a></li>
-<li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li><a href="#Hardware-requirements" title="Hardware requirements">Hardware requirements</a></li>
-<li><a href="#Software-requirements" title="Software requirements">Software requirements</a></li>
-<li><a href="#Install-Docker-and-Docker-compose" title="Install Docker and Docker compose">Install Docker and Docker compose</a></li>
-<li><a href="#Install-Apache-Hadoop" title="Install Apache Hadoop">Install Apache Hadoop</a><ul class="nav">
-<li><a href="#Without-Docker" title="Without Docker">Without Docker</a></li>
-<li><a href="#Using-Docker" title="Using Docker">Using Docker</a></li>
+<li class=""><a href="#Midterm-Prerequisites-2026" title="Midterm Prerequisites 2026">Midterm Prerequisites 2026</a></li>
+<li class=""><a href="#Hadoop-Spark-Cluster-using-Docker" title="Hadoop Spark Cluster using Docker">Hadoop Spark Cluster using Docker</a></li>
+<li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
+<li class=""><a href="#Objectives" title="Objectives">Objectives</a></li>
+<li class=""><a href="#Hardware-requirements" title="Hardware requirements">Hardware requirements</a></li>
+<li class=""><a href="#Software-requirements" title="Software requirements">Software requirements</a></li>
+<li class=""><a href="#Install-Docker-and-Docker-compose" title="Install Docker and Docker compose">Install Docker and Docker compose</a></li>
+<li class=""><a href="#Install-Apache-Hadoop" title="Install Apache Hadoop">Install Apache Hadoop</a><ul class="nav">
+<li class=""><a href="#Pesudo-distributed-mode-without-using-Docker" title="Pesudo-distributed mode without using Docker">Pesudo-distributed mode without using Docker</a></li>
+<li class=""><a href="#Fully-distributed-mode-Using-Docker" title="Fully-distributed mode Using Docker">Fully-distributed mode Using Docker</a></li>
 </ul>
 </li>
+<li class=""><a href="#Install-MapReduce" title="Install MapReduce">Install MapReduce</a></li>
 <li><a href="#Install-Spark-and-PySpark-package" title="Install Spark and PySpark package">Install Spark and PySpark package</a></li>
-<li><a href="#Install-PostgreSQL" title="Install PostgreSQL">Install PostgreSQL</a><ul class="nav">
-<li><a href="#Without-Docker1" title="Without Docker">Without Docker</a></li>
-<li><a href="#Using-Docker1" title="Using Docker">Using Docker</a></li>
+<li class=""><a href="#Install-PostgreSQL" title="Install PostgreSQL">Install PostgreSQL</a><ul class="nav">
+<li class=""><a href="#Without-Docker" title="Without Docker">Without Docker</a></li>
+<li class=""><a href="#Using-Docker" title="Using Docker">Using Docker</a></li>
 </ul>
 </li>
-<li><a href="#Install-Neo4j-server---Enterprise-edition" title="Install Neo4j server - Enterprise edition">Install Neo4j server - Enterprise edition</a><ul class="nav">
-<li><a href="#Without-Docker2" title="Without Docker">Without Docker</a><ul class="nav">
-<li><a href="#Windows-user" title="Windows user">Windows user</a></li>
-<li><a href="#Ubuntu-user-tested-on-Ubuntu-22043" title="Ubuntu user (tested on Ubuntu 22.04.3)">Ubuntu user (tested on Ubuntu 22.04.3)</a></li>
-</ul>
-</li>
-<li><a href="#Using-Docker2" title="Using Docker">Using Docker</a></li>
-</ul>
-</li>
-<li><a href="#Install-MongoDB-tools" title="Install MongoDB tools">Install MongoDB tools</a></li>
+<li class=""><a href="#Install-Memgraph" title="Install Memgraph">Install Memgraph</a></li>
+<li class=""><a href="#Install-MongoDB-tools" title="Install MongoDB tools">Install MongoDB tools</a></li>
 <li><a href="#Self-check-tasks" title="Self-check tasks">Self-check tasks</a></li>
 </ul>
 </div><div class="toc-menu" style="">
