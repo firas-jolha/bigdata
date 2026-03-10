@@ -307,7 +307,7 @@
 <span class="hljs-string">git</span> <span class="hljs-string">clone</span> <span class="hljs-string">git@github.com:firas-jolha/docker-spark-yarn-cluster.git</span>
 <span class="hljs-string">cd</span> <span class="hljs-string">docker-spark-yarn-cluster</span>
 </code></pre><ol start="2">
-<li>Run the script <code>startHadoopCluster.sh</code> passing the number of slaves <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>N</mi></math>" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 1.08em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.919em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.457em, 1000.92em, 2.481em, -999.997em); top: -2.314em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">N<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.11em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.32em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">N</script></span> (default value is 2).</li>
+<li>Run the script <code>startHadoopCluster.sh</code> passing the number of slaves <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;N&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 1.08em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.919em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.511em, 1000.92em, 2.535em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">N<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.11em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">N</script></span> (default value is 2).</li>
 </ol><pre><code class="wrap yaml hljs"><span class="hljs-string">N=5</span>
 <span class="hljs-string">bash</span> <span class="hljs-string">startHadoopCluster.sh</span> <span class="hljs-string">$N</span>
 </code></pre><p>Here I am running a cluster of one master node and 5 slave nodes. In HDFS, the master node will run the namenode and seconadry namenodes and the slave nodes will run the datanodes. In YARN, the master node will run the resource manager and the slave nodes will run the node managers. In Spark, the master node will run the Spark Cluster master and the slave nodes will run the workers.</p><ol start="3">
@@ -404,11 +404,12 @@
 </code></pre><p>Otherwise, you need to return to the install them.</p><div class="alert alert-danger">
 <p><strong>Note:</strong> You can use Python3.6 to write Spark applications if you configured it properly in HDP Sandbox.</p>
 </div><h2 id="Running-Spark-applications"><a class="anchor hidden-xs" href="#Running-Spark-applications" title="Running-Spark-applications"><i class="fa fa-link"></i></a>Running Spark applications</h2><p>You can execute PySpark statements in interactive mode on the shell <code>pyspark</code> or you can write them in Pyhton file and submit it to Spark using the tool <code>spark-submit</code>. In addition, Spark comes with a set of ready-to-execute examples of Spark applications.</p><h3 id="pyspark-shell"><a class="anchor hidden-xs" href="#pyspark-shell" title="pyspark-shell"><i class="fa fa-link"></i></a>pyspark shell</h3><p>You can open a spark shell session by running the shell <code>pyspark</code> for Python, <code>spark-shell</code> for Scala, <code>sparkR</code> for R language.</p><pre><code class="wrap python hljs">pyspark
-</code></pre><p><img src="https://i.imgur.com/H0zwDvA.png" alt="" class="md-image md-image"></p><p>The pyspark shell starts a Spark application and initiates/gets the Spark context <code>sc</code> (<code>spark</code> for Spark session) which internally creates a Web UI with URL localhost:4040 (or next port if 4040 is not free). By default, it uses local[*] as master (this means that Spark will run jobs on the same machine using all CPU cores). It also displays Spark, and Python versions.</p><div class="alert alert-warning">
+</code></pre><p><img src="https://imgur.com/dcJl3wo.png" alt="" class="md-image md-image"></p><p>The pyspark shell starts a Spark application and initiates/gets the Spark context <code>sc</code> (<code>spark</code> for Spark session) which internally creates a Web UI with URL localhost:4040 (or next port if 4040 is not free). By default, it uses local[*] as master (this means that Spark will run jobs on the same machine using all CPU cores). It also displays Spark, and Python versions.</p><div class="alert alert-warning">
 <p><strong>Note:</strong> If you are running two or more Spark applications simultaneously, then the next ports to 4040 (e.g. 4041, 4042, …etc) are not published in Docker container to the host machine and you can set the port for Spark app web UI manually to one of the free ports such as 4042 as follows:</p>
 <pre><code class="sh hljs">docker run --name pyspark -it -<span class="hljs-selector-tag">p</span> <span class="hljs-number">4042</span>:<span class="hljs-number">4042</span> spark:python3 /opt/spark/bin/pyspark --conf spark<span class="hljs-selector-class">.ui</span><span class="hljs-selector-class">.port</span>=<span class="hljs-number">4042</span>
 </code></pre>
-</div><p>On <code>pyspark</code> shell, you can write only Python code.</p><p><img src="https://i.imgur.com/JE9o6YR.png" alt="" class="md-image md-image"></p><div class="alert alert-info">
+</div><p>On <code>pyspark</code> shell, you can write only Python code.<br>
+<img src="https://imgur.com/JbNeNcj.png" alt="" class="md-image md-image"></p><div class="alert alert-info">
 <p>You can exit the <code>pyspark</code> shell by executing statement <code>exit()</code> like in a Python shell.</p>
 </div><p>Whereas <code>spark-shell</code> command runs a Spark shell for Scala.</p><pre><code class="shell hljs">spark-shell
 </code></pre><p><img src="/uploads/29030be24713ff2f56eeb3d03.png" alt="" class="md-image md-image"></p><h3 id="spark-submit"><a class="anchor hidden-xs" href="#spark-submit" title="spark-submit"><i class="fa fa-link"></i></a>spark-submit</h3><p>We can use this tool for non-interactive mode of data anlysis. This command accepts the path for the spark application.</p><p>Let’s write our simple application in <code>app.py</code> and execute it using <code>spark-submit</code>.</p><pre><code class="python hljs"><span class="hljs-keyword">from</span> pyspark.sql <span class="hljs-keyword">import</span> SparkSession
@@ -564,7 +565,8 @@ some_f(spark)
 <li>Scheduling mode: See job scheduling</li>
 <li>Number of jobs per status: Active, Completed, Failed</li>
 </ul><center>
-<p><img src="https://i.imgur.com/TgSYOvt.png" alt="" width="200" height="200" class="md-image md-image"></p>
+<p><img src="https://imgur.com/UNTCpXm.png" alt="" width="200" height="200" class="md-image md-image"></p>
+<!-- ![](https://i.imgur.com/TgSYOvt.png =200x200) -->
 <!-- ![](/uploads/29030be24713ff2f56eeb3d04.png =200x200) -->
 </center><ul>
 <li>Event timeline: Displays in chronological order the events related to the executors (added, removed) and the jobs</li>
@@ -712,7 +714,7 @@ sc = spark.sparkContext
 </div><h1 id="Spark-RDD"><a class="anchor hidden-xs" href="#Spark-RDD" title="Spark-RDD"><i class="fa fa-link"></i></a>Spark RDD</h1><p>There are multiple ways to create RDDs in PySpark.</p><h3 id="1-using-parallelize-function"><a class="anchor hidden-xs" href="#1-using-parallelize-function" title="1-using-parallelize-function"><i class="fa fa-link"></i></a>1. using <code>parallelize()</code> function</h3><pre><code class="python hljs">data = [(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>, <span class="hljs-string">'a b c'</span>), (<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>, <span class="hljs-string">'d e f'</span>), (<span class="hljs-number">7</span>,<span class="hljs-number">8</span>,<span class="hljs-number">9</span>,<span class="hljs-string">'g h i'</span>)]
 rdd = sc.parallelize(data) <span class="hljs-comment"># Spark RDD creation</span>
 <span class="hljs-comment"># rdd = sc.parallelize(data, n) # n is minimum number of partitions</span>
-</code></pre><p>This function will split the dataset into multiple partitions. You can get number of partitions by using the function <code>&lt;rdd&gt;.getNumParititions()</code>.</p><h3 id="2-using-textFile-or-wholeTextFiles-functions"><a class="anchor hidden-xs" href="#2-using-textFile-or-wholeTextFiles-functions" title="2-using-textFile-or-wholeTextFiles-functions"><i class="fa fa-link"></i></a>2. using <code>textFile</code> or <code>wholeTextFiles</code> functions</h3><h4 id="Read-from-a-local-file"><a class="anchor hidden-xs" href="#Read-from-a-local-file" title="Read-from-a-local-file"><i class="fa fa-link"></i></a>Read from a local file</h4><pre><code class="python hljs">path = <span class="hljs-string">"file:///data/movies.csv"</span>
+</code></pre><p>This function will split the dataset into multiple partitions. You can get number of partitions by using the function <code>&lt;rdd&gt;.getNumPartitions()</code>.</p><h3 id="2-using-textFile-or-wholeTextFiles-functions"><a class="anchor hidden-xs" href="#2-using-textFile-or-wholeTextFiles-functions" title="2-using-textFile-or-wholeTextFiles-functions"><i class="fa fa-link"></i></a>2. using <code>textFile</code> or <code>wholeTextFiles</code> functions</h3><h4 id="Read-from-a-local-file"><a class="anchor hidden-xs" href="#Read-from-a-local-file" title="Read-from-a-local-file"><i class="fa fa-link"></i></a>Read from a local file</h4><pre><code class="python hljs">path = <span class="hljs-string">"file:///data/movies.csv"</span>
 
 rdd = sc.textFile(path) <span class="hljs-comment"># a spark rdd</span>
 </code></pre><p>The file <code>movies.csv</code> is uploaded to the local file system and stored in the folder <code>/sparkdata</code>.</p><h4 id="Read-from-HDFS"><a class="anchor hidden-xs" href="#Read-from-HDFS" title="Read-from-HDFS"><i class="fa fa-link"></i></a>Read from HDFS</h4><pre><code class="wrap python hljs">path = <span class="hljs-string">"hdfs://localhost:9000/data/movies.csv"</span>
@@ -761,7 +763,7 @@ rdd2.take(<span class="hljs-number">10</span>)
 rdd3 = rdd2.map(<span class="hljs-keyword">lambda</span> x : x.strip())
 rdd3.take(<span class="hljs-number">10</span>)
 </code></pre><div class="alert alert-info">
-<p><code>take(k)</code> is a Spark action and returns the first <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>k</mi></math>" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-4" style="width: 0.649em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.541em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.457em, 1000.54em, 2.481em, -999.997em); top: -2.314em; left: 0em;"><span class="mrow" id="MathJax-Span-5"><span class="mi" id="MathJax-Span-6" style="font-family: MathJax_Math-italic;">k</span></span><span style="display: inline-block; width: 0px; height: 2.32em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span><script type="math/tex" id="MathJax-Element-2">k</script></span> elements of the RDD.</p>
+<p><code>take(k)</code> is a Spark action and returns the first <span class="mathjax"><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" style="position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/math&gt;" role="presentation"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-4" style="width: 0.649em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.541em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.511em, 1000.54em, 2.535em, -999.997em); top: -2.368em; left: 0em;"><span class="mrow" id="MathJax-Span-5"><span class="mi" id="MathJax-Span-6" style="font-family: MathJax_Math-italic;">k</span></span><span style="display: inline-block; width: 0px; height: 2.373em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>k</mi></math></span></span><script type="math/tex" id="MathJax-Element-2">k</script></span> elements of the RDD.</p>
 </div><h3 id="filter"><a class="anchor hidden-xs" href="#filter" title="filter"><i class="fa fa-link"></i></a>filter</h3><p>Returns a new RDD after applying filter function on source dataset.</p><pre><code class="wrap python hljs"><span class="hljs-comment"># Returns only values which are digits</span>
 rdd4 = rdd3.filter(<span class="hljs-keyword">lambda</span> x : str(x).isdigit())
 
@@ -903,7 +905,7 @@ print(acc.value) <span class="hljs-comment"># 20</span>
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li><a href="#Lab-6---Apache-Spark-RDD" title="Lab 6 - Apache Spark RDD">Lab 6 - Apache Spark RDD</a><ul class="nav">
+<li class=""><a href="#Lab-6---Apache-Spark-RDD" title="Lab 6 - Apache Spark RDD">Lab 6 - Apache Spark RDD</a><ul class="nav">
 <li><a href="#Datasets" title="Datasets">Datasets</a></li>
 <li><a href="#PySpark-on-Colab" title="PySpark on Colab">PySpark on Colab</a></li>
 <li><a href="#Readings" title="Readings">Readings</a></li>
@@ -941,8 +943,8 @@ print(acc.value) <span class="hljs-comment"># 20</span>
 <li><a href="#Python-Package-Management-in-PySpark-apps" title="Python Package Management in PySpark apps">Python Package Management in PySpark apps</a></li>
 </ul>
 </li>
-<li class=""><a href="#Spark-Web-UI" title="Spark Web UI">Spark Web UI</a><ul class="nav">
-<li class=""><a href="#Jobs-Tab" title="Jobs Tab">Jobs Tab</a><ul class="nav">
+<li><a href="#Spark-Web-UI" title="Spark Web UI">Spark Web UI</a><ul class="nav">
+<li><a href="#Jobs-Tab" title="Jobs Tab">Jobs Tab</a><ul class="nav">
 <li><a href="#Job-details" title="Job details">Job details</a></li>
 </ul>
 </li>
@@ -1017,7 +1019,7 @@ print(acc.value) <span class="hljs-comment"># 20</span>
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li><a href="#Lab-6---Apache-Spark-RDD" title="Lab 6 - Apache Spark RDD">Lab 6 - Apache Spark RDD</a><ul class="nav">
+<li class=""><a href="#Lab-6---Apache-Spark-RDD" title="Lab 6 - Apache Spark RDD">Lab 6 - Apache Spark RDD</a><ul class="nav">
 <li><a href="#Datasets" title="Datasets">Datasets</a></li>
 <li><a href="#PySpark-on-Colab" title="PySpark on Colab">PySpark on Colab</a></li>
 <li><a href="#Readings" title="Readings">Readings</a></li>
@@ -1055,8 +1057,8 @@ print(acc.value) <span class="hljs-comment"># 20</span>
 <li><a href="#Python-Package-Management-in-PySpark-apps" title="Python Package Management in PySpark apps">Python Package Management in PySpark apps</a></li>
 </ul>
 </li>
-<li class=""><a href="#Spark-Web-UI" title="Spark Web UI">Spark Web UI</a><ul class="nav">
-<li class=""><a href="#Jobs-Tab" title="Jobs Tab">Jobs Tab</a><ul class="nav">
+<li><a href="#Spark-Web-UI" title="Spark Web UI">Spark Web UI</a><ul class="nav">
+<li><a href="#Jobs-Tab" title="Jobs Tab">Jobs Tab</a><ul class="nav">
 <li><a href="#Job-details" title="Job details">Job details</a></li>
 </ul>
 </li>

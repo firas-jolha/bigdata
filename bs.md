@@ -13,6 +13,7 @@ layout: page
 ### [Lab 3 - MongoDB](html/bs/BS - Lab 3 - MongoDB.html)
 ### [Lab 4 - Apache Hadoop HDFS](html/bs/BS - Lab 4 - Apache Hadoop HDFS.html)
 ### [Lab 5 - Apache Hadoop YARN & MapReduce](html/bs/BS - Lab 5 - Apache Hadoop YARN & MapReduce.html)
+### [Lab 6 - Apache Spark RDD](html/bs/BS - Lab 6 - Apache Spark RDD.html)
 
 <!-- ### [Lab 2 - Data Retrieval with SQL and CQL](html/bs/BS - Lab 2 - Data Retrieval with SQL and CQL.html)
 
