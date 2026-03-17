@@ -40,8 +40,9 @@ layout: page
 <!-- ### [Assignment 2 - Apache Hadoop](html/bs/Apache Hadoop.html) -->
 <!-- [Assignment 3 - Apache Spark](html/bs/Apache Spark.html) -->
 
-<!-- ## Project
+## Project
 ### [Project Description](html/bs/BS - Final Project.html)
+<!-- 
 ### [Stage I - Data collection and Ingestion](html/bs/BS - Stage I - Data collection and Ingestion.html)
 ### [Stage II - Data Storage/Preparation & EDA](html/common/BS_MS Stage II - Data Storage_Preparation & EDA.html)
 ### [Stage III - Predictive Data Analytics](html/common/BS_MS Stage III - Predictive Data Analytics.html)
