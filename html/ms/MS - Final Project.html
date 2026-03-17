@@ -34,13 +34,12 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Final-Project"><a class="anchor hidden-xs" href="#Final-Project" title="Final-Project"><i class="fa fa-link"></i></a>Final Project</h1><p><strong>Course:</strong> Big Data - IU S25<br>
-<strong>Authors:</strong> Armen Beklaryan &amp; Firas Jolha</p><h1 id="Project-info-submission"><a class="anchor hidden-xs" href="#Project-info-submission" title="Project-info-submission"><i class="fa fa-link"></i></a>Project info submission</h1><ul>
-<li><a href="https://docs.google.com/spreadsheets/d/1osG8cx9ykPC7SiMacZ4zOralQ58uR3775VEeDwN8F6Q/edit?gid=0#gid=0" target="_blank" rel="noopener">Submission sheet</a></li>
+    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="MS---Final-Project"><a class="anchor hidden-xs" href="#MS---Final-Project" title="MS---Final-Project"><i class="fa fa-link"></i></a>MS - Final Project</h1><p><strong>Course:</strong> Big Data - IU</p><h1 id="Project-info-submission"><a class="anchor hidden-xs" href="#Project-info-submission" title="Project-info-submission"><i class="fa fa-link"></i></a>Project info submission</h1><ul>
+<li><a href="https://docs.google.com/spreadsheets/d/19TLI5sHJfGpgb5YjMEy6BFC2FYCVGcu85fYKQ6Unl5Y/edit?usp=sharing" target="_blank" rel="noopener">Submission sheet</a></li>
 </ul><h1 id="Project-Report-Overleaf-Template"><a class="anchor hidden-xs" href="#Project-Report-Overleaf-Template" title="Project-Report-Overleaf-Template"><i class="fa fa-link"></i></a>Project Report Overleaf Template</h1><ul>
-<li><a href="https://www.overleaf.com/read/qgjhymwkzbhv#7ae607" target="_blank" rel="noopener">IU BDT project report template 2025</a></li>
+<li><a href="https://www.overleaf.com/read/qgjhymwkzbhv#7ae607" target="_blank" rel="noopener">IU BDT project report template</a></li>
 </ul><h1 id="Agenda"><a class="anchor hidden-xs" href="#Agenda" title="Agenda"><i class="fa fa-link"></i></a>Agenda</h1><p></p><div class="toc"><ul>
-<li><a href="#Final-Project" title="Final Project">Final Project</a></li>
+<li><a href="#MS---Final-Project" title="MS - Final Project">MS - Final Project</a></li>
 <li><a href="#Project-info-submission" title="Project info submission">Project info submission</a></li>
 <li><a href="#Project-Report-Overleaf-Template" title="Project Report Overleaf Template">Project Report Overleaf Template</a></li>
 <li><a href="#Agenda" title="Agenda">Agenda</a></li>
@@ -70,7 +69,7 @@
 <li>Build and train ML models using SparkML.</li>
 <li>Build a dashboard to present the analysis results using Apache Superset.</li>
 </ol><h1 id="Description"><a class="anchor hidden-xs" href="#Description" title="Description"><i class="fa fa-link"></i></a>Description</h1><p>Within the framework of this project, it is necessary to conduct a full cycle of big data analysis from data loading to the presentation of the final results. Each student or a group of students independently choose a dataset that meets the following criteria:</p><ul>
-<li>At least 300k rows of data and 200MB of dataset file size.</li>
+<li>At least 1000k rows of data and 750MB of dataset file size.</li>
 <li>At least 10 explanatory variables (there may be both initial features and those created during the analysis).</li>
 <li>Either time or geospatial features must be present in the data (both can be). Date-only features are not counted here.</li>
 <li>The formulation of the problem, as well as the evaluation of the results, should be carried out according to the CRISP-DM methodology (will be explained at lectures) and have practical value.</li>
@@ -83,7 +82,7 @@
 </ul>
 </li>
 </ul><p>As part of the lab, the software stack and the project stages will be analyzed. The lectures will discuss in detail the methodology, the necessary calculations of the unit economy of the project, reporting documents and presentation.</p><p>In the course of the project, you will not be monitored in terms of passing all the necessary stages. Self-control in terms of the reference points of the project is the main challenge. See how much you can really do the work yourself and how much your productivity increases if there are no tight deadlines. The postponement of the deadline for the final uploading of the project is not provided. From this day on, you have enough time, regardless of all the other parallel study activities. Time management is completely on your side. In case of technical issues, schedule a consultation with the TA (it is advisable to collect a set of questions from everyone, not individual consultation). For project management issues, as well as the methodology of its implementation, please contact the lecturer.</p><h1 id="Instructions-on-Project-Artifacts"><a class="anchor hidden-xs" href="#Instructions-on-Project-Artifacts" title="Instructions-on-Project-Artifacts"><i class="fa fa-link"></i></a>Instructions on Project Artifacts</h1><div class="alert alert-warning">
-<p><strong>Important:</strong> Before you start working on the project, submit the info of your project in the <a href="https://docs.google.com/spreadsheets/d/1osG8cx9ykPC7SiMacZ4zOralQ58uR3775VEeDwN8F6Q/edit?gid=0#gid=0" target="_blank" rel="noopener">sheet attached</a> to this tutorial.</p>
+<p><strong>Important:</strong> Before you start working on the project, submit the info of your project in the <a href="#Project-info-submission">sheet attached</a> to this tutorial.</p>
 </div><p>In this section, I will explain the requirements and criteria for each artifact of the project</p><h2 id="The-repository"><a class="anchor hidden-xs" href="#The-repository" title="The-repository"><i class="fa fa-link"></i></a>The repository</h2><p>Here I will present the requirements and criteria related to the project repository.</p><h3 id="The-template"><a class="anchor hidden-xs" href="#The-template" title="The-template"><i class="fa fa-link"></i></a>The template</h3><p>Your repository should contain all required scripts and files to replicate the whole processes starting from data collection to presentation. The repository should be organized and <strong>documented</strong>, and have a Readme file about how to reproduce your work and eventually get the analysis results. The data pipelines should be written as shell scripts to be executed on <code>bash</code> shell for <code>Centos 7.9.2009</code> Linux distro (on which the IU cluster is running)</p><div class="alert alert-danger">
 <p>All files and scripts in the repository should be <strong>documented</strong> whereas undocumented files will not be evaluated. Any file that does not run due to some errors will also not be evaluated.</p>
 </div><p>You have to use only Python as a programming language. If you are using external packages, please add them to requirments and the installation commands to the scripts. If you need to install packages that need <code>sudo</code> permission, you need to ask the TA.</p><p>The scripts should generate reproducible results. For instance, If I run the script <code>stage1.sh</code> for the second time, it should not give me any errors, so you should make sure that you cleared the objects before creating new ones.</p><div class="alert alert-danger">
@@ -308,7 +307,7 @@
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li class=""><a href="#Final-Project" title="Final Project">Final Project</a></li>
+<li class=""><a href="#MS---Final-Project" title="MS - Final Project">MS - Final Project</a></li>
 <li class=""><a href="#Project-info-submission" title="Project info submission">Project info submission</a></li>
 <li class=""><a href="#Project-Report-Overleaf-Template" title="Project Report Overleaf Template">Project Report Overleaf Template</a></li>
 <li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
@@ -326,8 +325,8 @@
 <li class=""><a href="#The-recording-of-the-presentation" title="The recording of the presentation">The recording of the presentation</a></li>
 </ul>
 </li>
-<li><a href="#Project-submission" title="Project submission">Project submission</a></li>
-<li class=""><a href="#Grading-Criteria" title="Grading Criteria">Grading Criteria</a></li>
+<li class=""><a href="#Project-submission" title="Project submission">Project submission</a></li>
+<li><a href="#Grading-Criteria" title="Grading Criteria">Grading Criteria</a></li>
 </ul>
 </div><div class="toc-menu" style="">
     <a class="expand-toggle expand-all" href="#">Expand all</a>
@@ -340,7 +339,7 @@
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li class=""><a href="#Final-Project" title="Final Project">Final Project</a></li>
+<li class=""><a href="#MS---Final-Project" title="MS - Final Project">MS - Final Project</a></li>
 <li class=""><a href="#Project-info-submission" title="Project info submission">Project info submission</a></li>
 <li class=""><a href="#Project-Report-Overleaf-Template" title="Project Report Overleaf Template">Project Report Overleaf Template</a></li>
 <li class=""><a href="#Agenda" title="Agenda">Agenda</a></li>
@@ -358,8 +357,8 @@
 <li class=""><a href="#The-recording-of-the-presentation" title="The recording of the presentation">The recording of the presentation</a></li>
 </ul>
 </li>
-<li><a href="#Project-submission" title="Project submission">Project submission</a></li>
-<li class=""><a href="#Grading-Criteria" title="Grading Criteria">Grading Criteria</a></li>
+<li class=""><a href="#Project-submission" title="Project submission">Project submission</a></li>
+<li><a href="#Grading-Criteria" title="Grading Criteria">Grading Criteria</a></li>
 </ul>
 </div><div class="toc-menu" style="">
     <a class="expand-toggle expand-all" href="#">Expand all</a>
