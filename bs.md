@@ -33,7 +33,7 @@ layout: page
 
 ## Assignments
 ### [Assignment 1 - SQL and NoSQL databases](html/bs/BS - Assignment 1 - Big Data Storage in SQL vs. NoSQL Databases.html)
- ### [Assignment 2 - Simple Search Engine using Hadoop MapReduce](html/bs/BS - Assignment 2 - Simple Search Engine using Hadoop MapReduce.html)
+### [Assignment 2 - Simple Search Engine using Hadoop MapReduce](html/bs/BS - Assignment 2 - Simple Search Engine using Hadoop MapReduce.html)
 <!-- ### [Assignment 3 - Apache Spark SQL & MLlib](html/bs/BS - Assignment 3 - Apache Spark SQL & MLlib.html) -->
 
 
