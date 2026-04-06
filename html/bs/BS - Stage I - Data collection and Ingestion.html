@@ -34,7 +34,7 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Stage-I---Data-collection-and-Ingestion"><a class="anchor hidden-xs" href="#Stage-I---Data-collection-and-Ingestion" title="Stage-I---Data-collection-and-Ingestion"><i class="fa fa-link"></i></a>Stage I - Data collection and Ingestion</h1><p><strong>Course:</strong> Big Data - IU S25<br>
+    <div id="doc" class="markdown-body container-fluid" lang="en"><h1 id="Stage-I---Data-collection-and-Ingestion"><a class="anchor hidden-xs" href="#Stage-I---Data-collection-and-Ingestion" title="Stage-I---Data-collection-and-Ingestion"><i class="fa fa-link"></i></a>Stage I - Data collection and Ingestion</h1><p><strong>Course:</strong> Big Data - IU<br>
 <strong>Author:</strong> Firas Jolha</p><h1 id="Dataset"><a class="anchor hidden-xs" href="#Dataset" title="Dataset"><i class="fa fa-link"></i></a>Dataset</h1><ul>
 <li>Some emps and depts
 <ul>
@@ -284,24 +284,24 @@ conn_string=<span class="hljs-string">"host=hadoop-04.uni.innopolis.ru port=5432
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li><a href="#Stage-I---Data-collection-and-Ingestion" title="Stage I - Data collection and Ingestion">Stage I - Data collection and Ingestion</a></li>
+<li class=""><a href="#Stage-I---Data-collection-and-Ingestion" title="Stage I - Data collection and Ingestion">Stage I - Data collection and Ingestion</a></li>
 <li><a href="#Dataset" title="Dataset">Dataset</a></li>
 <li><a href="#Agenda" title="Agenda">Agenda</a></li>
 <li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
 <li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li class=""><a href="#Description" title="Description">Description</a></li>
-<li class=""><a href="#Dataset-Description" title="Dataset Description">Dataset Description</a></li>
-<li class=""><a href="#IU-Hadoop-cluster" title="IU Hadoop cluster">IU Hadoop cluster</a><ul class="nav">
-<li class=""><a href="#Initiate-the-project-repository" title="Initiate the project repository">Initiate the project repository</a></li>
-<li class=""><a href="#Download-dataset" title="Download dataset">Download dataset</a></li>
-<li class=""><a href="#Build-a-relational-database-via-PostgreSQL" title="Build a relational database via PostgreSQL">Build a relational database via PostgreSQL</a></li>
-<li class=""><a href="#Import-the-database-into-HDFS-via-Sqoop" title="Import the database into HDFS via Sqoop">Import the database into HDFS via Sqoop</a></li>
+<li><a href="#Description" title="Description">Description</a></li>
+<li><a href="#Dataset-Description" title="Dataset Description">Dataset Description</a></li>
+<li><a href="#IU-Hadoop-cluster" title="IU Hadoop cluster">IU Hadoop cluster</a><ul class="nav">
+<li><a href="#Initiate-the-project-repository" title="Initiate the project repository">Initiate the project repository</a></li>
+<li><a href="#Download-dataset" title="Download dataset">Download dataset</a></li>
+<li><a href="#Build-a-relational-database-via-PostgreSQL" title="Build a relational database via PostgreSQL">Build a relational database via PostgreSQL</a></li>
+<li><a href="#Import-the-database-into-HDFS-via-Sqoop" title="Import the database into HDFS via Sqoop">Import the database into HDFS via Sqoop</a></li>
 </ul>
 </li>
-<li class=""><a href="#AVRO" title="AVRO">AVRO</a></li>
-<li class=""><a href="#Parquet" title="Parquet">Parquet</a></li>
-<li class=""><a href="#Row-vs-Columnar-Format" title="Row vs Columnar Format">Row vs Columnar Format</a></li>
-<li class=""><a href="#Snappy" title="Snappy">Snappy</a></li>
+<li><a href="#AVRO" title="AVRO">AVRO</a></li>
+<li><a href="#Parquet" title="Parquet">Parquet</a></li>
+<li><a href="#Row-vs-Columnar-Format" title="Row vs Columnar Format">Row vs Columnar Format</a></li>
+<li><a href="#Snappy" title="Snappy">Snappy</a></li>
 <li><a href="#References" title="References">References</a></li>
 </ul>
 </div><div class="toc-menu" style="">
@@ -315,24 +315,24 @@ conn_string=<span class="hljs-string">"host=hadoop-04.uni.innopolis.ru port=5432
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li><a href="#Stage-I---Data-collection-and-Ingestion" title="Stage I - Data collection and Ingestion">Stage I - Data collection and Ingestion</a></li>
+<li class=""><a href="#Stage-I---Data-collection-and-Ingestion" title="Stage I - Data collection and Ingestion">Stage I - Data collection and Ingestion</a></li>
 <li><a href="#Dataset" title="Dataset">Dataset</a></li>
 <li><a href="#Agenda" title="Agenda">Agenda</a></li>
 <li><a href="#Prerequisites" title="Prerequisites">Prerequisites</a></li>
 <li><a href="#Objectives" title="Objectives">Objectives</a></li>
-<li class=""><a href="#Description" title="Description">Description</a></li>
-<li class=""><a href="#Dataset-Description" title="Dataset Description">Dataset Description</a></li>
-<li class=""><a href="#IU-Hadoop-cluster" title="IU Hadoop cluster">IU Hadoop cluster</a><ul class="nav">
-<li class=""><a href="#Initiate-the-project-repository" title="Initiate the project repository">Initiate the project repository</a></li>
-<li class=""><a href="#Download-dataset" title="Download dataset">Download dataset</a></li>
-<li class=""><a href="#Build-a-relational-database-via-PostgreSQL" title="Build a relational database via PostgreSQL">Build a relational database via PostgreSQL</a></li>
-<li class=""><a href="#Import-the-database-into-HDFS-via-Sqoop" title="Import the database into HDFS via Sqoop">Import the database into HDFS via Sqoop</a></li>
+<li><a href="#Description" title="Description">Description</a></li>
+<li><a href="#Dataset-Description" title="Dataset Description">Dataset Description</a></li>
+<li><a href="#IU-Hadoop-cluster" title="IU Hadoop cluster">IU Hadoop cluster</a><ul class="nav">
+<li><a href="#Initiate-the-project-repository" title="Initiate the project repository">Initiate the project repository</a></li>
+<li><a href="#Download-dataset" title="Download dataset">Download dataset</a></li>
+<li><a href="#Build-a-relational-database-via-PostgreSQL" title="Build a relational database via PostgreSQL">Build a relational database via PostgreSQL</a></li>
+<li><a href="#Import-the-database-into-HDFS-via-Sqoop" title="Import the database into HDFS via Sqoop">Import the database into HDFS via Sqoop</a></li>
 </ul>
 </li>
-<li class=""><a href="#AVRO" title="AVRO">AVRO</a></li>
-<li class=""><a href="#Parquet" title="Parquet">Parquet</a></li>
-<li class=""><a href="#Row-vs-Columnar-Format" title="Row vs Columnar Format">Row vs Columnar Format</a></li>
-<li class=""><a href="#Snappy" title="Snappy">Snappy</a></li>
+<li><a href="#AVRO" title="AVRO">AVRO</a></li>
+<li><a href="#Parquet" title="Parquet">Parquet</a></li>
+<li><a href="#Row-vs-Columnar-Format" title="Row vs Columnar Format">Row vs Columnar Format</a></li>
+<li><a href="#Snappy" title="Snappy">Snappy</a></li>
 <li><a href="#References" title="References">References</a></li>
 </ul>
 </div><div class="toc-menu" style="">
