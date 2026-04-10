@@ -15,7 +15,7 @@ layout: page
 ### [Lab 4 - Apache Hadoop HDFS](html/ms/MS - Lab 4 - Apache Hadoop HDFS.html)
 ### [Lab 5 - Apache Hadoop MapReduce & YARN](html/ms/MS - Lab 5 - Apache Hadoop YARN & MapReduce.html)
 ### [Lab 6 - Apache Spark Core & SQL](html/ms/MS - Lab 6 - Apache Spark Core & SQL.html)
-
+### [Lab 6 - Apache Spark Core & SQL](html/ms/MS Lab 7 - Apache Spark MLlib.html)
 <!-- 
 ### [Lab 2 - Data Retrieval with SQL and Cypher](html/ms/MS - Lab 2 - Data Retrieval with SQL and Cypher.html)
 
